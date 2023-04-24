@@ -13,7 +13,7 @@ Welcome to MyDocs's documentation!
 .. note::
     This project is under active development :)
 
-Check out the :doc:`usage` section for further info.
+Check out the :doc:`usage` section for further info. :)
 
 See :ref:`How to install <install_code>`
 
