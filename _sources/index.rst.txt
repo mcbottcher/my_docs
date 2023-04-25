@@ -3,23 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to MyDocs's documentation!
-==================================
+Welcome
+=======
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-.. note::
-    This project is under active development!
-
-Check out the :doc:`usage` section for further info. :)
-
-See :ref:`How to install <install_code>`
+Check out my `Github. <https://github.com/mcbottcher>`_
+Check out my `LinkedIn. <https://www.linkedin.com/in/mikkel-caschetto-b%C3%B6ttcher-63b0a7104/>`_
 
 Contents
 --------
 
 .. toctree::
 
-   usage
+   github_actions
