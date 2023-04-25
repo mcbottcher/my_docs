@@ -278,7 +278,68 @@ Functions:
 Contexts
 --------
 
-todo...
+Contexts are a way to access information about workflow runs, variables, runner environments, jobs, and steps.
+Each context is an object that contains properties, which can be strings or other objects.
+
+Examples of some context types include: ``github, env, vars, job, steps, runner, secrets, needs``...
+
+As part of an expression you can access context info in two ways:
+
+    - ``github['sha']``
+    - ``github.sha``
+
+.. note::
+    Attempting to dereference a non-existent property evaluates to an empty string
+
+You can print a context to the log if you want to see what is inside of them:
+
+.. code-block:: yaml
+
+    run: echo '${{ toJSON(github) }}'
+    run: echo '${{ toJSON(steps) }}'
+
+Contexts have many attributes so it is best to look `here <https://docs.github.com/en/actions/learn-github-actions/contexts>`_ for documentation.
+
+----
+
+Variables
+---------
+
+Variables provide a way to reuse non-sensitive configuration information.
+
+You can set environment variables on a workflow level, in the workflow YAML file, or across multiple workflows at the organisation,
+repository or environment level.
+
+Single Workflow Variables
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can set workflow variables at three levels:
+
+1. Workflow level
+2. Job level
+3. Step level
+
+.. note::
+    You can list all variables available at a particular step by using ``run: env``
+
+Configuration Variables across multiple workflows
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. warning::
+    These are still in beta and subject to change
+
+Configuration variables can be set at organisation, repository or environment level. Configuration variables are available in the ``vars`` context
+
+If variables have the same name, the one with the lowest level takes precedence: organisation < repository < environment.
+
+You can add configuration variables in the GitHub settings. This is same for secrets.
+
+----
+
+GitHub Actions Security
+-----------------------
+
+Check out this link: https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
 
 ----
 
@@ -286,6 +347,3 @@ Sources
 -------
 
 - https://docs.github.com/en/actions/learn-github-actions
-
-.. note::
-    Add object filters section when doing objects
