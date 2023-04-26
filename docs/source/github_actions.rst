@@ -183,7 +183,7 @@ Expressions
 
 Expressions are used to programmatically set environment variables.
 
-You use special syntax to evaluate as an expression: ``${{ <expression> }}``
+You use special syntax to evaluate as an expression: ``${{ <expression> }}``.
 
 If you use the expression within an ``if`` conditional, you can ommit the expression syntax above.
 
