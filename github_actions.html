@@ -51,8 +51,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#adding-actions">Adding Actions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#action-release-management">Action Release Management</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#action-inputs-and-outputs">Action Inputs and Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#action-file-fields">Action File Fields</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#running-scripts">Running Scripts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#expressions">Expressions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#literals">Literals</a></li>
@@ -324,6 +326,76 @@ automatic updates.</p>
     <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;Path</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">results</span><span class="nv"> </span><span class="s">file&quot;</span>
 </pre></div>
 </div>
+</div>
+<hr class="docutils" />
+<div class="section" id="action-file-fields">
+<h3>Action File Fields<a class="headerlink" href="#action-file-fields" title="Permalink to this headline"></a></h3>
+<p>See <a class="reference external" href="https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions">Metadata Syntax for GitHub Actions</a>.</p>
+<ul>
+<li><p>name</p></li>
+<li><p>author</p></li>
+<li><p>description</p></li>
+<li><p>inputs : see above section</p></li>
+<li><p>outputs : see above section</p></li>
+<li><dl>
+<dt>runs<span class="classifier">Specifies how the action is executed</span></dt><dd><ul class="simple">
+<li><p>runs composite actions:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runs</span><span class="p">:</span>
+  <span class="nt">using</span><span class="p">:</span> <span class="s">&quot;composite&quot;</span>
+  <span class="nt">steps</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">Sphinx</span><span class="nv"> </span><span class="s">Build</span><span class="nv"> </span><span class="s">Script&quot;</span>
+      <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$GITHUB_ACTION_PATH/script.sh</span>
+      <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bash</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>runs Docker container:</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runs</span><span class="p">:</span>
+  <span class="nt">using</span><span class="p">:</span> <span class="s">&#39;docker&#39;</span>
+  <span class="nt">image</span><span class="p">:</span> <span class="s">&#39;Dockerfile&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Be careful when your Dockerfile is not in the root of your repo since it cannot access
+anything above it in the directory tree. If this is the case you will have to use script
+to run docker from the root pointing at the Dockerfile further down the directory tree</p>
+</div>
+<ul class="simple">
+<li><p>branding: Create an icon that is shown on GitHub marketplace</p></li>
+</ul>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="running-scripts">
+<h2>Running Scripts<a class="headerlink" href="#running-scripts" title="Permalink to this headline"></a></h2>
+<p>You can run scripts as part of your <code class="docutils literal notranslate"><span class="pre">composite</span> <span class="pre">steps</span></code> section of either a action file or workflow file.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">using</span><span class="p">:</span> <span class="s">&quot;composite&quot;</span>
+<span class="nt">steps</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">Sphinx</span><span class="nv"> </span><span class="s">Build</span><span class="nv"> </span><span class="s">Script&quot;</span>
+    <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$GITHUB_ACTION_PATH/script.sh</span>
+    <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bash</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">$GITHUB_ACTION_PATH</span></code> specifies the path to the action file it is running from.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Even if the script is started from a random place in the repo, it seems that the working
+directory when the script starts is the root of the github repo.</p>
+</div>
+<p>If you want a script to run, you have to make sure it has it’s permission set to executable.
+This executable status is included when you commit the file to GitHub.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo chmod +x &lt;your_script.sh&gt;
+</pre></div>
 </div>
 </div>
 <hr class="docutils" />
