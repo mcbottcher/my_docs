@@ -19,3 +19,4 @@ Contents
 .. toctree::
 
    github_actions
+   docker
