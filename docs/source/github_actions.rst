@@ -178,6 +178,76 @@ To see the inputs and outputs of an action, check the ``action.yml`` in the root
 
 ----
 
+Action File Fields
+^^^^^^^^^^^^^^^^^^
+
+See `Metadata Syntax for GitHub Actions <https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions>`_.
+
+.. TODO, add link to above section instead of just writing above section
+
+- name
+- author
+- description
+- inputs : see above section
+- outputs : see above section 
+- runs : Specifies how the action is executed
+    - runs composite actions:
+
+    .. code-block:: yaml
+
+        runs:
+          using: "composite"
+          steps:
+            - name: "Run Sphinx Build Script"
+              run: $GITHUB_ACTION_PATH/script.sh
+              shell: bash
+
+    - runs Docker container:
+
+    .. code-block:: yaml
+
+        runs:
+          using: 'docker'
+          image: 'Dockerfile'
+
+.. warning::
+    Be careful when your Dockerfile is not in the root of your repo since it cannot access
+    anything above it in the directory tree. If this is the case you will have to use script
+    to run docker from the root pointing at the Dockerfile further down the directory tree
+
+- branding: Create an icon that is shown on GitHub marketplace
+
+----
+
+Running Scripts
+---------------
+
+You can run scripts as part of your ``composite steps`` section of either a action file or workflow file.
+
+.. code-block:: yaml
+
+    using: "composite"
+    steps:
+      - name: "Run Sphinx Build Script"
+        run: $GITHUB_ACTION_PATH/script.sh
+        shell: bash
+
+.. note::
+    ``$GITHUB_ACTION_PATH`` specifies the path to the action file it is running from.
+
+.. note::
+    Even if the script is started from a random place in the repo, it seems that the working
+    directory when the script starts is the root of the github repo.
+
+If you want a script to run, you have to make sure it has it's permission set to executable.
+This executable status is included when you commit the file to GitHub.
+
+.. code-block:: bash
+    
+    sudo chmod +x <your_script.sh>
+
+----
+
 Expressions
 -----------
 
