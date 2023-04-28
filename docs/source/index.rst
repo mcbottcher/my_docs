@@ -21,3 +21,5 @@ Contents
    github_actions
    docker
    pytest
+   yocto
+   uboot
