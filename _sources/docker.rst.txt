@@ -135,6 +135,20 @@ A Dockerfile contains a list of commands that the Docker client calls when creat
 
 ----
 
+Docker Volumes
+--------------
+
+A Docker Volume is a way of including part of your host filesystem into the Docker container.
+This way when you close and delete the container, you have a way of storing the data that you wanted.
+
+There are 3 types of volumes:
+
+1. Host Volume: Use the :bash:`docker run -v <host_dir>:<container_dir>` to specify a volume.
+2. Anonymous Volumes: :bash:`docker run -v <container_dir>`. This will put the volume somewhere on your host fs that you have't specified (``/var/lib/docker/volumes/``)
+3. Named Volume: :bash:`docker run -v name:<container_id>`. You can reference the host volume with a name that you specify
+
+----
+
 Sources
 -------
 

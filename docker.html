@@ -44,6 +44,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#useful-terms">Useful Terms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dockerfiles">Dockerfiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#docker-volumes">Docker Volumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sources">Sources</a></li>
 </ul>
 </li>
@@ -212,6 +213,18 @@ docker rm &lt;id&gt;
 <p class="admonition-title">Note</p>
 <p>It could be useful to start shell, then use <code class="docutils literal notranslate"><span class="pre">CMD</span></code> to pass the arguments. <code class="code docker docutils literal notranslate"><span class="keyword"><span class="pre">ENTRYPOINT</span></span><span class="punctuation"><span class="pre">[</span></span><span class="literal string double"><span class="pre">“/bin/sh”</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal string double"><span class="pre">“-c”</span></span><span class="punctuation"><span class="pre">]</span></span></code></p>
 </div>
+</div>
+<hr class="docutils" />
+<div class="section" id="docker-volumes">
+<h2>Docker Volumes<a class="headerlink" href="#docker-volumes" title="Permalink to this headline"></a></h2>
+<p>A Docker Volume is a way of including part of your host filesystem into the Docker container.
+This way when you close and delete the container, you have a way of storing the data that you wanted.</p>
+<p>There are 3 types of volumes:</p>
+<ol class="arabic simple">
+<li><p>Host Volume: Use the <code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-v</span> <span class="pre">&lt;host_dir&gt;:&lt;container_dir&gt;</span></code> to specify a volume.</p></li>
+<li><p>Anonymous Volumes: <code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-v</span> <span class="pre">&lt;container_dir&gt;</span></code>. This will put the volume somewhere on your host fs that you have’t specified (<code class="docutils literal notranslate"><span class="pre">/var/lib/docker/volumes/</span></code>)</p></li>
+<li><p>Named Volume: <code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-v</span> <span class="pre">name:&lt;container_id&gt;</span></code>. You can reference the host volume with a name that you specify</p></li>
+</ol>
 </div>
 <hr class="docutils" />
 <div class="section" id="sources">
