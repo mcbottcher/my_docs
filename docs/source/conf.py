@@ -6,6 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import os
+import sys
+sys.path.append(os.path.abspath('.'))
+
 project = 'MyDocs'
 copyright = '2023, Mikkel Caschetto-Bottcher'
 author = 'Mikkel Caschetto-Bottcher'
@@ -17,6 +21,7 @@ release = '0.1'
 extensions = [
     'sphinx.ext.duration',
     'sphinx_rtd_theme',
+    'sphinx.ext.autodoc',
 ]
 
 templates_path = ['_templates']
