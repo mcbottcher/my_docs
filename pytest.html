@@ -151,7 +151,10 @@ these will be implicitly added to all tests in that class.</p>
 <h2>Fixtures<a class="headerlink" href="#fixtures" title="Permalink to this headline"></a></h2>
 <p>Fixtures are functions which run before each test function to which it is applied.
 They can be used to feed data to a test function.</p>
-<p>They are only availble in one file. Not accross all test files.</p>
+<p>The scope is limited to the file you have created it in by default. However, if it is included
+in your <em>conftest.py</em> file, you can change the scope.</p>
+<p>You can set the scope of a fixture to <code class="docutils literal notranslate"><span class="pre">session,</span> <span class="pre">module,</span> <span class="pre">function...</span></code> by using <code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">fixture</span></span><span class="punctuation"><span class="pre">(</span></span><span class="name"><span class="pre">scope</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’session’</span></span><span class="punctuation"><span class="pre">)</span></span></code></p>
+<p>You can also set <code class="code python docutils literal notranslate"><span class="name"><span class="pre">autouse</span></span><span class="operator"><span class="pre">=</span></span><span class="keyword constant"><span class="pre">True</span></span></code> if you want it enabled for all test functions in the scope.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytest</span>
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
@@ -166,6 +169,8 @@ They can be used to feed data to a test function.</p>
   <span class="k">assert</span> <span class="n">input_value</span> <span class="o">%</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">0</span>
 </pre></div>
 </div>
+<p>Instead of passing the fixture as an argument, you can also use the <code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">mark</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">usefixtures</span></span><span class="punctuation"><span class="pre">(</span></span><span class="literal string single"><span class="pre">‘&lt;ficture_name&gt;’</span></span><span class="punctuation"><span class="pre">)</span></span></code>
+decorator to use the fixture in a test function.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You can view a list of builtin fixtures by using <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">--fixtures</span></code>. These are ones
@@ -242,11 +247,14 @@ used in a dashboard that displays test results.</p>
 <div class="section" id="pytest-hooks">
 <h2>PyTest Hooks<a class="headerlink" href="#pytest-hooks" title="Permalink to this headline"></a></h2>
 <p>Hooks are part of PyTest’s plugin system which allows you to extend the functionality of PyTest
-Hooks allow plugins to register custom code to be run at specific points during
-the execution of pytest, e.g. before a test function.</p>
-<p>To define a hoo, create a function and decorate it with <code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">hookimpl</span></span></code>.</p>
-<p>Using <code class="docutils literal notranslate"><span class="pre">hookwrapper</span></code> like this: <code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">hookimpl</span></span><span class="punctuation"><span class="pre">(</span></span><span class="name"><span class="pre">hookwrapper</span></span><span class="operator"><span class="pre">=</span></span><span class="literal number integer"><span class="pre">1</span></span><span class="punctuation"><span class="pre">)</span></span></code> wraps the hook function
-in a try except block so that excpetions raised in the hook are reported as test failures.</p>
+Hooks allows you to run custom code at different stages of a pytest run.</p>
+<p>The stage at which the code is run is defined by the name of the hook you use. These are predefined
+names which point to a different stage in the pytest process.</p>
+<p>To define a hook, create a function and decorate it with <code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">hookimpl</span></span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It doesn’t seem hooks can be declared in the test file, but work in the <em>conftest.py</em> file.</p>
+</div>
 <p>There are some main categories of hooks:</p>
 <ul>
 <li><p>Bootstrapping hooks</p>
@@ -296,6 +304,31 @@ in a try except block so that excpetions raised in the hook are reported as test
 </ul>
 </li>
 </ul>
+<p>You can find a list of available hooks <a class="reference external" href="https://docs.pytest.org/en/7.1.x/reference/reference.html#hooks">Here</a>.
+These are the names you should use to target a specific part of the PyTest process.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Hooks should start with <code class="docutils literal notranslate"><span class="pre">pytest_*</span></code> otherwise it won’t be recognised as a hook.</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Example modifing list of tests to be run after they have been collected</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">hookimpl</span>
+<span class="k">def</span> <span class="nf">pytest_collection_modifyitems</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+  <span class="c1"># modify the collected items after they have been collected...</span>
+  <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>You can also make a function a <em>hookwrapper</em> so that it will wrap another hook function. In the example,
+the hookwrapper function is called first. The <code class="docutils literal notranslate"><span class="pre">yield</span></code> statement yields to the wrapped hook function. When
+that finishes, execution returns to the hookwrapper to complete:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">hookimpl</span><span class="p">(</span><span class="n">hookwrapper</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">pytest_collection_modifyitems</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Entering the collection_modifyitems hook&#39;</span><span class="p">)</span>
+  <span class="k">yield</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Finished the collection_modifyitems hook&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <hr class="docutils" />
 <div class="section" id="options">
@@ -307,6 +340,7 @@ in a try except block so that excpetions raised in the hook are reported as test
 <li><p><code class="docutils literal notranslate"><span class="pre">--maxfail</span> <span class="pre">&lt;max_number_of_fails&gt;</span></code>: Number of fails after which to halt test execution</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">&lt;num_of_workers&gt;</span></code>: How many parallel workers will run the tests</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--junittxml=&lt;path_to_file&gt;</span></code>: Outputs test results to XML</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-s</span></code>: This will show <code class="code python docutils literal notranslate"><span class="name builtin"><span class="pre">print</span></span><span class="punctuation"><span class="pre">()</span></span></code> from test functions in the console</p></li>
 </ul>
 </div>
 <hr class="docutils" />
