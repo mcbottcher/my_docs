@@ -92,7 +92,12 @@ Fixtures
 Fixtures are functions which run before each test function to which it is applied.
 They can be used to feed data to a test function.
 
-They are only availble in one file. Not accross all test files.
+The scope is limited to the file you have created it in by default. However, if it is included
+in your *conftest.py* file, you can change the scope.
+
+You can set the scope of a fixture to ``session, module, function...`` by using :python:`@pytest.fixture(scope='session')`
+
+You can also set :python:`autouse=True` if you want it enabled for all test functions in the scope.
 
 .. code-block:: python
 
@@ -108,6 +113,9 @@ They are only availble in one file. Not accross all test files.
 
   def test_divisible_by_6(input_value):
     assert input_value % 6 == 0
+
+Instead of passing the fixture as an argument, you can also use the :python:`@pytest.mark.usefixtures('<ficture_name>')`
+decorator to use the fixture in a test function.
 
 .. note::
   You can view a list of builtin fixtures by using ``pytest --fixtures``. These are ones
@@ -256,7 +264,7 @@ Options
 - ``--maxfail <max_number_of_fails>``: Number of fails after which to halt test execution
 - ``-n <num_of_workers>``: How many parallel workers will run the tests
 - ``--junittxml=<path_to_file>``: Outputs test results to XML
-
+- ``-s``: This will show :python:`print()` from test functions in the console 
 
 ----
 
