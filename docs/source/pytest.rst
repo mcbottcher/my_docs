@@ -204,13 +204,15 @@ PyTest Hooks
 ------------
 
 Hooks are part of PyTest's plugin system which allows you to extend the functionality of PyTest
-Hooks allow plugins to register custom code to be run at specific points during
-the execution of pytest, e.g. before a test function.
+Hooks allows you to run custom code at different stages of a pytest run.
 
-To define a hoo, create a function and decorate it with :python:`@pytest.hookimpl`.
+The stage at which the code is run is defined by the name of the hook you use. These are predefined
+names which point to a different stage in the pytest process.
 
-Using ``hookwrapper`` like this: :python:`@pytest.hookimpl(hookwrapper=1)` wraps the hook function
-in a try except block so that excpetions raised in the hook are reported as test failures.
+To define a hook, create a function and decorate it with :python:`@pytest.hookimpl`.
+
+.. note::
+  It doesn't seem hooks can be declared in the test file, but work in the *conftest.py* file.
 
 There are some main categories of hooks:
 
@@ -252,6 +254,33 @@ There are some main categories of hooks:
 - Debugging/Interaction Hooks
 
   - Allows us to interact with the test session or debug issues that might arise
+
+You can find a list of available hooks `Here <https://docs.pytest.org/en/7.1.x/reference/reference.html#hooks>`_.
+These are the names you should use to target a specific part of the PyTest process.
+
+.. note::
+  Hooks should start with ``pytest_*`` otherwise it won't be recognised as a hook. 
+
+
+.. code-block:: python
+  :caption: Example modifing list of tests to be run after they have been collected
+
+  @pytest.hookimpl
+  def pytest_collection_modifyitems(config, items):
+    # modify the collected items after they have been collected...
+    items.append(items[0])
+
+You can also make a function a *hookwrapper* so that it will wrap another hook function. In the example,
+the hookwrapper function is called first. The ``yield`` statement yields to the wrapped hook function. When
+that finishes, execution returns to the hookwrapper to complete:
+
+.. code-block:: python
+
+  @pytest.hookimpl(hookwrapper=True)
+  def pytest_collection_modifyitems(config, items):
+    print('Entering the collection_modifyitems hook')
+    yield
+    print('Finished the collection_modifyitems hook')
 
 ----
 
