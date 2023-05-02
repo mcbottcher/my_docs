@@ -92,7 +92,12 @@ Fixtures
 Fixtures are functions which run before each test function to which it is applied.
 They can be used to feed data to a test function.
 
-They are only availble in one file. Not accross all test files.
+The scope is limited to the file you have created it in by default. However, if it is included
+in your *conftest.py* file, you can change the scope.
+
+You can set the scope of a fixture to ``session, module, function...`` by using :python:`@pytest.fixture(scope='session')`
+
+You can also set :python:`autouse=True` if you want it enabled for all test functions in the scope.
 
 .. code-block:: python
 
@@ -108,6 +113,9 @@ They are only availble in one file. Not accross all test files.
 
   def test_divisible_by_6(input_value):
     assert input_value % 6 == 0
+
+Instead of passing the fixture as an argument, you can also use the :python:`@pytest.mark.usefixtures('<ficture_name>')`
+decorator to use the fixture in a test function.
 
 .. note::
   You can view a list of builtin fixtures by using ``pytest --fixtures``. These are ones
@@ -196,13 +204,15 @@ PyTest Hooks
 ------------
 
 Hooks are part of PyTest's plugin system which allows you to extend the functionality of PyTest
-Hooks allow plugins to register custom code to be run at specific points during
-the execution of pytest, e.g. before a test function.
+Hooks allows you to run custom code at different stages of a pytest run.
 
-To define a hoo, create a function and decorate it with :python:`@pytest.hookimpl`.
+The stage at which the code is run is defined by the name of the hook you use. These are predefined
+names which point to a different stage in the pytest process.
 
-Using ``hookwrapper`` like this: :python:`@pytest.hookimpl(hookwrapper=1)` wraps the hook function
-in a try except block so that excpetions raised in the hook are reported as test failures.
+To define a hook, create a function and decorate it with :python:`@pytest.hookimpl`.
+
+.. note::
+  It doesn't seem hooks can be declared in the test file, but work in the *conftest.py* file.
 
 There are some main categories of hooks:
 
@@ -245,6 +255,33 @@ There are some main categories of hooks:
 
   - Allows us to interact with the test session or debug issues that might arise
 
+You can find a list of available hooks `Here <https://docs.pytest.org/en/7.1.x/reference/reference.html#hooks>`_.
+These are the names you should use to target a specific part of the PyTest process.
+
+.. note::
+  Hooks should start with ``pytest_*`` otherwise it won't be recognised as a hook. 
+
+
+.. code-block:: python
+  :caption: Example modifing list of tests to be run after they have been collected
+
+  @pytest.hookimpl
+  def pytest_collection_modifyitems(config, items):
+    # modify the collected items after they have been collected...
+    items.append(items[0])
+
+You can also make a function a *hookwrapper* so that it will wrap another hook function. In the example,
+the hookwrapper function is called first. The ``yield`` statement yields to the wrapped hook function. When
+that finishes, execution returns to the hookwrapper to complete:
+
+.. code-block:: python
+
+  @pytest.hookimpl(hookwrapper=True)
+  def pytest_collection_modifyitems(config, items):
+    print('Entering the collection_modifyitems hook')
+    yield
+    print('Finished the collection_modifyitems hook')
+
 ----
 
 Options
@@ -256,7 +293,7 @@ Options
 - ``--maxfail <max_number_of_fails>``: Number of fails after which to halt test execution
 - ``-n <num_of_workers>``: How many parallel workers will run the tests
 - ``--junittxml=<path_to_file>``: Outputs test results to XML
-
+- ``-s``: This will show :python:`print()` from test functions in the console 
 
 ----
 
