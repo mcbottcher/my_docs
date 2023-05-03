@@ -92,6 +92,10 @@ Commands
 
         docker cp <container_id>:path_to_files host_destination
 
+- :bash:`docker compose up`: This will run the docker compose file
+
+- :bash:`docker compose down`: Shuts down all the containers together
+
 ----
 
 Dockerfiles
@@ -148,6 +152,61 @@ There are 3 types of volumes:
 3. Named Volume: :bash:`docker run -v name:<container_id>`. You can reference the host volume with a name that you specify
 
 ----
+
+Docker Compose
+--------------
+
+One of the best ways of making docker containers easy to maintain, is to use multiple containers
+for one job, each one implementing one process (micro-service).
+
+Docker Compose lets you run multiple docker containers at the same time.
+
+Docker Compose uses a yaml file to configure the containers that are run.
+
+- :bash:`docker compose up`: This will run the docker compose file
+- :bash:`docker compose down`: Shuts down all the containers together
+
+.. code-block:: yaml
+    :caption: Example of a *docker-compose.yaml*
+
+    version: '3'
+    services:
+        app:
+            image: node:latest
+            container_name: app_main
+            restart: always
+            command: sh -c "yarn install && yarn start"
+            ports:
+            - 8000:8000
+            working_dir: /app
+            volumes:
+            - ./:/app
+            environment:
+            MYSQL_HOST: localhost
+            MYSQL_USER: root
+            MYSQL_PASSWORD: 
+            MYSQL_DB: test
+        mongo:
+            image: mongo
+            container_name: app_mongo
+            restart: always
+            ports:
+            - 27017:27017
+            volumes:
+            - ~/mongo:/data/db
+    volumes:
+    mongodb:
+
+- ``version``: This is the docker compose version we are using
+- ``services``: This provides a list of the containers that we run
+- ``app``: This is a custom name for one of the containers/services
+- ``image``: The image that the container is based on
+- ``container_name``: Name that the container will use
+- ``restart``: Starts/restarts a service container
+- ``port``: Defines the custom port to run the container (host_port:container_port)
+- ``working_dir``: The current working directory of the service container
+- ``environment``: Defines the environment variables
+- ``command``: This is the command to run the service
 
 Sources
 -------
