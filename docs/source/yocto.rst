@@ -267,6 +267,8 @@ Adding a Service
 
 - Inlude it in your final image, with *IMAGE_INSTALL_append* or add it to a package group
 
+   e.g. ``IMAGE_INSTALL:append = " hellosystemd"`` added to *layer.conf*
+
 Patch Files
 -----------
 
