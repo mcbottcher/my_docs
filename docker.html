@@ -46,6 +46,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dockerfiles">Dockerfiles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#docker-volumes">Docker Volumes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#docker-compose">Docker Compose</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sources">Sources</a></li>
 </ul>
 </li>
@@ -175,6 +176,8 @@ docker rm &lt;id&gt;
 </div>
 </div></blockquote>
 </li>
+<li><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code>: This will run the docker compose file</p></li>
+<li><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">down</span></code>: Shuts down all the containers together</p></li>
 </ul>
 </div>
 <hr class="docutils" />
@@ -233,6 +236,61 @@ This way when you close and delete the container, you have a way of storing the 
 </ol>
 </div>
 <hr class="docutils" />
+<div class="section" id="docker-compose">
+<h2>Docker Compose<a class="headerlink" href="#docker-compose" title="Permalink to this headline"></a></h2>
+<p>One of the best ways of making docker containers easy to maintain, is to use multiple containers
+for one job, each one implementing one process (micro-service).</p>
+<p>Docker Compose lets you run multiple docker containers at the same time.</p>
+<p>Docker Compose uses a yaml file to configure the containers that are run.</p>
+<ul class="simple">
+<li><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code>: This will run the docker compose file</p></li>
+<li><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">down</span></code>: Shuts down all the containers together</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Example of a <em>docker-compose.yaml</em></span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span> <span class="s">&#39;3&#39;</span>
+<span class="nt">services</span><span class="p">:</span>
+    <span class="nt">app</span><span class="p">:</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">node:latest</span>
+        <span class="nt">container_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app_main</span>
+        <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">always</span>
+        <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sh -c &quot;yarn install &amp;&amp; yarn start&quot;</span>
+        <span class="nt">ports</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">8000:8000</span>
+        <span class="nt">working_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/app</span>
+        <span class="nt">volumes</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./:/app</span>
+        <span class="nt">environment</span><span class="p">:</span>
+        <span class="nt">MYSQL_HOST</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+        <span class="nt">MYSQL_USER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root</span>
+        <span class="nt">MYSQL_PASSWORD</span><span class="p">:</span>
+        <span class="nt">MYSQL_DB</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test</span>
+    <span class="nt">mongo</span><span class="p">:</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mongo</span>
+        <span class="nt">container_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app_mongo</span>
+        <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">always</span>
+        <span class="nt">ports</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">27017:27017</span>
+        <span class="nt">volumes</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">~/mongo:/data/db</span>
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="nt">mongodb</span><span class="p">:</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: This is the docker compose version we are using</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">services</span></code>: This provides a list of the containers that we run</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">app</span></code>: This is a custom name for one of the containers/services</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">image</span></code>: The image that the container is based on</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">container_name</span></code>: Name that the container will use</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">restart</span></code>: Starts/restarts a service container</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">port</span></code>: Defines the custom port to run the container (host_port:container_port)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">working_dir</span></code>: The current working directory of the service container</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">environment</span></code>: Defines the environment variables</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">command</span></code>: This is the command to run the service</p></li>
+</ul>
+</div>
 <div class="section" id="sources">
 <h2>Sources<a class="headerlink" href="#sources" title="Permalink to this headline"></a></h2>
 <ul class="simple">
