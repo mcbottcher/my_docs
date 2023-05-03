@@ -25,5 +25,6 @@ Contents
    uboot
    systemd
    python
+   linux_commands
 
    
