@@ -24,5 +24,6 @@ Contents
    yocto
    uboot
    systemd
+   python
 
    
