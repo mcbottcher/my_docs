@@ -382,8 +382,12 @@ this service runs and to print to the standard output</p></li>
 <span class="n">WantedBy</span><span class="o">=</span><span class="n">multi</span><span class="o">-</span><span class="n">user</span><span class="o">.</span><span class="n">target</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li><p>Inlude it in your final image, with <em>IMAGE_INSTALL_append</em> or add it to a package group</p></li>
+<ul>
+<li><p>Inlude it in your final image, with <em>IMAGE_INSTALL_append</em> or add it to a package group</p>
+<blockquote>
+<div><p>e.g. <code class="docutils literal notranslate"><span class="pre">IMAGE_INSTALL:append</span> <span class="pre">=</span> <span class="pre">&quot;</span> <span class="pre">hellosystemd&quot;</span></code> added to <em>layer.conf</em></p>
+</div></blockquote>
+</li>
 </ul>
 </div>
 </div>
