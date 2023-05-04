@@ -246,6 +246,11 @@ This executable status is included when you commit the file to GitHub.
     
     sudo chmod +x <your_script.sh>
 
+.. warning::
+    A script might still exit with a sucessfull exit code even if one of the commands returned an
+    error code. This could make your workflow seem like it succeeded. You can use the ``set -e`` in
+    your script file to cause the script to exit with error on the first command that returns an error
+
 ----
 
 Expressions
@@ -405,6 +410,44 @@ If variables have the same name, the one with the lowest level takes precedence:
 You can add configuration variables in the GitHub settings. This is same for secrets.
 
 ----
+
+Example Commenting on PR
+------------------------
+
+.. code-block:: yaml
+    :caption: Adding PR to your workflow Events
+
+    on:
+    pull_request:
+        types: [opened, synchronize, reopened]
+
+In the example, we see that this pull_request event is triggered when the PR is opened
+and re-opened. Synchronize triggers the event when the PR is updated with a push.
+
+.. code-block:: yaml
+    :caption: Example step
+
+    - name: Update PR
+      if: ${{ github.event_name == 'pull_request' }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+          issue_number: context.issue.number,
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          body: '👋 Check the Sphinx build passed before merge!'
+          })
+
+The step in the example uses the GitHub provided ``github-script`` action which is used for issues and PRs.
+In GitHub, a PR is treated the same as an issue.
+
+The step will only run if the triggering event is of type ``pull_request``, which is extracted from the github
+context.
+
+.. note::
+    The nice thing about this event type is that it will actually block the PR from being merged until
+    the workflow has completed successfully. This is done automatically.
 
 GitHub Actions Security
 -----------------------
