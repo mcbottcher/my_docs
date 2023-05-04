@@ -73,6 +73,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#configuration-variables-across-multiple-workflows">Configuration Variables across multiple workflows</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#example-commenting-on-pr">Example Commenting on PR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#github-actions-security">GitHub Actions Security</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sources">Sources</a></li>
 </ul>
@@ -409,6 +410,12 @@ This executable status is included when you commit the file to GitHub.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo chmod +x &lt;your_script.sh&gt;
 </pre></div>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A script might still exit with a sucessfull exit code even if one of the commands returned an
+error code. This could make your workflow seem like it succeeded. You can use the <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">-e</span></code> in
+your script file to cause the script to exit with error on the first command that returns an error</p>
+</div>
 </section>
 <hr class="docutils" />
 <section id="expressions">
@@ -567,6 +574,44 @@ repository or environment level.</p>
 </section>
 </section>
 <hr class="docutils" />
+<section id="example-commenting-on-pr">
+<h2>Example Commenting on PR<a class="headerlink" href="#example-commenting-on-pr" title="Permalink to this heading"></a></h2>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Adding PR to your workflow Events</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">on</span><span class="p">:</span><span class="w"></span>
+<span class="nt">pull_request</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">opened</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">synchronize</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">reopened</span><span class="p p-Indicator">]</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<p>In the example, we see that this pull_request event is triggered when the PR is opened
+and re-opened. Synchronize triggers the event when the PR is updated with a push.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Example step</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update PR</span><span class="w"></span>
+<span class="w">  </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.event_name == &#39;pull_request&#39; }}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/github-script@v6</span><span class="w"></span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">      </span><span class="no">github.rest.issues.createComment({</span><span class="w"></span>
+<span class="w">      </span><span class="no">issue_number: context.issue.number,</span><span class="w"></span>
+<span class="w">      </span><span class="no">owner: context.repo.owner,</span><span class="w"></span>
+<span class="w">      </span><span class="no">repo: context.repo.repo,</span><span class="w"></span>
+<span class="w">      </span><span class="no">body: &#39;👋 Check the Sphinx build passed before merge!&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="no">})</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<p>The step in the example uses the GitHub provided <code class="docutils literal notranslate"><span class="pre">github-script</span></code> action which is used for issues and PRs.
+In GitHub, a PR is treated the same as an issue.</p>
+<p>The step will only run if the triggering event is of type <code class="docutils literal notranslate"><span class="pre">pull_request</span></code>, which is extracted from the github
+context.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The nice thing about this event type is that it will actually block the PR from being merged until
+the workflow has completed successfully. This is done automatically.</p>
+</div>
+</section>
 <section id="github-actions-security">
 <h2>GitHub Actions Security<a class="headerlink" href="#github-actions-security" title="Permalink to this heading"></a></h2>
 <p>Check out this link: <a class="reference external" href="https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions">https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions</a></p>
