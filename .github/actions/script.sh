@@ -1,3 +1,8 @@
+#!/bin/bash
+
+# exit on first error
+set -e
+
 # script starts in the repo root, print directory for debug
 echo $(pwd)
 
