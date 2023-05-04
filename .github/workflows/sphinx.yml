@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - 'main'
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
@@ -19,7 +21,19 @@ jobs:
         path: docs/build/html/
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
-      if: github.ref == 'refs/heads/main'
+      # if: github.ref == 'refs/heads/main'
+      if: ${{ github.event_name == 'push' }}
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/build/html
+    - name: Update PR
+      if: ${{ github.event_name == 'pull_request' }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '👋 Check the Sphinx build passed before merge!'
+          })

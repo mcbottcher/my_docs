@@ -1,4 +1,4 @@
-FROM sphinxdoc/sphinx:2.4.4
+FROM sphinxdoc/sphinx
 
 COPY . /home/my_docs/
 
