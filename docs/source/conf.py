@@ -28,4 +28,6 @@ exclude_patterns = []
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "sphinx_rtd_theme"
-html_static_path = ['_static']
+
+# This is causing a warning, make _static folder if you need it
+# html_static_path = ['_static']
