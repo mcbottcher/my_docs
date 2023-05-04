@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yocto &mdash; MyDocs 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Yocto &mdash; MyDocs 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -106,12 +110,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="yocto">
-<h1>Yocto<a class="headerlink" href="#yocto" title="Permalink to this headline"></a></h1>
+  <section id="yocto">
+<h1>Yocto<a class="headerlink" href="#yocto" title="Permalink to this heading"></a></h1>
 <p>Yocto is a framework for building customised embedded linux images for a device.</p>
 <hr class="docutils" />
-<div class="section" id="nomenclature">
-<h2>Nomenclature<a class="headerlink" href="#nomenclature" title="Permalink to this headline"></a></h2>
+<section id="nomenclature">
+<h2>Nomenclature<a class="headerlink" href="#nomenclature" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Bitbake: a generic task executor</p></li>
 <li><p>OpenEmbedded: a metadata set used by bitbake</p></li>
@@ -123,61 +127,61 @@
 <li><p>Machine: defines the architecture, pins, buses, BSP etc.</p></li>
 <li><p>Image: output of build process (bootable and executable Linux OS)</p></li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="bitbake-commands">
-<h2>Bitbake Commands<a class="headerlink" href="#bitbake-commands" title="Permalink to this headline"></a></h2>
+<section id="bitbake-commands">
+<h2>Bitbake Commands<a class="headerlink" href="#bitbake-commands" title="Permalink to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Before running a lot of these commands, you might have to source the environment. e.g. <code class="code bash docutils literal notranslate"><span class="name builtin"><span class="pre">source</span></span> <span class="pre">poky/oe-init-build-env</span> <span class="pre">&lt;build_dir&gt;</span></code></p>
+<p>Before running a lot of these commands, you might have to source the environment. e.g. <code class="code highlight bash docutils literal highlight-bash"><span class="nb">source</span> poky/oe-init-build-env &lt;build_dir&gt;</code></p>
 </div>
 <ul>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">bitbake</span> <span class="pre">&lt;image-name&gt;</span></code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake &lt;image-name&gt;</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>This will build your linux image using the &lt;image-name&gt; as the root .bb file.</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">bitbake-layers</span> <span class="pre">create-layer</span> <span class="pre">meta-&lt;name&gt;</span></code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake-layers create-layer meta-&lt;name&gt;</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>This creates the basic directory structure for a layer. The name should start with <em>meta</em>.</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">bitbake</span> <span class="pre">-c</span> <span class="pre">&lt;cmd&gt;</span> <span class="pre">&lt;image&gt;</span></code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -c &lt;cmd&gt; &lt;image&gt;</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Run a command from an image. The command is a task available to the image.</p></li>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">bitbake</span> <span class="pre">-c</span> <span class="pre">cleanall</span> <span class="pre">my_image</span></code></p></li>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">bitbake</span> <span class="pre">-c</span> <span class="pre">clean</span> <span class="pre">my_image</span></code></p></li>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">bitbake</span> <span class="pre">-c</span> <span class="pre">compile</span> <span class="pre">my_image</span></code></p></li>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -c cleanall my_image</code></p></li>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -c clean my_image</code></p></li>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -c compile my_image</code></p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">bitbake</span> <span class="pre">-e</span></code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -e</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Shows the bitbake environment for the most recent build</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">bitbake</span> <span class="pre">-g</span> <span class="pre">&lt;package_name&gt;</span></code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -g &lt;package_name&gt;</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Creates a dependancy tree for the package, which you can view in <em>task-depends.dot</em></p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code bash docutils literal notranslate"><span class="name variable"><span class="pre">BBDEBUG</span></span><span class="operator"><span class="pre">=</span></span><span class="literal number"><span class="pre">3</span></span> <span class="pre">bitbake</span> <span class="pre">custom-image</span></code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash"><span class="nv">BBDEBUG</span><span class="o">=</span><span class="m">3</span> bitbake custom-image</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Prints debug information from your build</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">bitbake</span> <span class="pre">-c</span> <span class="pre">devshell</span> <span class="pre">&lt;target&gt;</span></code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -c devshell &lt;target&gt;</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>This is a shell where you can run bitbake commands, and see environment variables like <code class="docutils literal notranslate"><span class="pre">$CC</span></code></p></li>
@@ -185,10 +189,10 @@
 </div></blockquote>
 </li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="adding-a-custom-c-program-application">
-<h2>Adding a custom C program/application<a class="headerlink" href="#adding-a-custom-c-program-application" title="Permalink to this headline"></a></h2>
+<section id="adding-a-custom-c-program-application">
+<h2>Adding a custom C program/application<a class="headerlink" href="#adding-a-custom-c-program-application" title="Permalink to this heading"></a></h2>
 <p>This section will describe adding a program (C) to <em>usr/bin</em></p>
 <dl class="simple">
 <dt>Tutorials:</dt><dd><ol class="arabic simple">
@@ -198,10 +202,10 @@
 </dd>
 </dl>
 <p>You will want something similar to this in your <em>CMakeLists.txt</em>, which installs the program in <em>usr/bin</em></p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">1.9</span><span class="p">)</span>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">1.9</span><span class="p">)</span>
 <span class="nb">project</span> <span class="p">(</span><span class="s">hellocmake</span><span class="p">)</span>
-<span class="nb">add_executable</span><span class="p">(</span><span class="s">hellocmake</span> <span class="s">helloworld.c</span><span class="p">)</span>
-<span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">hellocmake</span> <span class="s">RUNTIME</span> <span class="s">DESTINATION</span> <span class="s">bin</span><span class="p">)</span>
+<span class="nb">add_executable</span><span class="p">(</span><span class="s">hellocmake</span><span class="w"> </span><span class="s">helloworld.c</span><span class="p">)</span>
+<span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span><span class="w"> </span><span class="s">hellocmake</span><span class="w"> </span><span class="s">RUNTIME</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s">bin</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If you want pull files from GitHub for example, you something like in the example:</p>
@@ -220,18 +224,18 @@ inherit cmake
 <li><p><code class="docutils literal notranslate"><span class="pre">inherit</span> <span class="pre">cmake</span></code> is required if your package is using CMake</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">EXTRA_OECMAKE</span></code> allows you to pass extra arguments to the CMake process</p></li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="appending-to-a-recipe">
-<h2>Appending to a Recipe<a class="headerlink" href="#appending-to-a-recipe" title="Permalink to this headline"></a></h2>
+<section id="appending-to-a-recipe">
+<h2>Appending to a Recipe<a class="headerlink" href="#appending-to-a-recipe" title="Permalink to this heading"></a></h2>
 <p>This is achieved using the <em>.bbappend</em> where the name of the file is the same
 as the recipe file you want to append to.</p>
 <p>The append file can overwrite or add new things to an existing <em>.bb</em> file.</p>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">%</span></code> in the name so that it disregards the version number of the <em>.bb</em> file.</p>
 <p>e.g. <code class="docutils literal notranslate"><span class="pre">hello_0.1.bb</span></code> can be appended with both <code class="docutils literal notranslate"><span class="pre">hello_%.bbappend</span></code> and <code class="docutils literal notranslate"><span class="pre">hello_0.1.bbappend</span></code></p>
-</div>
-<div class="section" id="tasks-adding-custom-tasks">
-<h2>Tasks / Adding Custom Tasks<a class="headerlink" href="#tasks-adding-custom-tasks" title="Permalink to this headline"></a></h2>
+</section>
+<section id="tasks-adding-custom-tasks">
+<h2>Tasks / Adding Custom Tasks<a class="headerlink" href="#tasks-adding-custom-tasks" title="Permalink to this heading"></a></h2>
 <p>You can write a task in a <em>.bb</em> file with either regular or python syntax:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Regular syntax</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
@@ -275,12 +279,12 @@ by <em>before</em> and <em>after</em> need the <em>do_</em> prefix to be registe
 <p class="admonition-title">Note</p>
 <p>You can look into <em>log.taskorder</em> to check the order of tasks</p>
 </div>
-</div>
-<div class="section" id="package-groups">
-<h2>Package Groups<a class="headerlink" href="#package-groups" title="Permalink to this headline"></a></h2>
+</section>
+<section id="package-groups">
+<h2>Package Groups<a class="headerlink" href="#package-groups" title="Permalink to this heading"></a></h2>
 <p>A package group is a group of packages (recipes) that achieve the same/similar things.</p>
-<div class="section" id="adding-a-package-group">
-<h3>Adding a package group<a class="headerlink" href="#adding-a-package-group" title="Permalink to this headline"></a></h3>
+<section id="adding-a-package-group">
+<h3>Adding a package group<a class="headerlink" href="#adding-a-package-group" title="Permalink to this heading"></a></h3>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">Example in a <em>packagegroup-custom.bb</em> file</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>PACKAGE_ARCH = &quot;${MACHINE_ARCH}&quot;
@@ -305,10 +309,10 @@ images included in the <code class="docutils literal notranslate"><span class="p
 </pre></div>
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="making-your-own-distro">
-<h2>Making your own Distro<a class="headerlink" href="#making-your-own-distro" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+<section id="making-your-own-distro">
+<h2>Making your own Distro<a class="headerlink" href="#making-your-own-distro" title="Permalink to this heading"></a></h2>
 <p>To make your own distro, you will need to create a new layer. In this layer,
 create a file in <em>conf/distro</em> called <em>&lt;my_distro&gt;.conf</em>.</p>
 <div class="literal-block-wrapper docutils container" id="id5">
@@ -321,9 +325,9 @@ create a file in <em>conf/distro</em> called <em>&lt;my_distro&gt;.conf</em>.</p
 </div>
 </div>
 <p>Add <code class="docutils literal notranslate"><span class="pre">DISTRO</span> <span class="pre">?=</span> <span class="pre">&quot;mydistro&quot;</span></code> to your <em>local.conf</em> to implement your distro.</p>
-</div>
-<div class="section" id="systemd">
-<h2>SystemD<a class="headerlink" href="#systemd" title="Permalink to this headline"></a></h2>
+</section>
+<section id="systemd">
+<h2>SystemD<a class="headerlink" href="#systemd" title="Permalink to this heading"></a></h2>
 <p>If you want to use SystemD instead of Sysvinit, you can add the following lines to distro
 configuration file.</p>
 <div class="literal-block-wrapper docutils container" id="id6">
@@ -336,8 +340,8 @@ configuration file.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="adding-a-service">
-<h3>Adding a Service<a class="headerlink" href="#adding-a-service" title="Permalink to this headline"></a></h3>
+<section id="adding-a-service">
+<h3>Adding a Service<a class="headerlink" href="#adding-a-service" title="Permalink to this heading"></a></h3>
 <ul>
 <li><p>Create a new layer:</p>
 <blockquote>
@@ -391,10 +395,10 @@ this service runs and to print to the standard output</p></li>
 </div></blockquote>
 </li>
 </ul>
-</div>
-</div>
-<div class="section" id="patch-files">
-<h2>Patch Files<a class="headerlink" href="#patch-files" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+<section id="patch-files">
+<h2>Patch Files<a class="headerlink" href="#patch-files" title="Permalink to this heading"></a></h2>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=srM6u8e4tyw&amp;list=PLEBQazB0HUyTpoJoZecRK6PpDG31Y7RPB&amp;index=6">Example patch of device tree</a>.</p>
 <p>The basic idea of a patch is that you create a diff file for the file you want to patch.
 The name of the patch file doesn’t matter too much. The file it targets is named within the file.
@@ -426,27 +430,27 @@ you want to patch.</p>
 <li><p>Install - copy files to target directories</p></li>
 <li><p>Package - bundle files for installation</p></li>
 </ol>
-<div class="section" id="patching-device-tree">
-<h3>Patching Device Tree<a class="headerlink" href="#patching-device-tree" title="Permalink to this headline"></a></h3>
+<section id="patching-device-tree">
+<h3>Patching Device Tree<a class="headerlink" href="#patching-device-tree" title="Permalink to this heading"></a></h3>
 <p>Device tree files are .dtsi and .dts files. .dtsi files are include files, and are used generally. .dts
 files are the ones that are used in the end, so these are the ones you want to patch if working on device tree.
 Device tree also have a function to override certain attributes, by using a reference to the device tree tag.
 This example updates the watchdog0 node to have status okay:</p>
 <div class="literal-block-wrapper docutils container" id="id9">
 <div class="code-block-caption"><span class="caption-text">Example overriding status attribute</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
-<div class="highlight-dts notranslate"><div class="highlight"><pre><span></span>&amp;watchdog0 {
-        status = &quot;okay&quot;;
-};
+<div class="highlight-dts notranslate"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="na">watchdog0</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kr">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;okay&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <p>You can find more info <a class="reference external" href="https://www.devicetree.org/">here</a> about device trees.</p>
-</div>
-</div>
-<div class="section" id="editing-bitbake-files">
-<h2>Editing Bitbake Files<a class="headerlink" href="#editing-bitbake-files" title="Permalink to this headline"></a></h2>
-<div class="section" id="assigning-values">
-<h3>Assigning Values<a class="headerlink" href="#assigning-values" title="Permalink to this headline"></a></h3>
+</section>
+</section>
+<section id="editing-bitbake-files">
+<h2>Editing Bitbake Files<a class="headerlink" href="#editing-bitbake-files" title="Permalink to this heading"></a></h2>
+<section id="assigning-values">
+<h3>Assigning Values<a class="headerlink" href="#assigning-values" title="Permalink to this heading"></a></h3>
 <ul>
 <li><p>Soft assignment: value is only assigned if not already, it can be overriden later
 by a hard assignment</p>
@@ -458,14 +462,14 @@ by a hard assignment</p>
 </div></blockquote>
 </li>
 </ul>
-</div>
-<div class="section" id="adding-packages">
-<h3>Adding Packages<a class="headerlink" href="#adding-packages" title="Permalink to this headline"></a></h3>
+</section>
+<section id="adding-packages">
+<h3>Adding Packages<a class="headerlink" href="#adding-packages" title="Permalink to this heading"></a></h3>
 <p>You can add packages to the final image by using: <code class="docutils literal notranslate"><span class="pre">IMAGE_INSTALL</span> <span class="pre">+=</span> <span class="pre">&lt;package_name&gt;</span></code></p>
 <p>The package could also be a package_group, with a list of packages to be installed.</p>
-</div>
-<div class="section" id="include-and-require">
-<h3>Include and Require<a class="headerlink" href="#include-and-require" title="Permalink to this headline"></a></h3>
+</section>
+<section id="include-and-require">
+<h3>Include and Require<a class="headerlink" href="#include-and-require" title="Permalink to this heading"></a></h3>
 <p>You can include some more info in your <em>.bb</em> files. You can either use include - which includes
 the file in your <em>.bb file</em> - or require - which will check the file
 exists first before processing the <em>.bb</em> file. If the file doesn’t
@@ -473,21 +477,21 @@ exist require will throw an error.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">require</span> <span class="n">recipes</span><span class="o">-</span><span class="n">extended</span><span class="o">/</span><span class="n">hello</span><span class="o">-</span><span class="n">extend</span><span class="o">.</span><span class="n">bb</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="avoiding-recipe-name-clashes">
-<h3>Avoiding recipe name clashes<a class="headerlink" href="#avoiding-recipe-name-clashes" title="Permalink to this headline"></a></h3>
+</section>
+<section id="avoiding-recipe-name-clashes">
+<h3>Avoiding recipe name clashes<a class="headerlink" href="#avoiding-recipe-name-clashes" title="Permalink to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BBFILE_PRIORITY_custom</span> <span class="o">=</span> <span class="s2">&quot;6&quot;</span>
 </pre></div>
 </div>
 <p>This can be assinged in the <em>conf/layer.conf</em> file. The higher the number,
 the higher the priority. This helps resolve cases where two recipes have the same
 name.</p>
-</div>
-<div class="section" id="using-python">
-<h3>Using Python<a class="headerlink" href="#using-python" title="Permalink to this headline"></a></h3>
+</section>
+<section id="using-python">
+<h3>Using Python<a class="headerlink" href="#using-python" title="Permalink to this heading"></a></h3>
 <div class="literal-block-wrapper docutils container" id="id10">
 <div class="code-block-caption"><span class="caption-text">Example removing ‘-frename-registers’ from CFLAGS</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CFLAGS</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;${@&#39;$</span><span class="si">{CFLAGS}</span><span class="s2">&#39;.replace(&#39;-frename-registers&#39;, &#39;&#39;)}&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CFLAGS</span> <span class="o">:=</span> <span class="s2">&quot;${@&#39;$</span><span class="si">{CFLAGS}</span><span class="s2">&#39;.replace(&#39;-frename-registers&#39;, &#39;&#39;)}&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -502,9 +506,9 @@ name.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="optomising-image-size">
-<h3>Optomising Image Size<a class="headerlink" href="#optomising-image-size" title="Permalink to this headline"></a></h3>
+</section>
+<section id="optomising-image-size">
+<h3>Optomising Image Size<a class="headerlink" href="#optomising-image-size" title="Permalink to this heading"></a></h3>
 <p>Turning on buildhistory will help track parameters we can tweak</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INHERIT</span> <span class="o">+=</span> <span class="s2">&quot; buildhistory&quot;</span>
 <span class="n">BUILDHISTORY_COMMIT</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
@@ -516,10 +520,10 @@ There will be some useful files like: image_info.txt, depends.dot, installed-pac
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IMAGE_INSTALL_remove</span> <span class="o">+=</span> <span class="s2">&quot; &lt;package_name&gt;&quot;</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="creating-an-sdk">
-<h2>Creating an SDK<a class="headerlink" href="#creating-an-sdk" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+<section id="creating-an-sdk">
+<h2>Creating an SDK<a class="headerlink" href="#creating-an-sdk" title="Permalink to this heading"></a></h2>
 <p>An SDK (Software Development Kit) provides all the utilities for building and compiling
 software for a target.</p>
 <p>There is an SDK <em>bbclass</em> in the poky classes-recipes directory. It can be included in your
@@ -528,18 +532,18 @@ build by using: <code class="docutils literal notranslate"><span class="pre">inh
 <p>An example of using an SDK after it is installed is given here. This sources the environment
 variables which will point to the correct tools and environment variables to build
 software for your target.</p>
-<p><code class="code bash docutils literal notranslate"><span class="pre">.</span> <span class="pre">/opt/poky/4.1.3/environment-setup-cortexa9t2hf-neon-poky-linux-gnueabi</span></code></p>
-</div>
-<div class="section" id="recipe-naming">
-<h2>Recipe Naming<a class="headerlink" href="#recipe-naming" title="Permalink to this headline"></a></h2>
+<p><code class="code highlight bash docutils literal highlight-bash">. /opt/poky/4.1.3/environment-setup-cortexa9t2hf-neon-poky-linux-gnueabi</code></p>
+</section>
+<section id="recipe-naming">
+<h2>Recipe Naming<a class="headerlink" href="#recipe-naming" title="Permalink to this heading"></a></h2>
 <p>Recipes are built using their name. They can optionally include a version number
 at the end of their name, e.g. <code class="docutils literal notranslate"><span class="pre">my_recipe_0.1.bb</span></code></p>
 <p>You can reference specific recipe versions or take the latest by using just the name.</p>
 <p>You can make append files and other files ignore the version of the recipe too by using the
 <code class="docutils literal notranslate"><span class="pre">%</span></code> symbol. e.g. <code class="docutils literal notranslate"><span class="pre">my_recipe_%.bbappend</span></code> will apply to all versions of <code class="docutils literal notranslate"><span class="pre">my_recipe</span></code></p>
-</div>
-<div class="section" id="updating-bitbake-syntax">
-<h2>Updating Bitbake Syntax<a class="headerlink" href="#updating-bitbake-syntax" title="Permalink to this headline"></a></h2>
+</section>
+<section id="updating-bitbake-syntax">
+<h2>Updating Bitbake Syntax<a class="headerlink" href="#updating-bitbake-syntax" title="Permalink to this heading"></a></h2>
 <p>Bitbake has changed it syntax recently so sometimes if you copy something that uses the
 old syntax bitbake will throw an error.</p>
 <p>There is a script that helps update old syntax:</p>
@@ -547,8 +551,8 @@ old syntax bitbake will throw an error.</p>
 scripts/contrib/convert-overrides.py &lt;your-layer&gt;
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

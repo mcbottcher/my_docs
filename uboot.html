@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>U-Boot &mdash; MyDocs 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>U-Boot &mdash; MyDocs 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -85,12 +89,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="u-boot">
-<h1>U-Boot<a class="headerlink" href="#u-boot" title="Permalink to this headline"></a></h1>
+  <section id="u-boot">
+<h1>U-Boot<a class="headerlink" href="#u-boot" title="Permalink to this heading"></a></h1>
 <p>Enter U-Boot environment on startup by hitting enter when it is doing its countdown.
 It will also enter automatically if you haven’t specified a default <em>bootcmd</em>.</p>
-<div class="section" id="some-u-boot-commands">
-<h2>Some U-Boot Commands<a class="headerlink" href="#some-u-boot-commands" title="Permalink to this headline"></a></h2>
+<section id="some-u-boot-commands">
+<h2>Some U-Boot Commands<a class="headerlink" href="#some-u-boot-commands" title="Permalink to this heading"></a></h2>
 <p>You can see a list of U-Boot commands and their uses <a class="reference external" href="https://u-boot.readthedocs.io/en/latest/usage/index.html#shell-commands">here</a>
 and <a class="reference external" href="https://www.mediawiki.compulab.com/w/index.php?title=U-Boot:_Quick_reference#Memory_commands">there</a>.</p>
 <p>You can also type <code class="docutils literal notranslate"><span class="pre">help</span></code> in your uboot environment to view available commands. Type <code class="docutils literal notranslate"><span class="pre">printenv</span></code> to show the environment.</p>
@@ -113,13 +117,13 @@ For example loadb uses kermit.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">mmc</span> <span class="pre">info</span></code>: Shows info about mmc device</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">mmc</span> <span class="pre">part</span></code>: Shows info on mmc partitions</p></li>
 </ul>
-</div>
-<div class="section" id="booting-using-tftp">
-<h2>Booting using TFTP<a class="headerlink" href="#booting-using-tftp" title="Permalink to this headline"></a></h2>
+</section>
+<section id="booting-using-tftp">
+<h2>Booting using TFTP<a class="headerlink" href="#booting-using-tftp" title="Permalink to this heading"></a></h2>
 <p>Trivial File Transfer Protocol (TFTP) is a really basic file transfer protocol that is best suited to use over a LAN since it is not secure.</p>
 <p><a class="reference external" href="https://www.rocketboards.org/foswiki/Documentation/BootingAlteraSoCFPGAFromNetworkUsingTFTPAndNFS">This tutorial</a> was very useful in working out how to do this.</p>
-<div class="section" id="setting-up-the-host-server">
-<h3>Setting up the host server<a class="headerlink" href="#setting-up-the-host-server" title="Permalink to this headline"></a></h3>
+<section id="setting-up-the-host-server">
+<h3>Setting up the host server<a class="headerlink" href="#setting-up-the-host-server" title="Permalink to this heading"></a></h3>
 <p>You can use several implementations, this is one:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Installing the TFTP server</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
@@ -140,9 +144,9 @@ For example loadb uses kermit.</p></li>
 </pre></div>
 </div>
 <p>You can store files you want available over TFTP in the <em>/srv/tftp</em> directory</p>
-</div>
-<div class="section" id="setting-up-the-u-boot-client">
-<h3>Setting up the U-Boot Client<a class="headerlink" href="#setting-up-the-u-boot-client" title="Permalink to this headline"></a></h3>
+</section>
+<section id="setting-up-the-u-boot-client">
+<h3>Setting up the U-Boot Client<a class="headerlink" href="#setting-up-the-u-boot-client" title="Permalink to this heading"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The steps used here might be specific to DE10-Nano board</p>
@@ -179,9 +183,9 @@ bootz <span class="si">${</span><span class="nv">kernel_addr_r</span><span class
 </div>
 <p>This script gets the kernel image and the device tree. It sets the linux boot arguments including
 <code class="docutils literal notranslate"><span class="pre">root=</span></code> which tells the kernel where to find the rootfs (SD card partition 2), and then bootz the zImage (without initrd: “-” in the middle).</p>
-</div>
-<div class="section" id="creating-u-boot-files-on-the-host">
-<h3>Creating U-Boot files on the host<a class="headerlink" href="#creating-u-boot-files-on-the-host" title="Permalink to this headline"></a></h3>
+</section>
+<section id="creating-u-boot-files-on-the-host">
+<h3>Creating U-Boot files on the host<a class="headerlink" href="#creating-u-boot-files-on-the-host" title="Permalink to this heading"></a></h3>
 <p>To make a script into a U-Boot readable script, use the <em>mkimage</em> utility:</p>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">Example making a script execuable by uboot</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
@@ -192,9 +196,9 @@ sudo mkimage -A arm -O u-boot -T script -C none -a <span class="m">0</span> -e <
 </div>
 </div>
 <p>You can also use the <em>mkimage</em> utility to make other uboot files.</p>
-</div>
-<div class="section" id="updating-the-rootfs">
-<h3>Updating the rootfs<a class="headerlink" href="#updating-the-rootfs" title="Permalink to this headline"></a></h3>
+</section>
+<section id="updating-the-rootfs">
+<h3>Updating the rootfs<a class="headerlink" href="#updating-the-rootfs" title="Permalink to this heading"></a></h3>
 <p>The file system is mounted during boot. This can be mounted from the SD card, but could also be mounted from an external device, e.g. using a NFS server.</p>
 <p>So far all I have done is copy the rootfs.etx3 file to RAM using TFTP, then load it to the SD card using a command like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mmc</span> <span class="n">write</span> <span class="o">&lt;</span><span class="n">address_to_write_from</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">starting_block_offset</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">block_count</span><span class="o">&gt;</span>
@@ -202,14 +206,14 @@ sudo mkimage -A arm -O u-boot -T script -C none -a <span class="m">0</span> -e <
 </div>
 <p>You can find info about a device like block size and staring blocks of different partitions with <code class="docutils literal notranslate"><span class="pre">mmc</span> <span class="pre">info</span></code></p>
 <p>Use <code class="docutils literal notranslate"><span class="pre">mmc</span> <span class="pre">part</span></code> to see the SD card partitions.</p>
-</div>
-</div>
-<div class="section" id="booting-using-a-fit-image">
-<h2>Booting using a FIT image<a class="headerlink" href="#booting-using-a-fit-image" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+<section id="booting-using-a-fit-image">
+<h2>Booting using a FIT image<a class="headerlink" href="#booting-using-a-fit-image" title="Permalink to this heading"></a></h2>
 <p><a class="reference external" href="https://www.thegoodpenguin.co.uk/blog/u-boot-fit-image-overview/">This FIT tutorial</a> will give some insight into using a FIT image.
 A FIT image is basically a bundled together kernel image, initramfs and device tree.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

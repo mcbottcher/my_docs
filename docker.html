@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Docker &mdash; MyDocs 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Docker &mdash; MyDocs 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -82,8 +86,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="docker">
-<h1>Docker<a class="headerlink" href="#docker" title="Permalink to this headline"></a></h1>
+  <section id="docker">
+<h1>Docker<a class="headerlink" href="#docker" title="Permalink to this heading"></a></h1>
 <p>Docker is a tool that allows developers to develop their applications in a sandbox
 (container) to run on the host operating system.</p>
 <p>Main components of Docker:</p>
@@ -96,8 +100,8 @@
 </ul>
 </div></blockquote>
 <hr class="docutils" />
-<div class="section" id="useful-terms">
-<h2>Useful Terms<a class="headerlink" href="#useful-terms" title="Permalink to this headline"></a></h2>
+<section id="useful-terms">
+<h2>Useful Terms<a class="headerlink" href="#useful-terms" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Images: The blueprint of our application which form the basis of containers</p></li>
 <li><p>Containers: A running version of an image</p></li>
@@ -105,43 +109,43 @@
 <li><p>Docker Cliert: The command line tool that lets the user interact with the Daemon</p></li>
 <li><p>Docker Hub: Registry of Docker images. You can also host your own registry!</p></li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="commands">
-<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this headline"></a></h2>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this heading"></a></h2>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">pull</span></code>: This fetches the image from the Docker registry and saves it your system</p>
 <blockquote>
-<div><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">&lt;image_name&gt;</span></code></p>
+<div><p><code class="code highlight bash docutils literal highlight-bash">docker pull &lt;image_name&gt;</code></p>
 </div></blockquote>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">images</span></code>: Lists all images on your system</p>
 <blockquote>
-<div><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">images</span></code></p>
+<div><p><code class="code highlight bash docutils literal highlight-bash">docker images</code></p>
 </div></blockquote>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">run</span></code>: Runs the specified container</p>
 <blockquote>
-<div><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">&lt;image_name&gt;</span></code></p>
+<div><p><code class="code highlight bash docutils literal highlight-bash">docker run &lt;image_name&gt;</code></p>
 <ul>
 <li><p>This will exit immediately since no command is specified for the container to run:</p>
 <blockquote>
-<div><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">busybox</span> <span class="name builtin"><span class="pre">echo</span></span> <span class="literal string double"><span class="pre">“hello</span> <span class="pre">from</span> <span class="pre">busybox</span> <span class="pre">container”</span></span></code></p>
+<div><p><code class="code highlight bash docutils literal highlight-bash">docker run busybox <span class="nb">echo</span> <span class="s2">&quot;hello from busybox container&quot;</span></code></p>
 </div></blockquote>
 </li>
 <li><p>Run with an interactive environment:</p>
 <blockquote>
-<div><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-it</span> <span class="pre">busybox</span></code></p>
+<div><p><code class="code highlight bash docutils literal highlight-bash">docker run -it busybox</code></p>
 </div></blockquote>
 </li>
 <li><p>Run with it detached from the terminal: will keep running even if terminal is closed</p>
 <blockquote>
-<div><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-d</span> <span class="pre">&lt;image_name&gt;</span></code></p>
+<div><p><code class="code highlight bash docutils literal highlight-bash">docker run -d &lt;image_name&gt;</code></p>
 </div></blockquote>
 </li>
 <li><p>Set a name for your container, which you can use instead of an ID to perform actions e.g. <code class="docutils literal notranslate"><span class="pre">stop</span></code></p>
 <blockquote>
-<div><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">--name</span> <span class="pre">my_container</span> <span class="pre">&lt;image_name&gt;</span></code></p>
+<div><p><code class="code highlight bash docutils literal highlight-bash">docker run --name my_container &lt;image_name&gt;</code></p>
 </div></blockquote>
 </li>
 </ul>
@@ -160,14 +164,14 @@ docker rm &lt;id&gt;
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ps</span></code>: Lists containers</p>
 <blockquote>
-<div><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span> <span class="pre">-a</span></code></p>
+<div><p><code class="code highlight bash docutils literal highlight-bash">docker ps -a</code></p>
 <p>Use <code class="docutils literal notranslate"><span class="pre">-q</span></code> to only list IDs. This can be useful if you want to remove all containers e.g.</p>
-<p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">rm</span> <span class="keyword"><span class="pre">$(</span></span><span class="pre">docker</span> <span class="pre">ps</span> <span class="pre">-a</span> <span class="pre">-q</span><span class="keyword"><span class="pre">)</span></span></code></p>
+<p><code class="code highlight bash docutils literal highlight-bash">docker rm <span class="k">$(</span>docker ps -a -q<span class="k">)</span></code></p>
 </div></blockquote>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">prune</span></code>: Deletes all exited containers</p>
 <blockquote>
-<div><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">prune</span></code></p>
+<div><p><code class="code highlight bash docutils literal highlight-bash">docker prune</code></p>
 </div></blockquote>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cp</span></code>: Copies files from the container to the host machine</p>
@@ -177,13 +181,13 @@ docker rm &lt;id&gt;
 </div>
 </div></blockquote>
 </li>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code>: This will run the docker compose file</p></li>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">down</span></code>: Shuts down all the containers together</p></li>
+<li><p><code class="code highlight bash docutils literal highlight-bash">docker compose up</code>: This will run the docker compose file</p></li>
+<li><p><code class="code highlight bash docutils literal highlight-bash">docker compose down</code>: Shuts down all the containers together</p></li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="dockerfiles">
-<h2>Dockerfiles<a class="headerlink" href="#dockerfiles" title="Permalink to this headline"></a></h2>
+<section id="dockerfiles">
+<h2>Dockerfiles<a class="headerlink" href="#dockerfiles" title="Permalink to this heading"></a></h2>
 <p>A Dockerfile contains a list of commands that the Docker client calls when creating an image.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">FROM</span></code>: Specifies the base image to use</p></li>
@@ -196,24 +200,24 @@ docker rm &lt;id&gt;
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">COPY</span></code>: Copies files to the container</p>
 <blockquote>
-<div><p><code class="code docker docutils literal notranslate"><span class="keyword"><span class="pre">COPY</span></span> <span class="pre">&lt;src&gt;</span> <span class="pre">&lt;dest&gt;</span></code></p>
+<div><p><code class="code highlight docker docutils literal highlight-docker"><span class="k">COPY</span><span class="w"> </span>&lt;src&gt; &lt;dest&gt;</code></p>
 <p>e.g.</p>
-<p><code class="code docker docutils literal notranslate"><span class="keyword"><span class="pre">COPY</span></span> <span class="pre">.</span> <span class="pre">/home/my_docs/</span></code></p>
+<p><code class="code highlight docker docutils literal highlight-docker"><span class="k">COPY</span><span class="w"> </span>. /home/my_docs/</code></p>
 </div></blockquote>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">RUN</span></code>: Executes commands during the image build. Commits the results to the new image.</p>
 <blockquote>
-<div><p><code class="code docker docutils literal notranslate"><span class="keyword"><span class="pre">RUN</span></span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></p>
+<div><p><code class="code highlight docker docutils literal highlight-docker"><span class="k">RUN</span><span class="w"> </span>pip install -r requirements.txt</code></p>
 </div></blockquote>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">CMD</span></code>: Specifies the default command to be executed when a container starts. Can be overriden by command line args.</p>
 <blockquote>
-<div><p><code class="code docker docutils literal notranslate"><span class="keyword"><span class="pre">CMD</span></span> <span class="punctuation"><span class="pre">[</span></span><span class="literal string double"><span class="pre">“echo”</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal string double"><span class="pre">“hello”</span></span><span class="punctuation"><span class="pre">]</span></span></code></p>
+<div><p><code class="code highlight docker docutils literal highlight-docker"><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;echo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;hello&quot;</span><span class="p">]</span></code></p>
 <p>It comes in three forms:</p>
 <ol class="arabic simple">
-<li><p><code class="code docker docutils literal notranslate"><span class="keyword"><span class="pre">CMD</span></span> <span class="punctuation"><span class="pre">[</span></span><span class="literal string double"><span class="pre">“executable”</span></span><span class="punctuation"><span class="pre">,</span></span><span class="literal string double"><span class="pre">”param1”</span></span><span class="punctuation"><span class="pre">,</span></span><span class="literal string double"><span class="pre">”param2”</span></span><span class="punctuation"><span class="pre">]</span></span></code> (exec form, this is the preferred form)</p></li>
-<li><p><code class="code docker docutils literal notranslate"><span class="keyword"><span class="pre">CMD</span></span> <span class="punctuation"><span class="pre">[</span></span><span class="literal string double"><span class="pre">“param1”</span></span><span class="punctuation"><span class="pre">,</span></span><span class="literal string double"><span class="pre">”param2”</span></span><span class="punctuation"><span class="pre">]</span></span></code> (as default parameters to ENTRYPOINT)</p></li>
-<li><p><code class="code docker docutils literal notranslate"><span class="keyword"><span class="pre">CMD</span></span> <span class="name builtin"><span class="pre">command</span></span> <span class="pre">param1</span> <span class="pre">param2</span></code> (shell form)</p></li>
+<li><p><code class="code highlight docker docutils literal highlight-docker"><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;executable&quot;</span><span class="p">,</span><span class="s2">&quot;param1&quot;</span><span class="p">,</span><span class="s2">&quot;param2&quot;</span><span class="p">]</span></code> (exec form, this is the preferred form)</p></li>
+<li><p><code class="code highlight docker docutils literal highlight-docker"><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;param1&quot;</span><span class="p">,</span><span class="s2">&quot;param2&quot;</span><span class="p">]</span></code> (as default parameters to ENTRYPOINT)</p></li>
+<li><p><code class="code highlight docker docutils literal highlight-docker"><span class="k">CMD</span><span class="w"> </span><span class="nb">command</span> param1 param2</code> (shell form)</p></li>
 </ol>
 </div></blockquote>
 </li>
@@ -221,61 +225,61 @@ docker rm &lt;id&gt;
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>It could be useful to start shell, then use <code class="docutils literal notranslate"><span class="pre">CMD</span></code> to pass the arguments. <code class="code docker docutils literal notranslate"><span class="keyword"><span class="pre">ENTRYPOINT</span></span><span class="punctuation"><span class="pre">[</span></span><span class="literal string double"><span class="pre">“/bin/sh”</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal string double"><span class="pre">“-c”</span></span><span class="punctuation"><span class="pre">]</span></span></code></p>
+<p>It could be useful to start shell, then use <code class="docutils literal notranslate"><span class="pre">CMD</span></code> to pass the arguments. <code class="code highlight docker docutils literal highlight-docker">ENTRYPOINT<span class="o">[</span><span class="s2">&quot;/bin/sh&quot;</span>, <span class="s2">&quot;-c&quot;</span><span class="o">]</span></code></p>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="docker-volumes">
-<h2>Docker Volumes<a class="headerlink" href="#docker-volumes" title="Permalink to this headline"></a></h2>
+<section id="docker-volumes">
+<h2>Docker Volumes<a class="headerlink" href="#docker-volumes" title="Permalink to this heading"></a></h2>
 <p>A Docker Volume is a way of including part of your host filesystem into the Docker container.
 This way when you close and delete the container, you have a way of storing the data that you wanted.</p>
 <p>There are 3 types of volumes:</p>
 <ol class="arabic simple">
-<li><p>Host Volume: Use the <code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-v</span> <span class="pre">&lt;host_dir&gt;:&lt;container_dir&gt;</span></code> to specify a volume.</p></li>
-<li><p>Anonymous Volumes: <code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-v</span> <span class="pre">&lt;container_dir&gt;</span></code>. This will put the volume somewhere on your host fs that you have’t specified (<code class="docutils literal notranslate"><span class="pre">/var/lib/docker/volumes/</span></code>)</p></li>
-<li><p>Named Volume: <code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-v</span> <span class="pre">name:&lt;container_id&gt;</span></code>. You can reference the host volume with a name that you specify</p></li>
+<li><p>Host Volume: Use the <code class="code highlight bash docutils literal highlight-bash">docker run -v &lt;host_dir&gt;:&lt;container_dir&gt;</code> to specify a volume.</p></li>
+<li><p>Anonymous Volumes: <code class="code highlight bash docutils literal highlight-bash">docker run -v &lt;container_dir&gt;</code>. This will put the volume somewhere on your host fs that you have’t specified (<code class="docutils literal notranslate"><span class="pre">/var/lib/docker/volumes/</span></code>)</p></li>
+<li><p>Named Volume: <code class="code highlight bash docutils literal highlight-bash">docker run -v name:&lt;container_id&gt;</code>. You can reference the host volume with a name that you specify</p></li>
 </ol>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="docker-compose">
-<h2>Docker Compose<a class="headerlink" href="#docker-compose" title="Permalink to this headline"></a></h2>
+<section id="docker-compose">
+<h2>Docker Compose<a class="headerlink" href="#docker-compose" title="Permalink to this heading"></a></h2>
 <p>One of the best ways of making docker containers easy to maintain, is to use multiple containers
 for one job, each one implementing one process (micro-service).</p>
 <p>Docker Compose lets you run multiple docker containers at the same time.</p>
 <p>Docker Compose uses a yaml file to configure the containers that are run.</p>
 <ul class="simple">
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code>: This will run the docker compose file</p></li>
-<li><p><code class="code bash docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">down</span></code>: Shuts down all the containers together</p></li>
+<li><p><code class="code highlight bash docutils literal highlight-bash">docker compose up</code>: This will run the docker compose file</p></li>
+<li><p><code class="code highlight bash docutils literal highlight-bash">docker compose down</code>: Shuts down all the containers together</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Example of a <em>docker-compose.yaml</em></span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span> <span class="s">&#39;3&#39;</span>
-<span class="nt">services</span><span class="p">:</span>
-    <span class="nt">app</span><span class="p">:</span>
-        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">node:latest</span>
-        <span class="nt">container_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app_main</span>
-        <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">always</span>
-        <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sh -c &quot;yarn install &amp;&amp; yarn start&quot;</span>
-        <span class="nt">ports</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">8000:8000</span>
-        <span class="nt">working_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/app</span>
-        <span class="nt">volumes</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./:/app</span>
-        <span class="nt">environment</span><span class="p">:</span>
-        <span class="nt">MYSQL_HOST</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
-        <span class="nt">MYSQL_USER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root</span>
-        <span class="nt">MYSQL_PASSWORD</span><span class="p">:</span>
-        <span class="nt">MYSQL_DB</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test</span>
-    <span class="nt">mongo</span><span class="p">:</span>
-        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mongo</span>
-        <span class="nt">container_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app_mongo</span>
-        <span class="nt">restart</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">always</span>
-        <span class="nt">ports</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">27017:27017</span>
-        <span class="nt">volumes</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">~/mongo:/data/db</span>
-<span class="nt">volumes</span><span class="p">:</span>
-<span class="nt">mongodb</span><span class="p">:</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3&#39;</span><span class="w"></span>
+<span class="nt">services</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node:latest</span><span class="w"></span>
+<span class="w">        </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app_main</span><span class="w"></span>
+<span class="w">        </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span><span class="w"></span>
+<span class="w">        </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sh -c &quot;yarn install &amp;&amp; yarn start&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000:8000</span><span class="w"></span>
+<span class="w">        </span><span class="nt">working_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/app</span><span class="w"></span>
+<span class="w">        </span><span class="nt">volumes</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./:/app</span><span class="w"></span>
+<span class="w">        </span><span class="nt">environment</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MYSQL_HOST</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MYSQL_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">root</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MYSQL_PASSWORD</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MYSQL_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mongo</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mongo</span><span class="w"></span>
+<span class="w">        </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app_mongo</span><span class="w"></span>
+<span class="w">        </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">27017:27017</span><span class="w"></span>
+<span class="w">        </span><span class="nt">volumes</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~/mongo:/data/db</span><span class="w"></span>
+<span class="nt">volumes</span><span class="p">:</span><span class="w"></span>
+<span class="nt">mongodb</span><span class="p">:</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -291,15 +295,15 @@ for one job, each one implementing one process (micro-service).</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">environment</span></code>: Defines the environment variables</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">command</span></code>: This is the command to run the service</p></li>
 </ul>
-</div>
-<div class="section" id="sources">
-<h2>Sources<a class="headerlink" href="#sources" title="Permalink to this headline"></a></h2>
+</section>
+<section id="sources">
+<h2>Sources<a class="headerlink" href="#sources" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://docker-curriculum.com">https://docker-curriculum.com</a></p></li>
 <li><p><a class="reference external" href="https://www.tutorialspoint.com/docker/index.htm">https://www.tutorialspoint.com/docker/index.htm</a></p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

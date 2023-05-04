@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SystemD &mdash; MyDocs 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>SystemD &mdash; MyDocs 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -83,10 +87,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="systemd">
-<h1>SystemD<a class="headerlink" href="#systemd" title="Permalink to this headline"></a></h1>
-<div class="section" id="service-files">
-<h2>Service Files<a class="headerlink" href="#service-files" title="Permalink to this headline"></a></h2>
+  <section id="systemd">
+<h1>SystemD<a class="headerlink" href="#systemd" title="Permalink to this heading"></a></h1>
+<section id="service-files">
+<h2>Service Files<a class="headerlink" href="#service-files" title="Permalink to this heading"></a></h2>
 <p>SystemD service files have 3 sections:</p>
 <ol class="arabic simple">
 <li><p>Unit: The information section - description
@@ -101,8 +105,8 @@ target or multi-user target), can also define service alias</p></li>
 <p>You can use the <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">systemd.service</span></code> and <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">systemd.unit</span></code> commands to
 view some more info</p>
 </div>
-<div class="section" id="unit-section">
-<h3>Unit Section<a class="headerlink" href="#unit-section" title="Permalink to this headline"></a></h3>
+<section id="unit-section">
+<h3>Unit Section<a class="headerlink" href="#unit-section" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Description: This is the description that gets printed when running the service, so make it sound cool!</p></li>
 <li><p>After: You can specify the service runs after another service e.g.</p></li>
@@ -116,9 +120,9 @@ view some more info</p>
 <li><p>OnFailure: A space-seperated list of one or more units that are actived if this unit enters the “failed“ state</p></li>
 <li><p>ConditionPathExists: Only starts if file in given path exists (use the ! to do the opposite)</p></li>
 </ul>
-</div>
-<div class="section" id="service-section">
-<h3>Service Section<a class="headerlink" href="#service-section" title="Permalink to this headline"></a></h3>
+</section>
+<section id="service-section">
+<h3>Service Section<a class="headerlink" href="#service-section" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Type: simple,exec, forking, oneshot, dbus, notify, idle</p></li>
 <li><p>ExecStart: Commands (with their arguments) that are executed when the service is started e.g.</p></li>
@@ -135,18 +139,18 @@ view some more info</p>
 <li><p>EnvironmentFile: Specify location of file containing env variables</p></li>
 <li><p>Restart: Lists situations where restart is triggered e.g. Restart=on-failure will restart if executable returns a non 0 value</p></li>
 </ul>
-</div>
-<div class="section" id="install-section">
-<h3>Install Section<a class="headerlink" href="#install-section" title="Permalink to this headline"></a></h3>
+</section>
+<section id="install-section">
+<h3>Install Section<a class="headerlink" href="#install-section" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>WantedBy: Specifies the target that will want this service - multi-user / graphical</p></li>
 <li><p>Alias: another name for starting/stopping a service</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 <hr class="docutils" />
-<div class="section" id="systemd-management">
-<h2>SystemD Management<a class="headerlink" href="#systemd-management" title="Permalink to this headline"></a></h2>
+<section id="systemd-management">
+<h2>SystemD Management<a class="headerlink" href="#systemd-management" title="Permalink to this heading"></a></h2>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Some SystemD commands</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">systemctl</span> <span class="n">enable</span> <span class="n">name</span><span class="o">.</span><span class="n">service</span>
@@ -164,8 +168,8 @@ To view targets available, use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">systemd</span> <span class="n">daemon</span><span class="o">-</span><span class="n">reload</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GitHub Actions &mdash; MyDocs 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>GitHub Actions &mdash; MyDocs 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -106,13 +110,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="github-actions">
-<h1>GitHub Actions<a class="headerlink" href="#github-actions" title="Permalink to this headline"></a></h1>
+  <section id="github-actions">
+<h1>GitHub Actions<a class="headerlink" href="#github-actions" title="Permalink to this heading"></a></h1>
 <p>GitHub Actions is an automation tool that allows developers to automate their workflows, build,
 test, and deploy their code directly from their GitHub repository.</p>
 <hr class="docutils" />
-<div class="section" id="components-of-github-actions">
-<h2>Components of GitHub Actions<a class="headerlink" href="#components-of-github-actions" title="Permalink to this headline"></a></h2>
+<section id="components-of-github-actions">
+<h2>Components of GitHub Actions<a class="headerlink" href="#components-of-github-actions" title="Permalink to this heading"></a></h2>
 <p>A GitHub Actions <em>workflow</em> can be triggered when an <em>event</em> occurs in your repository. A workflow
 contains one or more <em>jobs</em> which can be run sequentially or in parallel. Each job runs inside a
 <em>runner</em> (VM or container), and has one or more <em>steps</em> that either runs a script or an <em>action</em>.</p>
@@ -160,85 +164,85 @@ contains one or more <em>jobs</em> which can be run sequentially or in parallel.
 </dl>
 </li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="workflow-yaml-file">
-<h2>Workflow YAML file<a class="headerlink" href="#workflow-yaml-file" title="Permalink to this headline"></a></h2>
+<section id="workflow-yaml-file">
+<h2>Workflow YAML file<a class="headerlink" href="#workflow-yaml-file" title="Permalink to this heading"></a></h2>
 <ul>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">name</span></span><span class="punctuation"><span class="pre">:</span></span></code>: The name of the workflow that appears in the “Actions” tab in GitHub</p></li>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">run-name</span></span><span class="punctuation"><span class="pre">:</span></span></code>: The name of the workflow run that will appear on GitHub</p>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">name</span><span class="p">:</span><span class="w"></span></code>: The name of the workflow that appears in the “Actions” tab in GitHub</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">run-name</span><span class="p">:</span><span class="w"></span></code>: The name of the workflow run that will appear on GitHub</p>
 <blockquote>
 <div><p>This can be customised by incrementing a number or showing the username of the person that
-triggered the action e.g. <code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">run-name</span></span><span class="punctuation"><span class="pre">:</span></span> <span class="literal scalar plain"><span class="pre">${{</span> <span class="pre">github.actor</span> <span class="pre">}}</span> <span class="pre">workflow</span> <span class="pre">run</span></span></code></p>
+triggered the action e.g. <code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">run-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.actor }} workflow run</span><span class="w"></span></code></p>
 </div></blockquote>
 </li>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">on</span></span><span class="punctuation"><span class="pre">:</span></span></code>: Specifies the trigger(s) for the workflow</p></li>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">jobs</span></span><span class="punctuation"><span class="pre">:</span></span></code>: Groups together jobs that run in the workflow</p></li>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">runs-on</span></span><span class="punctuation"><span class="pre">:</span></span></code>: Specifies where the job will be run</p></li>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">steps</span></span><span class="punctuation"><span class="pre">:</span></span></code>: Lists the steps for the job</p></li>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">uses</span></span><span class="punctuation"><span class="pre">:</span></span></code>: Specifies the pre-defined action that a step will use</p></li>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">run</span></span><span class="punctuation"><span class="pre">:</span></span></code>: Tells the job to execute a command on the runner</p></li>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">needs</span></span><span class="punctuation"><span class="pre">:</span></span></code>: Used when a job needs to wait for another job to complete</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">on</span><span class="p">:</span><span class="w"></span></code>: Specifies the trigger(s) for the workflow</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">jobs</span><span class="p">:</span><span class="w"></span></code>: Groups together jobs that run in the workflow</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">runs-on</span><span class="p">:</span><span class="w"></span></code>: Specifies where the job will be run</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">steps</span><span class="p">:</span><span class="w"></span></code>: Lists the steps for the job</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"></span></code>: Specifies the pre-defined action that a step will use</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">run</span><span class="p">:</span><span class="w"></span></code>: Tells the job to execute a command on the runner</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">needs</span><span class="p">:</span><span class="w"></span></code>: Used when a job needs to wait for another job to complete</p></li>
 </ul>
-<div class="section" id="using-variables">
-<h3>Using Variables<a class="headerlink" href="#using-variables" title="Permalink to this headline"></a></h3>
+<section id="using-variables">
+<h3>Using Variables<a class="headerlink" href="#using-variables" title="Permalink to this heading"></a></h3>
 <p>You can add custom variables to your worflow YAML file. In the example the variables will be
 available to the given script.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my_script.scr</span>
-      <span class="nt">env</span><span class="p">:</span>
-        <span class="nt">MY_VAR_1</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">53</span>
-        <span class="nt">MY_VAR_2</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hello</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_script.scr</span><span class="w"></span>
+<span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MY_VAR_1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">53</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MY_VAR_2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="using-scripts-and-shell-commands">
-<h3>Using Scripts and Shell Commands<a class="headerlink" href="#using-scripts-and-shell-commands" title="Permalink to this headline"></a></h3>
+</section>
+<section id="using-scripts-and-shell-commands">
+<h3>Using Scripts and Shell Commands<a class="headerlink" href="#using-scripts-and-shell-commands" title="Permalink to this heading"></a></h3>
 <p>You can either run just a single command, or a script from your local repo, provided with a shell type</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">npm install -g bats</span>
-    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Run script</span>
-      <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./.github/scripts/build.sh</span>
-      <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bash</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">npm install -g bats</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run script</span><span class="w"></span>
+<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./.github/scripts/build.sh</span><span class="w"></span>
+<span class="w">      </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="sharing-data-between-jobs">
-<h3>Sharing Data Between Jobs<a class="headerlink" href="#sharing-data-between-jobs" title="Permalink to this headline"></a></h3>
+</section>
+<section id="sharing-data-between-jobs">
+<h3>Sharing Data Between Jobs<a class="headerlink" href="#sharing-data-between-jobs" title="Permalink to this heading"></a></h3>
 <p>If you want to share files between jobs, or just save them for later reference,
 you can save them as artifacts.</p>
 <ul class="simple">
 <li><p>Creating an artifact:</p></li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">example-job</span><span class="p">:</span>
-    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Save output</span>
-    <span class="nt">steps</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bash</span>
-      <span class="nt">run</span><span class="p">:</span> <span class="p p-Indicator">|</span>
-        <span class="no">expr 1 + 1 &gt; output.log</span>
-    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Upload output file</span>
-      <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3</span>
-      <span class="nt">with</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">output-log-file</span>
-        <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">output.log</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">example-job</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Save output</span><span class="w"></span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span><span class="w"></span>
+<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">        </span><span class="no">expr 1 + 1 &gt; output.log</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload output file</span><span class="w"></span>
+<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3</span><span class="w"></span>
+<span class="w">      </span><span class="nt">with</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output-log-file</span><span class="w"></span>
+<span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output.log</span><span class="w"></span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p>Downloading an artifact</p></li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">example-job</span><span class="p">:</span>
-    <span class="nt">steps</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Download a single artifact</span>
-      <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">actions/download-artifact@v3</span>
-      <span class="nt">with</span><span class="p">:</span>
-        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">output-log-file</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">example-job</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download a single artifact</span><span class="w"></span>
+<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/download-artifact@v3</span><span class="w"></span>
+<span class="w">      </span><span class="nt">with</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output-log-file</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 <hr class="docutils" />
-<div class="section" id="actions-files">
-<h2>Actions Files<a class="headerlink" href="#actions-files" title="Permalink to this headline"></a></h2>
+<section id="actions-files">
+<h2>Actions Files<a class="headerlink" href="#actions-files" title="Permalink to this heading"></a></h2>
 <dl class="simple">
 <dt>The actions you use can be located in:</dt><dd><ul class="simple">
 <li><p>The same repo as the worflow file</p></li>
@@ -248,12 +252,12 @@ you can save them as artifacts.</p>
 </dd>
 </dl>
 <p>See <a class="reference external" href="https://github.com/marketplace?type=actions">GitHub Marketplace</a> for some pre-defined actions.</p>
-<div class="section" id="adding-actions">
-<h3>Adding Actions<a class="headerlink" href="#adding-actions" title="Permalink to this headline"></a></h3>
+<section id="adding-actions">
+<h3>Adding Actions<a class="headerlink" href="#adding-actions" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><dl class="simple">
 <dt>From Marketplace:</dt><dd><ul>
-<li><p>Copy the <em>uses</em> tag to your worflow e.g. <code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">uses</span></span><span class="punctuation"><span class="pre">:</span></span> <span class="literal scalar plain"><span class="pre">actions/upload-artifact&#64;v3.1.2</span></span></code></p></li>
+<li><p>Copy the <em>uses</em> tag to your worflow e.g. <code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3.1.2</span><span class="w"></span></code></p></li>
 <li><p>The action may require you to provide inputs</p></li>
 </ul>
 </dd>
@@ -267,7 +271,7 @@ you can save them as artifacts.</p>
 </dl>
 </li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./.github/actions/hello-world-action</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./.github/actions/hello-world-action</span><span class="w"></span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -286,9 +290,9 @@ you can save them as artifacts.</p>
 </dl>
 </li>
 </ul>
-</div>
-<div class="section" id="action-release-management">
-<h3>Action Release Management<a class="headerlink" href="#action-release-management" title="Permalink to this headline"></a></h3>
+</section>
+<section id="action-release-management">
+<h3>Action Release Management<a class="headerlink" href="#action-release-management" title="Permalink to this heading"></a></h3>
 <p>You should indicate the version of the action you’d like to use based on your comfort with accepting
 automatic updates.</p>
 <div class="admonition note">
@@ -298,46 +302,46 @@ automatic updates.</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Using tags</dt><dd><ul>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">uses</span></span><span class="punctuation"><span class="pre">:</span></span> <span class="literal scalar plain"><span class="pre">actions/javascript-action&#64;v1.0.1</span></span></code></p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/javascript-action@v1.0.1</span><span class="w"></span></code></p></li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
 <dt>Using SHA</dt><dd><ul>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">uses</span></span><span class="punctuation"><span class="pre">:</span></span> <span class="literal scalar plain"><span class="pre">actions/javascript-action&#64;a824008085750b8e136effc585c3cd6082bd575f</span></span></code></p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/javascript-action@a824008085750b8e136effc585c3cd6082bd575f</span><span class="w"></span></code></p></li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
 <dt>Using branches</dt><dd><ul>
-<li><p><code class="code yaml docutils literal notranslate"><span class="name tag"><span class="pre">uses</span></span><span class="punctuation"><span class="pre">:</span></span> <span class="literal scalar plain"><span class="pre">actions/javascript-action&#64;main</span></span></code></p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/javascript-action@main</span><span class="w"></span></code></p></li>
 </ul>
 </dd>
 </dl>
 </li>
 </ul>
-</div>
-<div class="section" id="action-inputs-and-outputs">
-<h3>Action Inputs and Outputs<a class="headerlink" href="#action-inputs-and-outputs" title="Permalink to this headline"></a></h3>
+</section>
+<section id="action-inputs-and-outputs">
+<h3>Action Inputs and Outputs<a class="headerlink" href="#action-inputs-and-outputs" title="Permalink to this heading"></a></h3>
 <p>To see the inputs and outputs of an action, check the <code class="docutils literal notranslate"><span class="pre">action.yml</span></code> in the root of the repo.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Example&quot;</span>
-<span class="nt">description</span><span class="p">:</span> <span class="s">&quot;Receives</span><span class="nv"> </span><span class="s">file</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">generates</span><span class="nv"> </span><span class="s">output&quot;</span>
-<span class="nt">inputs</span><span class="p">:</span>
-<span class="nt">file-path</span><span class="p">:</span> <span class="c1"># id of input</span>
-    <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;Path</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">test</span><span class="nv"> </span><span class="s">script&quot;</span>
-    <span class="nt">required</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-    <span class="nt">default</span><span class="p">:</span> <span class="s">&quot;test-file.js&quot;</span>
-<span class="nt">outputs</span><span class="p">:</span>
-<span class="nt">results-file</span><span class="p">:</span> <span class="c1"># id of output</span>
-    <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;Path</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">results</span><span class="nv"> </span><span class="s">file&quot;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Example&quot;</span><span class="w"></span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Receives</span><span class="nv"> </span><span class="s">file</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">generates</span><span class="nv"> </span><span class="s">output&quot;</span><span class="w"></span>
+<span class="nt">inputs</span><span class="p">:</span><span class="w"></span>
+<span class="nt">file-path</span><span class="p">:</span><span class="w"> </span><span class="c1"># id of input</span><span class="w"></span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Path</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">test</span><span class="nv"> </span><span class="s">script&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;test-file.js&quot;</span><span class="w"></span>
+<span class="nt">outputs</span><span class="p">:</span><span class="w"></span>
+<span class="nt">results-file</span><span class="p">:</span><span class="w"> </span><span class="c1"># id of output</span><span class="w"></span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Path</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">results</span><span class="nv"> </span><span class="s">file&quot;</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="action-file-fields">
-<h3>Action File Fields<a class="headerlink" href="#action-file-fields" title="Permalink to this headline"></a></h3>
+<section id="action-file-fields">
+<h3>Action File Fields<a class="headerlink" href="#action-file-fields" title="Permalink to this heading"></a></h3>
 <p>See <a class="reference external" href="https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions">Metadata Syntax for GitHub Actions</a>.</p>
 <ul>
 <li><p>name</p></li>
@@ -349,20 +353,20 @@ automatic updates.</p>
 <dt>runs<span class="classifier">Specifies how the action is executed</span></dt><dd><ul class="simple">
 <li><p>runs composite actions:</p></li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runs</span><span class="p">:</span>
-  <span class="nt">using</span><span class="p">:</span> <span class="s">&quot;composite&quot;</span>
-  <span class="nt">steps</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">Sphinx</span><span class="nv"> </span><span class="s">Build</span><span class="nv"> </span><span class="s">Script&quot;</span>
-      <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$GITHUB_ACTION_PATH/script.sh</span>
-      <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bash</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runs</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">using</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;composite&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Run</span><span class="nv"> </span><span class="s">Sphinx</span><span class="nv"> </span><span class="s">Build</span><span class="nv"> </span><span class="s">Script&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$GITHUB_ACTION_PATH/script.sh</span><span class="w"></span>
+<span class="w">      </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span><span class="w"></span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p>runs Docker container:</p></li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runs</span><span class="p">:</span>
-  <span class="nt">using</span><span class="p">:</span> <span class="s">&#39;docker&#39;</span>
-  <span class="nt">image</span><span class="p">:</span> <span class="s">&#39;Dockerfile&#39;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runs</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">using</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;docker&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Dockerfile&#39;</span><span class="w"></span>
 </pre></div>
 </div>
 </dd>
@@ -378,17 +382,17 @@ to run docker from the root pointing at the Dockerfile further down the director
 <ul class="simple">
 <li><p>branding: Create an icon that is shown on GitHub marketplace</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 <hr class="docutils" />
-<div class="section" id="running-scripts">
-<h2>Running Scripts<a class="headerlink" href="#running-scripts" title="Permalink to this headline"></a></h2>
+<section id="running-scripts">
+<h2>Running Scripts<a class="headerlink" href="#running-scripts" title="Permalink to this heading"></a></h2>
 <p>You can run scripts as part of your <code class="docutils literal notranslate"><span class="pre">composite</span> <span class="pre">steps</span></code> section of either a action file or workflow file.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">using</span><span class="p">:</span> <span class="s">&quot;composite&quot;</span>
-<span class="nt">steps</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Run</span><span class="nv"> </span><span class="s">Sphinx</span><span class="nv"> </span><span class="s">Build</span><span class="nv"> </span><span class="s">Script&quot;</span>
-    <span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$GITHUB_ACTION_PATH/script.sh</span>
-    <span class="nt">shell</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bash</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">using</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;composite&quot;</span><span class="w"></span>
+<span class="nt">steps</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Run</span><span class="nv"> </span><span class="s">Sphinx</span><span class="nv"> </span><span class="s">Build</span><span class="nv"> </span><span class="s">Script&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$GITHUB_ACTION_PATH/script.sh</span><span class="w"></span>
+<span class="w">    </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -405,42 +409,42 @@ This executable status is included when you commit the file to GitHub.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo chmod +x &lt;your_script.sh&gt;
 </pre></div>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="expressions">
-<h2>Expressions<a class="headerlink" href="#expressions" title="Permalink to this headline"></a></h2>
+<section id="expressions">
+<h2>Expressions<a class="headerlink" href="#expressions" title="Permalink to this heading"></a></h2>
 <p>Expressions are used to programmatically set environment variables.</p>
 <p>You use special syntax to evaluate as an expression: <code class="docutils literal notranslate"><span class="pre">${{</span> <span class="pre">&lt;expression&gt;</span> <span class="pre">}}</span></code>.</p>
 <p>If you use the expression within an <code class="docutils literal notranslate"><span class="pre">if</span></code> conditional, you can ommit the expression syntax above.</p>
-<div class="section" id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">actions/hello-world-javascript-action@e76147da8e5c81eaf017dede5645551d4b94427b</span>
-    <span class="nt">if</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ &lt;expression&gt; }}</span>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/hello-world-javascript-action@e76147da8e5c81eaf017dede5645551d4b94427b</span><span class="w"></span>
+<span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ &lt;expression&gt; }}</span><span class="w"></span>
 </pre></div>
 </div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">env</span><span class="p">:</span>
-  <span class="nt">MY_ENV_VAR</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ &lt;expression&gt; }}</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">MY_ENV_VAR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ &lt;expression&gt; }}</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="literals">
-<h3>Literals<a class="headerlink" href="#literals" title="Permalink to this headline"></a></h3>
+</section>
+<section id="literals">
+<h3>Literals<a class="headerlink" href="#literals" title="Permalink to this heading"></a></h3>
 <p>You can use: boolean, null, number or string data types</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">env</span><span class="p">:</span>
-  <span class="nt">myNull</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ null }}</span>
-  <span class="nt">myBoolean</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ false }}</span>
-  <span class="nt">myIntegerNumber</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ 711 }}</span>
-  <span class="nt">myFloatNumber</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ -9.2 }}</span>
-  <span class="nt">myHexNumber</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ 0xff }}</span>
-  <span class="nt">myExponentialNumber</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ -2.99e-2 }}</span>
-  <span class="nt">myString</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Mona the Octocat</span>
-  <span class="nt">myStringInBraces</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ &#39;It&#39;&#39;s open source!&#39; }}</span> <span class="c1"># note the &#39;&#39;, which is required to output It&#39;s</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">myNull</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ null }}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">myBoolean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ false }}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">myIntegerNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ 711 }}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">myFloatNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ -9.2 }}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">myHexNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ 0xff }}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">myExponentialNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ -2.99e-2 }}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">myString</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Mona the Octocat</span><span class="w"></span>
+<span class="w">  </span><span class="nt">myStringInBraces</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ &#39;It&#39;&#39;s open source!&#39; }}</span><span class="w"> </span><span class="c1"># note the &#39;&#39;, which is required to output It&#39;s</span><span class="w"></span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="operators">
-<h3>Operators<a class="headerlink" href="#operators" title="Permalink to this headline"></a></h3>
+</section>
+<section id="operators">
+<h3>Operators<a class="headerlink" href="#operators" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Logical operators: <code class="docutils literal notranslate"><span class="pre">||</span> <span class="pre">&amp;&amp;</span> <span class="pre">!</span> <span class="pre">!=</span> <span class="pre">==</span> <span class="pre">&lt;=</span> <span class="pre">&lt;</span> <span class="pre">&gt;</span> <span class="pre">&gt;=</span></code></p></li>
 <li><p>Index: <code class="docutils literal notranslate"><span class="pre">[]</span></code></p></li>
@@ -481,9 +485,9 @@ This executable status is included when you commit the file to GitHub.</p>
 <p class="admonition-title">Note</p>
 <p>Objects and array are only considered equal when they are the same instance</p>
 </div>
-</div>
-<div class="section" id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
 <p>GitHub provides some builtin functions. Some functions cast input to a string:</p>
 <ul class="simple">
 <li><p>NULL -&gt; <code class="docutils literal notranslate"><span class="pre">''</span></code></p></li>
@@ -506,11 +510,11 @@ This executable status is included when you commit the file to GitHub.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">cancelled()</span></code>: true if workflow is cancelled</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">failure()</span></code>: returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if any previous step or ancestor job fails</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 <hr class="docutils" />
-<div class="section" id="contexts">
-<h2>Contexts<a class="headerlink" href="#contexts" title="Permalink to this headline"></a></h2>
+<section id="contexts">
+<h2>Contexts<a class="headerlink" href="#contexts" title="Permalink to this heading"></a></h2>
 <p>Contexts are a way to access information about workflow runs, variables, runner environments, jobs, and steps.
 Each context is an object that contains properties, which can be strings or other objects.</p>
 <p>Examples of some context types include: <code class="docutils literal notranslate"><span class="pre">github,</span> <span class="pre">env,</span> <span class="pre">vars,</span> <span class="pre">job,</span> <span class="pre">steps,</span> <span class="pre">runner,</span> <span class="pre">secrets,</span> <span class="pre">needs</span></code>…</p>
@@ -526,20 +530,20 @@ Each context is an object that contains properties, which can be strings or othe
 <p>Attempting to dereference a non-existent property evaluates to an empty string</p>
 </div>
 <p>You can print a context to the log if you want to see what is inside of them:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo &#39;${{ toJSON(github) }}&#39;</span>
-<span class="nt">run</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">echo &#39;${{ toJSON(steps) }}&#39;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &#39;${{ toJSON(github) }}&#39;</span><span class="w"></span>
+<span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &#39;${{ toJSON(steps) }}&#39;</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Contexts have many attributes so it is best to look <a class="reference external" href="https://docs.github.com/en/actions/learn-github-actions/contexts">here</a> for documentation.</p>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="variables">
-<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline"></a></h2>
+<section id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this heading"></a></h2>
 <p>Variables provide a way to reuse non-sensitive configuration information.</p>
 <p>You can set environment variables on a workflow level, in the workflow YAML file, or across multiple workflows at the organisation,
 repository or environment level.</p>
-<div class="section" id="single-workflow-variables">
-<h3>Single Workflow Variables<a class="headerlink" href="#single-workflow-variables" title="Permalink to this headline"></a></h3>
+<section id="single-workflow-variables">
+<h3>Single Workflow Variables<a class="headerlink" href="#single-workflow-variables" title="Permalink to this heading"></a></h3>
 <p>You can set workflow variables at three levels:</p>
 <ol class="arabic simple">
 <li><p>Workflow level</p></li>
@@ -550,9 +554,9 @@ repository or environment level.</p>
 <p class="admonition-title">Note</p>
 <p>You can list all variables available at a particular step by using <code class="docutils literal notranslate"><span class="pre">run:</span> <span class="pre">env</span></code></p>
 </div>
-</div>
-<div class="section" id="configuration-variables-across-multiple-workflows">
-<h3>Configuration Variables across multiple workflows<a class="headerlink" href="#configuration-variables-across-multiple-workflows" title="Permalink to this headline"></a></h3>
+</section>
+<section id="configuration-variables-across-multiple-workflows">
+<h3>Configuration Variables across multiple workflows<a class="headerlink" href="#configuration-variables-across-multiple-workflows" title="Permalink to this heading"></a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>These are still in beta and subject to change</p>
@@ -560,21 +564,21 @@ repository or environment level.</p>
 <p>Configuration variables can be set at organisation, repository or environment level. Configuration variables are available in the <code class="docutils literal notranslate"><span class="pre">vars</span></code> context</p>
 <p>If variables have the same name, the one with the lowest level takes precedence: organisation &lt; repository &lt; environment.</p>
 <p>You can add configuration variables in the GitHub settings. This is same for secrets.</p>
-</div>
-</div>
+</section>
+</section>
 <hr class="docutils" />
-<div class="section" id="github-actions-security">
-<h2>GitHub Actions Security<a class="headerlink" href="#github-actions-security" title="Permalink to this headline"></a></h2>
+<section id="github-actions-security">
+<h2>GitHub Actions Security<a class="headerlink" href="#github-actions-security" title="Permalink to this heading"></a></h2>
 <p>Check out this link: <a class="reference external" href="https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions">https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions</a></p>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="sources">
-<h2>Sources<a class="headerlink" href="#sources" title="Permalink to this headline"></a></h2>
+<section id="sources">
+<h2>Sources<a class="headerlink" href="#sources" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://docs.github.com/en/actions/learn-github-actions">https://docs.github.com/en/actions/learn-github-actions</a></p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

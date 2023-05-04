@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Linux Commands &mdash; MyDocs 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Linux Commands &mdash; MyDocs 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -73,75 +77,75 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="linux-commands">
-<h1>Linux Commands<a class="headerlink" href="#linux-commands" title="Permalink to this headline"></a></h1>
+  <section id="linux-commands">
+<h1>Linux Commands<a class="headerlink" href="#linux-commands" title="Permalink to this heading"></a></h1>
 <ul class="simple">
-<li><p><code class="code shell docutils literal notranslate"><span class="name builtin"><span class="pre">cd</span></span></code> : Change Directory</p>
+<li><p><code class="code highlight shell docutils literal highlight-shell"><span class="nb">cd</span></code> : Change Directory</p>
 <ul>
-<li><p><code class="code shell docutils literal notranslate"><span class="name builtin"><span class="pre">cd</span></span></code> itself will default to the home DIR</p></li>
-<li><p><code class="code shell docutils literal notranslate"><span class="name builtin"><span class="pre">cd</span></span> <span class="pre">-</span></code> takes you back to the previous directory you were at</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell"><span class="nb">cd</span></code> itself will default to the home DIR</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell"><span class="nb">cd</span> -</code> takes you back to the previous directory you were at</p></li>
 </ul>
 </li>
-<li><p><code class="code shell docutils literal notranslate"><span class="name builtin"><span class="pre">pwd</span></span></code> : print the directory you are in</p></li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">whoami</span></code> : prints current user</p></li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">wc</span></code>: get file size info</p>
+<li><p><code class="code highlight shell docutils literal highlight-shell"><span class="nb">pwd</span></code> : print the directory you are in</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">whoami</code> : prints current user</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">wc</code>: get file size info</p>
 <ul>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">wc</span> <span class="pre">-c</span> <span class="pre">unix.md</span></code> : Get number of bytes of file</p></li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">wc</span> <span class="pre">-l</span> <span class="pre">unix.md</span></code> : Get number of lines of file</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">wc -c unix.md</code> : Get number of bytes of file</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">wc -l unix.md</code> : Get number of lines of file</p></li>
 </ul>
 </li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">diff</span></code>: Compares two files</p>
+<li><p><code class="code highlight shell docutils literal highlight-shell">diff</code>: Compares two files</p>
 <ul>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">diff</span> <span class="pre">-y</span> <span class="pre">&lt;file1&gt;</span> <span class="pre">&lt;file2&gt;</span></code>: Outputs diff of file1 and file2 side-by-side</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">diff -y &lt;file1&gt; &lt;file2&gt;</code>: Outputs diff of file1 and file2 side-by-side</p></li>
 </ul>
 </li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">find</span></code>: Find a file</p>
+<li><p><code class="code highlight shell docutils literal highlight-shell">find</code>: Find a file</p>
 <ul>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">find</span> <span class="pre">.</span> <span class="pre">-name</span> <span class="literal string double"><span class="pre">“*.py”</span></span></code>: Finds all .py files from current directory and down</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">find . -name <span class="s2">&quot;*.py&quot;</span></code>: Finds all .py files from current directory and down</p></li>
 </ul>
 </li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">tree</span></code>: Shows files in tree display</p></li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">printenv</span></code>: Print environment variables</p></li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">curl</span></code>: cURL lets us query URLs from the command line</p>
+<li><p><code class="code highlight shell docutils literal highlight-shell">tree</code>: Shows files in tree display</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">printenv</code>: Print environment variables</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">curl</code>: cURL lets us query URLs from the command line</p>
 <ul>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">curl</span> <span class="pre">www.google.com</span></code>: Returns HTML/Scripts of google.com</p></li>
-<li><p>option <code class="code shell docutils literal notranslate"><span class="pre">-i</span></code> gives information header</p></li>
-<li><p>option <code class="code shell docutils literal notranslate"><span class="pre">-d</span> <span class="pre">or</span> <span class="pre">--data</span></code> can be used to post data to a url</p>
+<li><p><code class="code highlight shell docutils literal highlight-shell">curl www.google.com</code>: Returns HTML/Scripts of google.com</p></li>
+<li><p>option <code class="code highlight shell docutils literal highlight-shell">-i</code> gives information header</p></li>
+<li><p>option <code class="code highlight shell docutils literal highlight-shell">-d or --data</code> can be used to post data to a url</p>
 <ul>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">curl</span> <span class="pre">-d</span> <span class="literal string double"><span class="pre">“first=Bob&amp;last=Ross”</span></span> <span class="pre">http://&lt;url&gt;</span></code></p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">curl -d <span class="s2">&quot;first=Bob&amp;last=Ross&quot;</span> http://&lt;url&gt;</code></p></li>
 </ul>
 </li>
-<li><p>pass in username and password: <code class="code shell docutils literal notranslate"><span class="pre">curl</span> <span class="pre">-u</span> <span class="pre">&lt;username&gt;:&lt;password&gt;</span> <span class="pre">&lt;url&gt;</span></code></p></li>
-<li><p>Download response e.g. picture: <code class="code shell docutils literal notranslate"><span class="pre">curl</span> <span class="pre">-o</span> <span class="pre">test.jpg</span> <span class="pre">&lt;url&gt;</span></code> -&gt; outputs response to test.jpg</p></li>
+<li><p>pass in username and password: <code class="code highlight shell docutils literal highlight-shell">curl -u &lt;username&gt;:&lt;password&gt; &lt;url&gt;</code></p></li>
+<li><p>Download response e.g. picture: <code class="code highlight shell docutils literal highlight-shell">curl -o test.jpg &lt;url&gt;</code> -&gt; outputs response to test.jpg</p></li>
 </ul>
 </li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">grep</span></code>: Search for word or expression in a file</p>
+<li><p><code class="code highlight shell docutils literal highlight-shell">grep</code>: Search for word or expression in a file</p>
 <ul>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">grep</span> <span class="literal string double"><span class="pre">“expression”</span></span> <span class="pre">&lt;file&gt;</span></code></p></li>
-<li><p>Use <code class="code shell docutils literal notranslate"><span class="pre">-i</span></code> to search for expression without being case sensitive</p></li>
-<li><p>Can use it with pipe: <code class="code shell docutils literal notranslate"><span class="pre">cat</span> <span class="pre">my_file.txt</span> <span class="punctuation"><span class="pre">|</span></span> <span class="pre">grep</span> <span class="literal string double"><span class="pre">“hello</span> <span class="pre">world”</span></span></code></p></li>
-<li><p>Use with extended regualar expressions: <code class="code shell docutils literal notranslate"><span class="pre">grep</span> <span class="pre">-E</span> <span class="literal string single"><span class="pre">‘pattern1|pattern2’</span></span> <span class="pre">fileName</span></code></p>
+<li><p><code class="code highlight shell docutils literal highlight-shell">grep <span class="s2">&quot;expression&quot;</span> &lt;file&gt;</code></p></li>
+<li><p>Use <code class="code highlight shell docutils literal highlight-shell">-i</code> to search for expression without being case sensitive</p></li>
+<li><p>Can use it with pipe: <code class="code highlight shell docutils literal highlight-shell">cat my_file.txt <span class="p">|</span> grep <span class="s2">&quot;hello world&quot;</span></code></p></li>
+<li><p>Use with extended regualar expressions: <code class="code highlight shell docutils literal highlight-shell">grep -E <span class="s1">&#39;pattern1|pattern2&#39;</span> fileName</code></p>
 <ul>
 <li><p>Or regular grep:</p>
 <ul>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">grep</span> <span class="literal string single"><span class="pre">‘pattern1\|pattern2’</span></span> <span class="pre">fileName</span></code></p></li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">grep</span> <span class="pre">-e</span> <span class="literal string single"><span class="pre">‘pattern1’</span></span> <span class="pre">-e</span> <span class="literal string single"><span class="pre">‘pattern2’</span></span> <span class="pre">fileName</span></code></p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">grep <span class="s1">&#39;pattern1|pattern2&#39;</span> fileName</code></p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">grep -e <span class="s1">&#39;pattern1&#39;</span> -e <span class="s1">&#39;pattern2&#39;</span> fileName</code></p></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p>Use <code class="code shell docutils literal notranslate"><span class="pre">-c</span></code> to get a count of number of grep matches</p></li>
-<li><p>Can also search multiple files: <code class="code shell docutils literal notranslate"><span class="pre">grep</span> <span class="pre">-c</span> <span class="literal string single"><span class="pre">‘warning\|error’</span></span> <span class="pre">/var/log/*log</span></code> -&gt; Searches all log files…</p>
+<li><p>Use <code class="code highlight shell docutils literal highlight-shell">-c</code> to get a count of number of grep matches</p></li>
+<li><p>Can also search multiple files: <code class="code highlight shell docutils literal highlight-shell">grep -c <span class="s1">&#39;warning|error&#39;</span> /var/log/*log</code> -&gt; Searches all log files…</p>
 <ul>
 <li><p>Use the -R flag to recursivly search subdirectories too</p></li>
 </ul>
 </li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">grep</span> <span class="pre">-r</span> <span class="literal string double"><span class="pre">“pattern”</span></span> <span class="pre">*</span></code>: This will search recursivly all files in the current dir and below</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">grep -r <span class="s2">&quot;pattern&quot;</span> *</code>: This will search recursivly all files in the current dir and below</p></li>
 </ul>
 </li>
-<li><p><code class="code shell docutils literal notranslate"><span class="pre">uname</span></code>: prints system info</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">uname</code>: prints system info</p></li>
 </ul>
-</div>
+</section>
 
 
            </div>

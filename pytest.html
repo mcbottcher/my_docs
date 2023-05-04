@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PyTest &mdash; MyDocs 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>PyTest &mdash; MyDocs 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -87,8 +91,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="pytest">
-<h1>PyTest<a class="headerlink" href="#pytest" title="Permalink to this headline"></a></h1>
+  <section id="pytest">
+<h1>PyTest<a class="headerlink" href="#pytest" title="Permalink to this heading"></a></h1>
 <p>PyTest is a testing framework based on Python.</p>
 <p>Some features/advantages:</p>
 <ul class="simple">
@@ -100,8 +104,8 @@
 in the current directory or subdirectories.</p>
 <p>PyTest test function names must start with <code class="docutils literal notranslate"><span class="pre">test</span></code> or <code class="docutils literal notranslate"><span class="pre">test_</span></code>.</p>
 <hr class="docutils" />
-<div class="section" id="basic-test-example">
-<h2>Basic Test Example<a class="headerlink" href="#basic-test-example" title="Permalink to this headline"></a></h2>
+<section id="basic-test-example">
+<h2>Basic Test Example<a class="headerlink" href="#basic-test-example" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
 
 <span class="k">def</span> <span class="nf">test_sqrt</span><span class="p">():</span>
@@ -118,23 +122,23 @@ in the current directory or subdirectories.</p>
 </pre></div>
 </div>
 <p>Run <code class="docutils literal notranslate"><span class="pre">pytest</span></code> in the same directory level.</p>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="test-subsets">
-<h2>Test Subsets<a class="headerlink" href="#test-subsets" title="Permalink to this headline"></a></h2>
+<section id="test-subsets">
+<h2>Test Subsets<a class="headerlink" href="#test-subsets" title="Permalink to this heading"></a></h2>
 <p>We don’t always want to specify all the tests to run/don’t want all tests to run automatically.</p>
 <p>Can run a subset of tests in two ways:</p>
 <ol class="arabic simple">
 <li><p>String matching of test name:
-<code class="code bash docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">-k</span> <span class="pre">great</span> <span class="pre">-v</span></code> will only run tests with ‘great’ in their name</p></li>
+<code class="code highlight bash docutils literal highlight-bash">pytest -k great -v</code> will only run tests with ‘great’ in their name</p></li>
 <li><p>Test Markers:
-<code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">mark</span></span><span class="operator"><span class="pre">.&lt;</span></span><span class="name"><span class="pre">markername</span></span><span class="operator"><span class="pre">&gt;</span></span></code>
-<code class="code bash docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">-m</span> <span class="pre">&lt;markername&gt;</span> <span class="pre">-v</span></code></p></li>
+<code class="code highlight python docutils literal highlight-python"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.&lt;</span><span class="n">markername</span><span class="o">&gt;</span></code>
+<code class="code highlight bash docutils literal highlight-bash">pytest -m &lt;markername&gt; -v</code></p></li>
 </ol>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="test-classes">
-<h2>Test Classes<a class="headerlink" href="#test-classes" title="Permalink to this headline"></a></h2>
+<section id="test-classes">
+<h2>Test Classes<a class="headerlink" href="#test-classes" title="Permalink to this heading"></a></h2>
 <p>You can specify a class to group tests. This also allows you share parameters between
 tests, like <code class="docutils literal notranslate"><span class="pre">value</span></code> in the example.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># content of test_class_demo.py</span>
@@ -151,16 +155,16 @@ tests, like <code class="docutils literal notranslate"><span class="pre">value</
 </div>
 <p>Grouping in classes also allows you to apply class level fixtures and marks and
 these will be implicitly added to all tests in that class.</p>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="fixtures">
-<h2>Fixtures<a class="headerlink" href="#fixtures" title="Permalink to this headline"></a></h2>
+<section id="fixtures">
+<h2>Fixtures<a class="headerlink" href="#fixtures" title="Permalink to this heading"></a></h2>
 <p>Fixtures are functions which run before each test function to which it is applied.
 They can be used to feed data to a test function.</p>
 <p>The scope is limited to the file you have created it in by default. However, if it is included
 in your <em>conftest.py</em> file, you can change the scope.</p>
-<p>You can set the scope of a fixture to <code class="docutils literal notranslate"><span class="pre">session,</span> <span class="pre">module,</span> <span class="pre">function...</span></code> by using <code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">fixture</span></span><span class="punctuation"><span class="pre">(</span></span><span class="name"><span class="pre">scope</span></span><span class="operator"><span class="pre">=</span></span><span class="literal string single"><span class="pre">’session’</span></span><span class="punctuation"><span class="pre">)</span></span></code></p>
-<p>You can also set <code class="code python docutils literal notranslate"><span class="name"><span class="pre">autouse</span></span><span class="operator"><span class="pre">=</span></span><span class="keyword constant"><span class="pre">True</span></span></code> if you want it enabled for all test functions in the scope.</p>
+<p>You can set the scope of a fixture to <code class="docutils literal notranslate"><span class="pre">session,</span> <span class="pre">module,</span> <span class="pre">function...</span></code> by using <code class="code highlight python docutils literal highlight-python"><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s1">&#39;session&#39;</span><span class="p">)</span></code></p>
+<p>You can also set <code class="code highlight python docutils literal highlight-python"><span class="n">autouse</span><span class="o">=</span><span class="kc">True</span></code> if you want it enabled for all test functions in the scope.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytest</span>
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
@@ -175,17 +179,17 @@ in your <em>conftest.py</em> file, you can change the scope.</p>
   <span class="k">assert</span> <span class="n">input_value</span> <span class="o">%</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">0</span>
 </pre></div>
 </div>
-<p>Instead of passing the fixture as an argument, you can also use the <code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">mark</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">usefixtures</span></span><span class="punctuation"><span class="pre">(</span></span><span class="literal string single"><span class="pre">‘&lt;ficture_name&gt;’</span></span><span class="punctuation"><span class="pre">)</span></span></code>
+<p>Instead of passing the fixture as an argument, you can also use the <code class="code highlight python docutils literal highlight-python"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">usefixtures</span><span class="p">(</span><span class="s1">&#39;&lt;ficture_name&gt;&#39;</span><span class="p">)</span></code>
 decorator to use the fixture in a test function.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You can view a list of builtin fixtures by using <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">--fixtures</span></code>. These are ones
 you don’t have to specify but can just use the name of the fixture e.g. <code class="docutils literal notranslate"><span class="pre">tmp_path</span></code></p>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="conftest-py">
-<h2>conftest.py<a class="headerlink" href="#conftest-py" title="Permalink to this headline"></a></h2>
+<section id="conftest-py">
+<h2>conftest.py<a class="headerlink" href="#conftest-py" title="Permalink to this heading"></a></h2>
 <p>Can use the file <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code> to share configurations across test files, e.g. fixtures.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytest</span>
 
@@ -196,20 +200,20 @@ you don’t have to specify but can just use the name of the fixture e.g. <code 
 </pre></div>
 </div>
 <p>Now this <code class="docutils literal notranslate"><span class="pre">input_value</span></code> can be used across all test files.</p>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="running-tests-in-parallel">
-<h2>Running Tests in Parallel<a class="headerlink" href="#running-tests-in-parallel" title="Permalink to this headline"></a></h2>
+<section id="running-tests-in-parallel">
+<h2>Running Tests in Parallel<a class="headerlink" href="#running-tests-in-parallel" title="Permalink to this heading"></a></h2>
 <p>To run tests in parallel, you need the <code class="docutils literal notranslate"><span class="pre">pytest-xdist</span></code> plugin.</p>
-<p><code class="code bash docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pytest-xdist</span></code></p>
+<p><code class="code highlight bash docutils literal highlight-bash">pip install pytest-xdist</code></p>
 <p>Now you can specify how many workers you want to use to run the tests in parallel:</p>
-<p><code class="code bash docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">-n</span> <span class="pre">&lt;number_of_workers&gt;</span></code></p>
-</div>
+<p><code class="code highlight bash docutils literal highlight-bash">pytest -n &lt;number_of_workers&gt;</code></p>
+</section>
 <hr class="docutils" />
-<div class="section" id="markers">
-<h2>Markers<a class="headerlink" href="#markers" title="Permalink to this headline"></a></h2>
+<section id="markers">
+<h2>Markers<a class="headerlink" href="#markers" title="Permalink to this heading"></a></h2>
 <ul>
-<li><p>Set a test group that can run as a subset: <code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">mark</span></span><span class="operator"><span class="pre">.&lt;</span></span><span class="name"><span class="pre">markername</span></span><span class="operator"><span class="pre">&gt;</span></span></code></p>
+<li><p>Set a test group that can run as a subset: <code class="code highlight python docutils literal highlight-python"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.&lt;</span><span class="n">markername</span><span class="o">&gt;</span></code></p>
 <p>You can register your custom marks in the <code class="docutils literal notranslate"><span class="pre">pytest.ini</span></code> file. Unregistered marks will trigger a warning.
 This warning can be raised to an error by passing the <code class="docutils literal notranslate"><span class="pre">strict-markers</span></code> argument. This avoids accidental
 mark name errors. Or add something like this to your pytest.ini</p>
@@ -234,29 +238,29 @@ mark name errors. Or add something like this to your pytest.ini</p>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Execute a test, but don’t consider its result: <code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">mark</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">xfail</span></span></code></p></li>
-<li><p>Don’t execute a test: <code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">mark</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">skip</span></span></code></p></li>
+<li><p>Execute a test, but don’t consider its result: <code class="code highlight python docutils literal highlight-python"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">xfail</span></code></p></li>
+<li><p>Don’t execute a test: <code class="code highlight python docutils literal highlight-python"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span></code></p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You can view a list of markers by using <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">--markers</span></code></p>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="test-execution-results">
-<h2>Test Execution Results<a class="headerlink" href="#test-execution-results" title="Permalink to this headline"></a></h2>
+<section id="test-execution-results">
+<h2>Test Execution Results<a class="headerlink" href="#test-execution-results" title="Permalink to this heading"></a></h2>
 <p>The results from the test execution can be written to an XML file. This can be
 used in a dashboard that displays test results.</p>
-<p><code class="code bash docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">test_multiplication.py</span> <span class="pre">-v</span> <span class="pre">--junitxml</span><span class="operator"><span class="pre">=</span></span><span class="literal string double"><span class="pre">”results.xml”</span></span></code></p>
-</div>
+<p><code class="code highlight bash docutils literal highlight-bash">pytest test_multiplication.py -v --junitxml<span class="o">=</span><span class="s2">&quot;results.xml&quot;</span></code></p>
+</section>
 <hr class="docutils" />
-<div class="section" id="pytest-hooks">
-<h2>PyTest Hooks<a class="headerlink" href="#pytest-hooks" title="Permalink to this headline"></a></h2>
+<section id="pytest-hooks">
+<h2>PyTest Hooks<a class="headerlink" href="#pytest-hooks" title="Permalink to this heading"></a></h2>
 <p>Hooks are part of PyTest’s plugin system which allows you to extend the functionality of PyTest
 Hooks allows you to run custom code at different stages of a pytest run.</p>
 <p>The stage at which the code is run is defined by the name of the hook you use. These are predefined
 names which point to a different stage in the pytest process.</p>
-<p>To define a hook, create a function and decorate it with <code class="code python docutils literal notranslate"><span class="name decorator"><span class="pre">&#64;pytest</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">hookimpl</span></span></code>.</p>
+<p>To define a hook, create a function and decorate it with <code class="code highlight python docutils literal highlight-python"><span class="nd">@pytest</span><span class="o">.</span><span class="n">hookimpl</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>It doesn’t seem hooks can be declared in the test file, but work in the <em>conftest.py</em> file.</p>
@@ -335,10 +339,10 @@ that finishes, execution returns to the hookwrapper to complete:</p>
   <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Finished the collection_modifyitems hook&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="options">
-<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline"></a></h2>
+<section id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code>: make the output more versbose</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-k</span> <span class="pre">&lt;substring&gt;</span></code>: run a subset of tests based on given substring</p></li>
@@ -346,17 +350,17 @@ that finishes, execution returns to the hookwrapper to complete:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">--maxfail</span> <span class="pre">&lt;max_number_of_fails&gt;</span></code>: Number of fails after which to halt test execution</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">&lt;num_of_workers&gt;</span></code>: How many parallel workers will run the tests</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--junittxml=&lt;path_to_file&gt;</span></code>: Outputs test results to XML</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">-s</span></code>: This will show <code class="code python docutils literal notranslate"><span class="name builtin"><span class="pre">print</span></span><span class="punctuation"><span class="pre">()</span></span></code> from test functions in the console</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-s</span></code>: This will show <code class="code highlight python docutils literal highlight-python"><span class="nb">print</span><span class="p">()</span></code> from test functions in the console</p></li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="sources">
-<h2>Sources<a class="headerlink" href="#sources" title="Permalink to this headline"></a></h2>
+<section id="sources">
+<h2>Sources<a class="headerlink" href="#sources" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.tutorialspoint.com/pytest">https://www.tutorialspoint.com/pytest</a></p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

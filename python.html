@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Python &mdash; MyDocs 0.1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Python &mdash; MyDocs 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -91,12 +95,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="python">
-<h1>Python<a class="headerlink" href="#python" title="Permalink to this headline"></a></h1>
-<div class="section" id="lambda">
-<h2>Lambda<a class="headerlink" href="#lambda" title="Permalink to this headline"></a></h2>
+  <section id="python">
+<h1>Python<a class="headerlink" href="#python" title="Permalink to this heading"></a></h1>
+<section id="lambda">
+<h2>Lambda<a class="headerlink" href="#lambda" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><code class="code python docutils literal notranslate"><span class="keyword"><span class="pre">lambda</span></span> <span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">arguments</span></span><span class="operator"><span class="pre">&gt;</span></span> <span class="punctuation"><span class="pre">:</span></span> <span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">expression</span></span><span class="operator"><span class="pre">&gt;</span></span></code>: Small anonymous function</p></li>
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="k">lambda</span> <span class="o">&lt;</span><span class="n">arguments</span><span class="o">&gt;</span> <span class="p">:</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span></code>: Small anonymous function</p></li>
 <li><p>Can only have one expression, can take multiple arguments</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span> <span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">10</span>
@@ -118,11 +122,11 @@
 <span class="nb">print</span><span class="p">(</span><span class="n">mytripler</span><span class="p">(</span><span class="mi">11</span><span class="p">))</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="map">
-<h2>Map<a class="headerlink" href="#map" title="Permalink to this headline"></a></h2>
+</section>
+<section id="map">
+<h2>Map<a class="headerlink" href="#map" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><code class="code python docutils literal notranslate"><span class="name builtin"><span class="pre">map</span></span><span class="punctuation"><span class="pre">(</span></span><span class="name"><span class="pre">func</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="name builtin"><span class="pre">iter</span></span><span class="punctuation"><span class="pre">)</span></span></code>: Applies func to each element of iterable</p></li>
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="nb">map</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="nb">iter</span><span class="p">)</span></code>: Applies func to each element of iterable</p></li>
 <li><p>Returns a map object, need to covert to another type to view, e.g. list()</p></li>
 <li><p>map object is an iterator - it doesn’t store the new data, just how to data is mapped, so when extracting a value it will map the value on the fly</p></li>
 </ul>
@@ -139,11 +143,11 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">a</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])))</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="filter">
-<h2>Filter<a class="headerlink" href="#filter" title="Permalink to this headline"></a></h2>
+</section>
+<section id="filter">
+<h2>Filter<a class="headerlink" href="#filter" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><code class="code python docutils literal notranslate"><span class="name builtin"><span class="pre">filter</span></span><span class="punctuation"><span class="pre">(</span></span><span class="name"><span class="pre">func</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="name builtin"><span class="pre">iter</span></span><span class="punctuation"><span class="pre">)</span></span></code>: Added each element of iterable to new iterable if func returns true</p></li>
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="nb">filter</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="nb">iter</span><span class="p">)</span></code>: Added each element of iterable to new iterable if func returns true</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
   <span class="k">return</span> <span class="n">a</span> <span class="o">!=</span> <span class="mi">0</span>
@@ -158,42 +162,42 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">a</span><span class="o">!=</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])))</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="set">
-<h2>Set<a class="headerlink" href="#set" title="Permalink to this headline"></a></h2>
+</section>
+<section id="set">
+<h2>Set<a class="headerlink" href="#set" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Set is a collection which is unordered, unchangable (can remove and add items still), and unindexed</p></li>
-<li><p><code class="code python docutils literal notranslate"><span class="name"><span class="pre">my_set</span></span> <span class="operator"><span class="pre">=</span></span> <span class="punctuation"><span class="pre">{</span></span><span class="literal string double"><span class="pre">“banana”</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal string double"><span class="pre">“apple”</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal string double"><span class="pre">“cherry”</span></span><span class="punctuation"><span class="pre">}</span></span></code></p></li>
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="n">my_set</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;banana&quot;</span><span class="p">,</span> <span class="s2">&quot;apple&quot;</span><span class="p">,</span> <span class="s2">&quot;cherry&quot;</span><span class="p">}</span></code></p></li>
 <li><p>Sets cannot have duplicate entries - they will be ignored if there is a duplicate</p></li>
-<li><p>Can also use the <code class="code python docutils literal notranslate"><span class="name builtin"><span class="pre">set</span></span><span class="punctuation"><span class="pre">()</span></span></code> object: <code class="code python docutils literal notranslate"><span class="name"><span class="pre">my_set</span></span> <span class="operator"><span class="pre">=</span></span> <span class="name builtin"><span class="pre">set</span></span><span class="punctuation"><span class="pre">((</span></span><span class="literal string double"><span class="pre">“banana”</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal string double"><span class="pre">“apple”</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal number integer"><span class="pre">2</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="keyword constant"><span class="pre">True</span></span><span class="punctuation"><span class="pre">))</span></span></code></p></li>
+<li><p>Can also use the <code class="code highlight python docutils literal highlight-python"><span class="nb">set</span><span class="p">()</span></code> object: <code class="code highlight python docutils literal highlight-python"><span class="n">my_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="s2">&quot;banana&quot;</span><span class="p">,</span> <span class="s2">&quot;apple&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="string-formatting">
-<h2>String formatting<a class="headerlink" href="#string-formatting" title="Permalink to this headline"></a></h2>
+</section>
+<section id="string-formatting">
+<h2>String formatting<a class="headerlink" href="#string-formatting" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><code class="code python docutils literal notranslate"><span class="name builtin"><span class="pre">print</span></span><span class="punctuation"><span class="pre">(</span></span><span class="literal string affix"><span class="pre">f</span></span><span class="literal string double"><span class="pre">”Hello</span> </span><span class="literal string interpol"><span class="pre">{my_string}</span></span><span class="literal string double"><span class="pre">”</span></span><span class="punctuation"><span class="pre">)</span></span></code></p></li>
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello </span><span class="si">{</span><span class="n">my_string</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="checking-for-a-type">
-<h2>Checking for a type<a class="headerlink" href="#checking-for-a-type" title="Permalink to this headline"></a></h2>
+</section>
+<section id="checking-for-a-type">
+<h2>Checking for a type<a class="headerlink" href="#checking-for-a-type" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>Use <code class="code python docutils literal notranslate"><span class="name builtin"><span class="pre">isinstance</span></span><span class="punctuation"><span class="pre">(</span></span><span class="name builtin"><span class="pre">object</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="name"><span class="pre">class_type</span></span><span class="punctuation"><span class="pre">)</span></span></code></p></li>
-<li><p>Don’t use <code class="code python docutils literal notranslate"><span class="operator"><span class="pre">==</span></span></code></p></li>
+<li><p>Use <code class="code highlight python docutils literal highlight-python"><span class="nb">isinstance</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">class_type</span><span class="p">)</span></code></p></li>
+<li><p>Don’t use <code class="code highlight python docutils literal highlight-python"><span class="o">==</span></code></p></li>
 </ul>
-</div>
-<div class="section" id="equality-vs-identity">
-<h2>Equality vs Identity<a class="headerlink" href="#equality-vs-identity" title="Permalink to this headline"></a></h2>
+</section>
+<section id="equality-vs-identity">
+<h2>Equality vs Identity<a class="headerlink" href="#equality-vs-identity" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><code class="code python docutils literal notranslate"><span class="operator word"><span class="pre">is</span></span></code> checks that two variables point to the same object in memory
-- Use <code class="code python docutils literal notranslate"><span class="operator word"><span class="pre">is</span></span></code> when checking for <code class="code python docutils literal notranslate"><span class="keyword constant"><span class="pre">None</span></span> <span class="keyword constant"><span class="pre">True</span></span> <span class="keyword constant"><span class="pre">False</span></span></code> - <code class="code python docutils literal notranslate"><span class="keyword"><span class="pre">if</span></span> <span class="name"><span class="pre">my_var</span></span> <span class="operator word"><span class="pre">is</span></span> <span class="keyword constant"><span class="pre">None</span></span><span class="punctuation"><span class="pre">:</span></span></code></p></li>
-<li><p><code class="code python docutils literal notranslate"><span class="operator"><span class="pre">==</span></span></code> or <code class="code python docutils literal notranslate"><span class="operator"><span class="pre">!=</span></span></code> check that the value of two objects are the same</p></li>
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="ow">is</span></code> checks that two variables point to the same object in memory
+- Use <code class="code highlight python docutils literal highlight-python"><span class="ow">is</span></code> when checking for <code class="code highlight python docutils literal highlight-python"><span class="kc">None</span> <span class="kc">True</span> <span class="kc">False</span></code> - <code class="code highlight python docutils literal highlight-python"><span class="k">if</span> <span class="n">my_var</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span></code></p></li>
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="o">==</span></code> or <code class="code highlight python docutils literal highlight-python"><span class="o">!=</span></code> check that the value of two objects are the same</p></li>
 </ul>
-</div>
-<div class="section" id="range-length-looping">
-<h2>Range Length Looping<a class="headerlink" href="#range-length-looping" title="Permalink to this headline"></a></h2>
+</section>
+<section id="range-length-looping">
+<h2>Range Length Looping<a class="headerlink" href="#range-length-looping" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>Better to NOT use something like <code class="code python docutils literal notranslate"><span class="keyword"><span class="pre">for</span></span> <span class="name"><span class="pre">i</span></span> <span class="operator word"><span class="pre">in</span></span> <span class="name builtin"><span class="pre">range</span></span><span class="punctuation"><span class="pre">(</span></span><span class="name builtin"><span class="pre">len</span></span><span class="punctuation"><span class="pre">(</span></span><span class="name"><span class="pre">a</span></span><span class="punctuation"><span class="pre">))</span></span></code></p></li>
-<li><p>Instead use <code class="code python docutils literal notranslate"><span class="keyword"><span class="pre">for</span></span> <span class="name"><span class="pre">v</span></span> <span class="operator word"><span class="pre">in</span></span> <span class="name"><span class="pre">a</span></span><span class="punctuation"><span class="pre">:</span></span></code> or similar</p></li>
+<li><p>Better to NOT use something like <code class="code highlight python docutils literal highlight-python"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">))</span></code></p></li>
+<li><p>Instead use <code class="code highlight python docutils literal highlight-python"><span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span></code> or similar</p></li>
 <li><p>If you need the index, you can use enumerate to get the element and the index at the same time:</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
@@ -201,9 +205,9 @@
   <span class="o">...</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="zip">
-<h2>Zip<a class="headerlink" href="#zip" title="Permalink to this headline"></a></h2>
+</section>
+<section id="zip">
+<h2>Zip<a class="headerlink" href="#zip" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Returns a zip object, which is an iterator of tuples</p></li>
 <li><p>Each tuple contains the elements from the same index in the given input iterators</p></li>
@@ -219,11 +223,11 @@
   <span class="o">...</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="timing-code">
-<h2>Timing code<a class="headerlink" href="#timing-code" title="Permalink to this headline"></a></h2>
+</section>
+<section id="timing-code">
+<h2>Timing code<a class="headerlink" href="#timing-code" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>Use <code class="code python docutils literal notranslate"><span class="name"><span class="pre">time</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">perf_counter</span></span><span class="punctuation"><span class="pre">()</span></span></code> to time code</p></li>
+<li><p>Use <code class="code highlight python docutils literal highlight-python"><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span></code> to time code</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
 <span class="o">...</span>
@@ -231,9 +235,9 @@
 <span class="nb">print</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="logging">
-<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline"></a></h2>
+</section>
+<section id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Use logging instead of print statements for debug</p></li>
 <li><p>Can use different levels of log, and your own formatting</p></li>
@@ -249,9 +253,9 @@
   <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fmt</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="exceptions">
-<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline"></a></h2>
+</section>
+<section id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
   <span class="o">...</span>
 <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
@@ -262,9 +266,9 @@
 </div>
 <ul class="simple">
 <li><p>Used to handle errors in pieces of code you think an error could occur in</p></li>
-<li><p>Can use multiple except statements to catch different errors - put more generic ones like <code class="code python docutils literal notranslate"><span class="name exception"><span class="pre">Exception</span></span></code> towards the bottom</p></li>
-<li><p>use the <code class="code python docutils literal notranslate"><span class="keyword"><span class="pre">else</span></span></code> to run code if the try block finishes without raising and exception</p></li>
-<li><p>use <code class="code python docutils literal notranslate"><span class="keyword"><span class="pre">finally</span></span></code> to run if code is successful or if exception is thrown</p></li>
+<li><p>Can use multiple except statements to catch different errors - put more generic ones like <code class="code highlight python docutils literal highlight-python"><span class="ne">Exception</span></code> towards the bottom</p></li>
+<li><p>use the <code class="code highlight python docutils literal highlight-python"><span class="k">else</span></code> to run code if the try block finishes without raising and exception</p></li>
+<li><p>use <code class="code highlight python docutils literal highlight-python"><span class="k">finally</span></code> to run if code is successful or if exception is thrown</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
   <span class="o">...</span>
@@ -277,7 +281,7 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Raise your own exceptions: <code class="code python docutils literal notranslate"><span class="keyword"><span class="pre">raise</span></span> <span class="name exception"><span class="pre">Exception</span></span></code></p></li>
+<li><p>Raise your own exceptions: <code class="code highlight python docutils literal highlight-python"><span class="k">raise</span> <span class="ne">Exception</span></code></p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyCustomError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
   <span class="k">pass</span>
@@ -289,9 +293,9 @@
   <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;My custom exception was triggered&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="list-comprehension">
-<h2>List comprehension<a class="headerlink" href="#list-comprehension" title="Permalink to this headline"></a></h2>
+</section>
+<section id="list-comprehension">
+<h2>List comprehension<a class="headerlink" href="#list-comprehension" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Create a new list where each element which passes a filter is altered by a function</p></li>
 </ul>
@@ -302,11 +306,11 @@
 <span class="c1"># my_list = [4, 8]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="iterator">
-<h2>Iterator<a class="headerlink" href="#iterator" title="Permalink to this headline"></a></h2>
+</section>
+<section id="iterator">
+<h2>Iterator<a class="headerlink" href="#iterator" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>e.g. <code class="code python docutils literal notranslate"><span class="name builtin"><span class="pre">map</span></span><span class="punctuation"><span class="pre">()</span></span></code></p></li>
+<li><p>e.g. <code class="code highlight python docutils literal highlight-python"><span class="nb">map</span><span class="p">()</span></code></p></li>
 <li><p>A type that allows iteration but doesn’t store any raw data</p></li>
 <li><p>Iterator stores where in sequence you are:</p></li>
 </ul>
@@ -322,12 +326,12 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>use <code class="code python docutils literal notranslate"><span class="name builtin"><span class="pre">iter</span></span><span class="punctuation"><span class="pre">()</span></span></code> to make an iterator e.g.: <code class="code python docutils literal notranslate"><span class="name"><span class="pre">x</span></span> <span class="operator"><span class="pre">=</span></span> <span class="name builtin"><span class="pre">iter</span></span><span class="punctuation"><span class="pre">(</span></span><span class="name builtin"><span class="pre">range</span></span><span class="punctuation"><span class="pre">(</span></span><span class="literal number integer"><span class="pre">1</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal number integer"><span class="pre">11</span></span><span class="punctuation"><span class="pre">))</span></span></code></p></li>
-<li><p>Exception <code class="code python docutils literal notranslate"><span class="name"><span class="pre">StopIterator</span></span></code> will stop an interator - how a for loop stops for example</p></li>
+<li><p>use <code class="code highlight python docutils literal highlight-python"><span class="nb">iter</span><span class="p">()</span></code> to make an iterator e.g.: <code class="code highlight python docutils literal highlight-python"><span class="n">x</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span></code></p></li>
+<li><p>Exception <code class="code highlight python docutils literal highlight-python"><span class="n">StopIterator</span></code> will stop an interator - how a for loop stops for example</p></li>
 </ul>
-</div>
-<div class="section" id="generator">
-<h2>Generator<a class="headerlink" href="#generator" title="Permalink to this headline"></a></h2>
+</section>
+<section id="generator">
+<h2>Generator<a class="headerlink" href="#generator" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">generator</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="c1"># pauses function and returns i to the calling function</span>
@@ -361,8 +365,8 @@
   <span class="nb">print</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
