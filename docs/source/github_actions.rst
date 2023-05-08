@@ -112,6 +112,23 @@ you can save them as artifacts.
           with:
             name: output-log-file
 
+Workflow Triggers - Events
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- `pull_reqest`
+
+    - You can specify a branch/branches with `branches:`
+    
+    - You can specify which particular file changes will trigger this with
+      `paths:`. You can use expressions here like `"*,py"` to trigger on a
+      change in a python file.
+
+- `workflow_dispatch`: Allows you to run the workflow manually from GitHub actions tab
+
+- `repository_dispatch`: Allows you to trigger a workflow using a webhook.
+
+- `schedule`: Can set it to run at specified times, e.g. using the `cron` tag
+
 ----
 
 Actions Files

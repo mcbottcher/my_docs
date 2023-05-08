@@ -402,6 +402,37 @@ Then it can be used without a passphrase for the duration of the terminal sessio
 
 ----
 
+Multiple SSH Users - GitHub
+---------------------------
+
+Checkout `this <https://gist.github.com/rahularity/86da20fe3858e6b311de068201d279e3>`_ tutorial.
+
+1. Create seperate ssh keys.
+2. Make a config file in *.ssh/config*
+
+.. code-block::
+    :caption: Example config (*.ssh/config*) file
+
+    #account1
+    Host github.com-account1
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_rsa
+
+    #account2
+    Host github.com-account2
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_rsa_account2
+
+3. When you clone the repo, make sure to clone it as a specific user:
+
+.. code-block::
+    
+    git clone git@github.com<user_to_clone_with>:<repo_owner>/<repo_name>.git
+
+----
+
 Sources
 -------
 
