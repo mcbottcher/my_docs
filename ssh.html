@@ -75,6 +75,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ssh-escape-codes">SSH Escape Codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ssh-agent">SSH Agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multiple-ssh-users-github">Multiple SSH Users - GitHub</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sources">Sources</a></li>
 </ul>
 </li>
@@ -495,6 +496,37 @@ Then it can be used without a passphrase for the duration of the terminal sessio
 $ ssh-add
 </pre></div>
 </div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="multiple-ssh-users-github">
+<h2>Multiple SSH Users - GitHub<a class="headerlink" href="#multiple-ssh-users-github" title="Permalink to this heading"></a></h2>
+<p>Checkout <a class="reference external" href="https://gist.github.com/rahularity/86da20fe3858e6b311de068201d279e3">this</a> tutorial.</p>
+<ol class="arabic simple">
+<li><p>Create seperate ssh keys.</p></li>
+<li><p>Make a config file in <em>.ssh/config</em></p></li>
+</ol>
+<div class="literal-block-wrapper docutils container" id="id32">
+<div class="code-block-caption"><span class="caption-text">Example config (<em>.ssh/config</em>) file</span><a class="headerlink" href="#id32" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#account1</span>
+<span class="n">Host</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">-</span><span class="n">account1</span>
+    <span class="n">HostName</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span>
+    <span class="n">User</span> <span class="n">git</span>
+    <span class="n">IdentityFile</span> <span class="o">~/.</span><span class="n">ssh</span><span class="o">/</span><span class="n">id_rsa</span>
+
+<span class="c1">#account2</span>
+<span class="n">Host</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">-</span><span class="n">account2</span>
+    <span class="n">HostName</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span>
+    <span class="n">User</span> <span class="n">git</span>
+    <span class="n">IdentityFile</span> <span class="o">~/.</span><span class="n">ssh</span><span class="o">/</span><span class="n">id_rsa_account2</span>
+</pre></div>
+</div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>When you clone the repo, make sure to clone it as a specific user:</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="o">&lt;</span><span class="n">user_to_clone_with</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">repo_owner</span><span class="o">&gt;/&lt;</span><span class="n">repo_name</span><span class="o">&gt;.</span><span class="n">git</span>
+</pre></div>
 </div>
 </section>
 <hr class="docutils" />

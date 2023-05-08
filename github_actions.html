@@ -50,6 +50,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#using-variables">Using Variables</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#using-scripts-and-shell-commands">Using Scripts and Shell Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sharing-data-between-jobs">Sharing Data Between Jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#workflow-triggers-events">Workflow Triggers - Events</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#actions-files">Actions Files</a><ul>
@@ -240,6 +241,24 @@ you can save them as artifacts.</p>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output-log-file</span><span class="w"></span>
 </pre></div>
 </div>
+</section>
+<section id="workflow-triggers-events">
+<h3>Workflow Triggers - Events<a class="headerlink" href="#workflow-triggers-events" title="Permalink to this heading"></a></h3>
+<ul>
+<li><p><cite>pull_reqest</cite></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>You can specify a branch/branches with <cite>branches:</cite></p></li>
+<li><p>You can specify which particular file changes will trigger this with
+<cite>paths:</cite>. You can use expressions here like <cite>“*,py”</cite> to trigger on a
+change in a python file.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><cite>workflow_dispatch</cite>: Allows you to run the workflow manually from GitHub actions tab</p></li>
+<li><p><cite>repository_dispatch</cite>: Allows you to trigger a workflow using a webhook.</p></li>
+<li><p><cite>schedule</cite>: Can set it to run at specified times, e.g. using the <cite>cron</cite> tag</p></li>
+</ul>
 </section>
 </section>
 <hr class="docutils" />
