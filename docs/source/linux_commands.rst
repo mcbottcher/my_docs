@@ -100,3 +100,25 @@ Linux Commands
 
   - :shell:`sudo kill $(pidof <process_name>)`
 
+----
+
+- :shell:`chown`: Change the owner of a file
+
+  - :shell:`sudo chown root <my_file>`: Example changing owner to root
+
+----
+
+- :shell:`chmod`: Changes permissions to a file
+
+  - Permissions are grouped in 3 sections, Owner, Group and Users.
+    - Owner is the owner of the file which can be changed with `chown`
+    - Users is all the users of the system
+
+  - Setting permissions with numbers:
+    - 4: read permission
+    - 2: write permission
+    - 1: execute permission
+  - :shell:`chmod 764 <file_name>`: Sets RWX permission for owner, RW for Group and R only for users.
+
+  - Adding with letters:
+    - `chmod +x <file_name>`: This will add execute permissions for Owner, Group and Users
