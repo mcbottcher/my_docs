@@ -9,26 +9,42 @@ Linux Commands
   - :shell:`cd` itself will default to the home DIR
   - :shell:`cd -` takes you back to the previous directory you were at
 
+----
+
 - :shell:`pwd` : print the directory you are in
 
+----
+
 - :shell:`whoami` : prints current user
+
+----
 
 - :shell:`wc`: get file size info
 
   - :shell:`wc -c unix.md` : Get number of bytes of file
   - :shell:`wc -l unix.md` : Get number of lines of file
 
+----
+
 - :shell:`diff`: Compares two files
 
   - :shell:`diff -y <file1> <file2>`: Outputs diff of file1 and file2 side-by-side
+
+----
 
 - :shell:`find`: Find a file
 
   - :shell:`find . -name "*.py"`: Finds all .py files from current directory and down
 
+----
+
 - :shell:`tree`: Shows files in tree display
 
+----
+
 - :shell:`printenv`: Print environment variables
+
+----
 
 - :shell:`curl`: cURL lets us query URLs from the command line
 
@@ -40,6 +56,8 @@ Linux Commands
 
   - pass in username and password: :shell:`curl -u <username>:<password> <url>`
   - Download response e.g. picture: :shell:`curl -o test.jpg <url>` -> outputs response to test.jpg
+
+----
 
 - :shell:`grep`: Search for word or expression in a file
 
@@ -60,4 +78,47 @@ Linux Commands
   
   - :shell:`grep -r "pattern" *`: This will search recursivly all files in the current dir and below
 
+----
+
 - :shell:`uname`: prints system info
+
+----
+
+- :shell:`ps`: "Process Status", prints info about running processes
+
+  - :shell:`ps -A` or :shell:`ps -e` prints all running processes
+
+  - :shell:`ps aux` shows all running processes in BSD format
+
+  - :shell:`ps -u <user>` allows you to filter by user
+
+  - :shell:`ps -C process_name` searches the PID of a process by name
+
+----
+
+- :shell:`pidof <process_name>`: This returns the PID only of the process
+
+  - :shell:`sudo kill $(pidof <process_name>)`
+
+----
+
+- :shell:`chown`: Change the owner of a file
+
+  - :shell:`sudo chown root <my_file>`: Example changing owner to root
+
+----
+
+- :shell:`chmod`: Changes permissions to a file
+
+  - Permissions are grouped in 3 sections, Owner, Group and Users.
+    - Owner is the owner of the file which can be changed with `chown`
+    - Users is all the users of the system
+
+  - Setting permissions with numbers:
+    - 4: read permission
+    - 2: write permission
+    - 1: execute permission
+  - :shell:`chmod 764 <file_name>`: Sets RWX permission for owner, RW for Group and R only for users.
+
+  - Adding with letters:
+    - `chmod +x <file_name>`: This will add execute permissions for Owner, Group and Users
