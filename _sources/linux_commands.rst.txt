@@ -78,6 +78,9 @@ Linux Commands
   
   - :shell:`grep -r "pattern" *`: This will search recursivly all files in the current dir and below
 
+  - :shell:`grep -P "(?<=hello)(.*)(?=world)"`: Use a pearl regex. This returns all
+    expressions found between "hello" and "world".
+
 ----
 
 - :shell:`uname`: prints system info
