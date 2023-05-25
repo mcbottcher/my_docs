@@ -272,3 +272,14 @@ Generator
   for i in gen:
     # prints 1, 3, 5, 7, 9
     print(gen)
+
+Pass Statement
+--------------
+
+You can use the ``pass`` keyword for avoiding errors on code you have not yet written
+
+.. code-block:: python
+
+  def my_function():
+    # TODO
+    pass
