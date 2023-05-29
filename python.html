@@ -66,6 +66,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#list-comprehension">List comprehension</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#iterator">Iterator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#generator">Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pass-statement">Pass Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calling-c-functions-from-python">Calling C Functions from Python</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
@@ -366,6 +368,36 @@
   <span class="nb">print</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span>
 </pre></div>
 </div>
+</section>
+<section id="pass-statement">
+<h2>Pass Statement<a class="headerlink" href="#pass-statement" title="Permalink to this heading"></a></h2>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">pass</span></code> keyword for avoiding errors on code you have not yet written</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_function</span><span class="p">():</span>
+  <span class="c1"># TODO</span>
+  <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="calling-c-functions-from-python">
+<h2>Calling C Functions from Python<a class="headerlink" href="#calling-c-functions-from-python" title="Permalink to this heading"></a></h2>
+<p>You can use the python <code class="docutils literal notranslate"><span class="pre">ctypes</span></code> module to convert data types between C and python</p>
+<p>To call C from python, you have to load the shared library into python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+
+<span class="c1"># Load the shared library</span>
+<span class="n">my_lib</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="s1">&#39;./libmy_lib.so&#39;</span><span class="p">)</span>
+
+<span class="c1"># Define the function arguments and return type</span>
+<span class="n">my_lib</span><span class="o">.</span><span class="n">add_numbers</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">]</span>
+<span class="n">my_lib</span><span class="o">.</span><span class="n">add_numbers</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span>
+
+<span class="c1"># Call the function</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">my_lib</span><span class="o">.</span><span class="n">add_numbers</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">67</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result:&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You also have to define the python representations of the c types for the
+arguments and return value, which can be done using <code class="docutils literal notranslate"><span class="pre">ctypes</span></code></p>
 </section>
 </section>
 
