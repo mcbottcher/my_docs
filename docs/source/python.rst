@@ -283,3 +283,28 @@ You can use the ``pass`` keyword for avoiding errors on code you have not yet wr
   def my_function():
     # TODO
     pass
+
+Calling C Functions from Python
+-------------------------------
+
+You can use the python ``ctypes`` module to convert data types between C and python
+
+To call C from python, you have to load the shared library into python:
+
+.. code-block:: python
+
+  import ctypes
+
+  # Load the shared library
+  my_lib = ctypes.CDLL('./libmy_lib.so')
+
+  # Define the function arguments and return type
+  my_lib.add_numbers.argtypes = [ctypes.c_uint32, ctypes.c_uint32]
+  my_lib.add_numbers.restype = ctypes.c_uint32
+
+  # Call the function
+  result = my_lib.add_numbers(15, 67)
+  print("Result:", result)
+
+You also have to define the python representations of the c types for the
+arguments and return value, which can be done using ``ctypes``
