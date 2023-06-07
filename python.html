@@ -68,6 +68,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#generator">Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pass-statement">Pass Statement</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#calling-c-functions-from-python">Calling C Functions from Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-paths">Working with Paths</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
@@ -398,6 +399,24 @@
 </div>
 <p>You also have to define the python representations of the c types for the
 arguments and return value, which can be done using <code class="docutils literal notranslate"><span class="pre">ctypes</span></code></p>
+</section>
+<section id="working-with-paths">
+<h2>Working with Paths<a class="headerlink" href="#working-with-paths" title="Permalink to this heading"></a></h2>
+<p>When working with paths, it is neat to use <code class="docutils literal notranslate"><span class="pre">pathlib</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">my_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;&lt;path_to_file&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can do a lot of useful things once your file is in a Path object:</p>
+<ul class="simple">
+<li><p>Get current working directory (the dir the python script is called from): <code class="code highlight python docutils literal highlight-python"><span class="n">my_file</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span></code></p></li>
+<li><p>Join paths: <code class="code highlight python docutils literal highlight-python"><span class="n">my_file</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s1">&#39;&lt;another path&gt;&#39;</span><span class="p">)</span></code></p></li>
+<li><p>chmod: <code class="code highlight python docutils literal highlight-python"><span class="n">my_file</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">my_file</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mode</span> <span class="o">|</span> <span class="mo">0o111</span><span class="p">)</span></code> -&gt; equivilent to <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">+x</span></code></p></li>
+<li><p>Exists: <code class="code highlight python docutils literal highlight-python"><span class="n">my_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span></code></p></li>
+<li><p>Get filepath of current python module: <code class="code highlight python docutils literal highlight-python"><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span></code></p></li>
+<li><p>Get directory path of current python module: <code class="code highlight python docutils literal highlight-python"><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span></code></p></li>
+</ul>
 </section>
 </section>
 
