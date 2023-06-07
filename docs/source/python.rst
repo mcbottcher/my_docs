@@ -308,3 +308,23 @@ To call C from python, you have to load the shared library into python:
 
 You also have to define the python representations of the c types for the
 arguments and return value, which can be done using ``ctypes``
+
+Working with Paths
+------------------
+
+When working with paths, it is neat to use ``pathlib``
+
+.. code-block:: python
+
+  from pathlib import Path
+
+  my_file = Path('<path_to_file>')
+
+You can do a lot of useful things once your file is in a Path object:
+
+- Get current working directory (the dir the python script is called from): :python:`my_file = Path.cwd()`
+- Join paths: :python:`my_file.joinpath('<another path>')`
+- chmod: :python:`my_file.chmod(self.my_file.stat().st_mode | 0o111)` -> equivilent to ``chmod +x``
+- Exists: :python:`my_file.exists()`
+- Get filepath of current python module: :python:`Path(__file__)`
+- Get directory path of current python module: :python:`Path(__file__).parent`
