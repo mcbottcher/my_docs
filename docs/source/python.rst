@@ -328,3 +328,31 @@ You can do a lot of useful things once your file is in a Path object:
 - Exists: :python:`my_file.exists()`
 - Get filepath of current python module: :python:`Path(__file__)`
 - Get directory path of current python module: :python:`Path(__file__).parent`
+
+Pickle - Saving objects to files
+--------------------------------
+
+You can dump an object's value to a file so it can be stored in non-volatile memory.
+Maybe you want to save some things but don't have enough RAM to store everything at once
+
+Objects need to be written in a binary format:
+
+.. code-block:: python
+  :caption: Example storing an object to memory and retreiving it
+
+  import pickle
+
+  my_var: list[int] = [0,1,2,2,3,3,3,4,4,4,4,5,5]
+
+  # notice write-binary
+  with open("my_python_vars.file", "wb") as f:
+      pickle.dump(my_var, f, pickle.HIGHEST_PROTOCOL)
+
+  del my_var
+
+  # notice read-binary
+  with open("my_python_vars.file", "rb") as f:
+
+      my_other_var = pickle.load(f)
+
+      print(f'my_other_var is {my_other_var}')
