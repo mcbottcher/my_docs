@@ -158,6 +158,42 @@ Logging
     fmt = '[%(levelname)s] %(asctime)s - %(message)s'
     logging.basicConfig(level=level, format=fmt)
 
+Using the `logging.basicConfig` uses the root logger, which is fine for small applications,
+but for larger projects it is better to use different loggers. This allows you to have multiple logging
+configurations.
+
+For each logging instance, you can specify to where the log is written. You can use `FileHandler` type to
+specify that your log will be written to a file. You can use the `StreamHandler` to specify the log will be printed
+to the console for example.
+
+.. code-block:: python
+  :caption: Setting up a new logger
+
+  # This will get the logger with the specified name, and create it if not already existing
+  # using __name__ is a convention to use the module name for the logger
+  my_logger = logging.getLogger(__name__)
+
+
+.. code-block:: python
+  :caption: Example setting a FileHandler
+
+  file_handler = logging.FileHandler(log_file)
+  file_handler.setLevel(logging.DEBUG)
+  file_handler.setFormatter(formatter)
+  logger.addHandler(file_handler)
+
+.. code-block:: python
+  :caption: Example setting a StreamHandler
+
+  sh = logging.StreamHandler(sys.stdout)
+  formatter = logging.Formatter(my_log_format)
+
+  logger.addHandler(sh)
+  sh.setFormatter(formatter)
+
+.. note::
+  You can use the logging level `exception` if you want to print a stack trace with your log message
+
 Exceptions
 ----------
 
