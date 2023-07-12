@@ -392,3 +392,19 @@ Objects need to be written in a binary format:
       my_other_var = pickle.load(f)
 
       print(f'my_other_var is {my_other_var}')
+
+Environment variables
+---------------------
+
+You can use environment variables inside your python script.
+This allows you to access variables which you might want to keep out of your
+source code for example.
+
+.. code-block:: python
+
+  import os
+
+  # os.environ returns a dictionary of your environment variables
+  user_name = os.environ.get('MY_USER_NAME')
+  password = os.environ.get('MY_PASSWORD')
+
