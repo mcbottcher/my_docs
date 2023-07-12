@@ -70,6 +70,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#calling-c-functions-from-python">Calling C Functions from Python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#working-with-paths">Working with Paths</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pickle-saving-objects-to-files">Pickle - Saving objects to files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
@@ -481,6 +482,19 @@ Maybe you want to save some things but don’t have enough RAM to store everythi
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;my_other_var is </span><span class="si">{</span><span class="n">my_other_var</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+</section>
+<section id="environment-variables">
+<h2>Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this heading"></a></h2>
+<p>You can use environment variables inside your python script.
+This allows you to access variables which you might want to keep out of your
+source code for example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># os.environ returns a dictionary of your environment variables</span>
+<span class="n">user_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MY_USER_NAME&#39;</span><span class="p">)</span>
+<span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MY_PASSWORD&#39;</span><span class="p">)</span>
+</pre></div>
 </div>
 </section>
 </section>
