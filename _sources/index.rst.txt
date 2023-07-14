@@ -27,4 +27,5 @@ Contents
    python
    linux_commands
    ssh
+   bash
    
