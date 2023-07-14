@@ -102,20 +102,20 @@
 <h1>Bash<a class="headerlink" href="#bash" title="Permalink to this heading"></a></h1>
 <section id="executing-scripts">
 <h2>Executing Scripts<a class="headerlink" href="#executing-scripts" title="Permalink to this heading"></a></h2>
-<p>By convention, bash scripts end with the <cite>.sh</cite> file extension.
-You can make a script executable using <cite>chmod</cite> e.g. <code class="code highlight bash docutils literal highlight-bash">chmod u+x my_script.sh</code>.
+<p>By convention, bash scripts end with the <code class="docutils literal notranslate"><span class="pre">.sh</span></code> file extension.
+You can make a script executable using <code class="docutils literal notranslate"><span class="pre">chmod</span></code> e.g. <code class="code highlight bash docutils literal highlight-bash">chmod u+x my_script.sh</code>.
 You can then run the script with <code class="code highlight bash docutils literal highlight-bash">./my_script.sh</code>, <code class="code highlight bash docutils literal highlight-bash">sh my_script.sh</code>, <code class="code highlight bash docutils literal highlight-bash">bash my_script.sh</code></p>
 <p>Add a <em>shebang</em> to let your shell know what to execute the script with.
-For bash, this is the path to where bash is e.g. <cite>#!/bin/bash</cite></p>
+For bash, this is the path to where bash is e.g. <code class="docutils literal notranslate"><span class="pre">#!/bin/bash</span></code></p>
 </section>
 <section id="comments">
 <h2>Comments<a class="headerlink" href="#comments" title="Permalink to this heading"></a></h2>
-<p>Comments can be written using the <cite>#</cite> character</p>
+<p>Comments can be written using the <code class="docutils literal notranslate"><span class="pre">#</span></code> character</p>
 </section>
 <section id="variables">
 <h2>Variables<a class="headerlink" href="#variables" title="Permalink to this heading"></a></h2>
 <p>Bash has no data types. A variable can store numeric values, characters, or strings.
-You use the <cite>$</cite> operator to access a variable’s value</p>
+You use the <code class="docutils literal notranslate"><span class="pre">$</span></code> operator to access a variable’s value</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Assigning and accessing variables</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">my_var</span><span class="o">=</span>hello
@@ -169,7 +169,7 @@ You use the <cite>$</cite> operator to access a variable’s value</p>
 <section id="input-and-output">
 <h2>Input and Output<a class="headerlink" href="#input-and-output" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>User input - use the <cite>read</cite> command: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">read</span> var_to_hold_input</code></p></li>
+<li><p>User input - use the <code class="docutils literal notranslate"><span class="pre">read</span></code> command: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">read</span> var_to_hold_input</code></p></li>
 <li><p>Read lines of a file:</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="nb">read</span> line
@@ -180,9 +180,9 @@ You use the <cite>$</cite> operator to access a variable’s value</p>
 </div>
 <ul class="simple">
 <li><dl class="simple">
-<dt>Command line args. You can access arguments passed through the command line with <cite>$1, $2 …</cite>.</dt><dd><ul>
-<li><p>Can access all arguments through a special character: <cite>$&#64;</cite></p></li>
-<li><p>Could place in an array like so: <cite>args=(“$&#64;”)</cite>, and access them with <cite>args[0], args[1]…</cite></p></li>
+<dt>Command line args. You can access arguments passed through the command line with <code class="docutils literal notranslate"><span class="pre">$1,</span> <span class="pre">$2</span> <span class="pre">...</span></code>.</dt><dd><ul>
+<li><p>Can access all arguments through a special character: <code class="docutils literal notranslate"><span class="pre">$&#64;</span></code></p></li>
+<li><p>Could place in an array like so: <code class="docutils literal notranslate"><span class="pre">args=(&quot;$&#64;&quot;)</span></code>, and access them with <code class="docutils literal notranslate"><span class="pre">args[0],</span> <span class="pre">args[1]...</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -192,7 +192,7 @@ You use the <cite>$</cite> operator to access a variable’s value</p>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The <cite>&gt;</cite> operator overwrites a file if it already has content in it</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> operator overwrites a file if it already has content in it</p>
 </div>
 <ul class="simple">
 <li><p>Appending to a file: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">echo</span> <span class="s2">&quot;More text.&quot;</span> &gt;&gt; output.txt</code></p></li>
@@ -216,11 +216,11 @@ You use the <cite>$</cite> operator to access a variable’s value</p>
 </div>
 </div>
 <ul class="simple">
-<li><p>You can use logical operators in the condition check, e.g. <cite>-a</cite> (AND), <cite>-o</cite> (OR), <cite>-gt</cite> (&gt;), <cite>-lt</cite> (&lt;), <cite>-le</cite> (&lt;=) etc.</p></li>
+<li><p>You can use logical operators in the condition check, e.g. <code class="docutils literal notranslate"><span class="pre">-a</span></code> (AND), <code class="docutils literal notranslate"><span class="pre">-o</span></code> (OR), <code class="docutils literal notranslate"><span class="pre">-gt</span></code> (&gt;), <code class="docutils literal notranslate"><span class="pre">-lt</span></code> (&lt;), <code class="docutils literal notranslate"><span class="pre">-le</span></code> (&lt;=) etc.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>There is a slight difference between using double <cite>[[]]</cite> and single <cite>[]</cite>, but mostly can be used in a similar way</p>
+<p>There is a slight difference between using double <code class="docutils literal notranslate"><span class="pre">[[]]</span></code> and single <code class="docutils literal notranslate"><span class="pre">[]</span></code>, but mostly can be used in a similar way</p>
 </div>
 </section>
 <section id="looping-and-branching">
@@ -313,27 +313,27 @@ You use the <cite>$</cite> operator to access a variable’s value</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>You can manage and edit cron jobs using <cite>crontab</cite>. e.g. <cite>crontab -l</cite> lists all cron jobs for a user</p>
+<p>You can manage and edit cron jobs using <code class="docutils literal notranslate"><span class="pre">crontab</span></code>. e.g. <code class="docutils literal notranslate"><span class="pre">crontab</span> <span class="pre">-l</span></code> lists all cron jobs for a user</p>
 </div>
 <ul class="simple">
-<li><p>cron logs can be found at <cite>/var/log/syslog</cite></p></li>
+<li><p>cron logs can be found at <code class="docutils literal notranslate"><span class="pre">/var/log/syslog</span></code></p></li>
 </ul>
 </section>
 <section id="debugging">
 <h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><dl class="simple">
-<dt>Use <cite>set -x</cite> at the start of your bash script</dt><dd><ul>
+<dt>Use <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">-x</span></code> at the start of your bash script</dt><dd><ul>
 <li><p>This will print each command it executes to the terminal</p></li>
 <li><p>You can also just pass in the flag when calling the script: <code class="code highlight bash docutils literal highlight-bash">bash -x my_script.sh</code></p></li>
 </ul>
 </dd>
 </dl>
 </li>
-<li><p>Checking exit code: <cite>$?</cite> will give the exit code of the previous command</p></li>
+<li><p>Checking exit code: <code class="docutils literal notranslate"><span class="pre">$?</span></code> will give the exit code of the previous command</p></li>
 <li><dl class="simple">
-<dt>Use the <cite>-e</cite> flag to make your script exit on an error, and not keep running</dt><dd><ul>
-<li><p>Can also do <cite>set -e</cite> at the start</p></li>
+<dt>Use the <code class="docutils literal notranslate"><span class="pre">-e</span></code> flag to make your script exit on an error, and not keep running</dt><dd><ul>
+<li><p>Can also do <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">-e</span></code> at the start</p></li>
 </ul>
 </dd>
 </dl>
@@ -343,7 +343,7 @@ You use the <cite>$</cite> operator to access a variable’s value</p>
 <section id="executing-shell-commands-in-bash">
 <h2>Executing Shell Commands in bash<a class="headerlink" href="#executing-shell-commands-in-bash" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>You can create a new subshell with <cite>$( )</cite></p></li>
+<li><p>You can create a new subshell with <code class="docutils literal notranslate"><span class="pre">$(</span> <span class="pre">)</span></code></p></li>
 <li><p>It is then possible to use this output in other commands:</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id10">
@@ -377,24 +377,24 @@ bashtrap<span class="o">()</span>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Arithmetic:</dt><dd><ul>
-<li><p><cite>-lt</cite> (&lt;)</p></li>
-<li><p><cite>-gt</cite> (&gt;)</p></li>
-<li><p><cite>-le</cite> (&lt;=)</p></li>
-<li><p><cite>-ge</cite> (&gt;=)</p></li>
-<li><p><cite>-eq</cite> (==)</p></li>
-<li><p><cite>-ne</cite> (!=)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-lt</span></code> (&lt;)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-gt</span></code> (&gt;)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-le</span></code> (&lt;=)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-ge</span></code> (&gt;=)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-eq</span></code> (==)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-ne</span></code> (!=)</p></li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
 <dt>String:</dt><dd><ul>
-<li><p><cite>=</cite>: equal</p></li>
-<li><p><cite>!=</cite>: not equal</p></li>
-<li><p><cite>&lt;</cite>: less than</p></li>
-<li><p><cite>&gt;</cite>: greater than</p></li>
-<li><p><cite>-n s1</cite>: string s1 is not empty</p></li>
-<li><p><cite>-z s1</cite>: string s1 is empty</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">=</span></code>: equal</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!=</span></code>: not equal</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;</span></code>: less than</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&gt;</span></code>: greater than</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">s1</span></code>: string s1 is not empty</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-z</span> <span class="pre">s1</span></code>: string s1 is empty</p></li>
 </ul>
 </dd>
 </dl>
@@ -405,13 +405,13 @@ bashtrap<span class="o">()</span>
 <h2>File Testing<a class="headerlink" href="#file-testing" title="Permalink to this heading"></a></h2>
 <p>It is possible to test characteristics of files/directories in bash:</p>
 <ul class="simple">
-<li><p><cite>-d dir_name</cite>: Check if dir exists</p></li>
-<li><p><cite>-e filename</cite>: Check if file exists</p></li>
-<li><p><cite>-L filename</cite>: Symbolic link</p></li>
-<li><p><cite>-r file</cite>: File is readable</p></li>
-<li><p><cite>-s file</cite>: File is non-zero size</p></li>
-<li><p><cite>-w file</cite>: File is writable</p></li>
-<li><p><cite>-x file</cite>: File is executable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">dir_name</span></code>: Check if dir exists</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-e</span> <span class="pre">filename</span></code>: Check if file exists</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">filename</span></code>: Symbolic link</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">file</span></code>: File is readable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-s</span> <span class="pre">file</span></code>: File is non-zero size</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-w</span> <span class="pre">file</span></code>: File is writable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-x</span> <span class="pre">file</span></code>: File is executable</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id12">
 <div class="code-block-caption"><span class="caption-text">Example with file testing</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
@@ -462,12 +462,12 @@ bashtrap<span class="o">()</span>
 <section id="single-and-double-quotes">
 <h2>Single and Double Quotes<a class="headerlink" href="#single-and-double-quotes" title="Permalink to this heading"></a></h2>
 <p>Single quotes in bash will suppress special meanings of meta characters.</p>
-<p>Double quotes suppresses the meanings, except from <cite>$ `
-In this case you can use escape characters like: `a</cite> -&gt; alert (bell)</p>
+<p>Double quotes suppresses the meanings, except from <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">\</span></code>
+In this case you can use escape characters like: <code class="docutils literal notranslate"><span class="pre">\a</span></code> -&gt; alert (bell)</p>
 </section>
 <section id="let-keyword">
 <h2>Let keyword<a class="headerlink" href="#let-keyword" title="Permalink to this heading"></a></h2>
-<p><cite>let</cite> is used when evaluating arithmetic expressions on shell variables</p>
+<p><code class="docutils literal notranslate"><span class="pre">let</span></code> is used when evaluating arithmetic expressions on shell variables</p>
 <p><code class="code highlight bash docutils literal highlight-bash"><span class="nb">let</span> my_var++</code></p>
 </section>
 <section id="redirecting-std-streans">
