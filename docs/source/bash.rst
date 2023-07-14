@@ -40,7 +40,7 @@ You use the `$` operator to access a variable's value
 - You are also able to have global and local variables:
 
 .. code-block:: bash
-    :caption:
+    :caption: Example with global and local vars
 
     VAR="global variable"
 
@@ -97,7 +97,7 @@ Conditional Statements
 - If and else statements take the following form:
 
 .. code-block:: bash
-    :caption:
+    :caption: if else example
 
     if [ condition ]; then
         statement
