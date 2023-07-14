@@ -125,3 +125,10 @@ Linux Commands
 
   - Adding with letters:
     - `chmod +x <file_name>`: This will add execute permissions for Owner, Group and Users
+
+----
+
+- :shell:`echo`: Prints a string to console/file
+
+  - Use with `-e` to for formatting characters: :shell:`echo -e "\nThis is a newline"`
+
