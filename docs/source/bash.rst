@@ -7,23 +7,23 @@ Bash
 Executing Scripts
 -----------------
 
-By convention, bash scripts end with the `.sh` file extension.
-You can make a script executable using `chmod` e.g. :bash:`chmod u+x my_script.sh`.
+By convention, bash scripts end with the ``.sh`` file extension.
+You can make a script executable using ``chmod`` e.g. :bash:`chmod u+x my_script.sh`.
 You can then run the script with :bash:`./my_script.sh`, :bash:`sh my_script.sh`, :bash:`bash my_script.sh`
 
 Add a *shebang* to let your shell know what to execute the script with.
-For bash, this is the path to where bash is e.g. `#!/bin/bash`
+For bash, this is the path to where bash is e.g. ``#!/bin/bash``
 
 Comments
 --------
 
-Comments can be written using the `#` character
+Comments can be written using the ``#`` character
 
 Variables
 ---------
 
 Bash has no data types. A variable can store numeric values, characters, or strings.
-You use the `$` operator to access a variable's value
+You use the ``$`` operator to access a variable's value
 
 .. code-block:: bash
     :caption: Assigning and accessing variables
@@ -66,7 +66,7 @@ You use the `$` operator to access a variable's value
 Input and Output
 ----------------
 
-- User input - use the `read` command: :bash:`read var_to_hold_input`
+- User input - use the ``read`` command: :bash:`read var_to_hold_input`
 
 - Read lines of a file:
 
@@ -77,9 +77,9 @@ Input and Output
         echo $line
     done < input.txt
 
-- Command line args. You can access arguments passed through the command line with `$1, $2 ...`.
-    - Can access all arguments through a special character: `$@`
-    - Could place in an array like so: `args=("$@")`, and access them with `args[0], args[1]...`
+- Command line args. You can access arguments passed through the command line with ``$1, $2 ...``.
+    - Can access all arguments through a special character: ``$@``
+    - Could place in an array like so: ``args=("$@")``, and access them with ``args[0], args[1]...``
 
 
 - Printing to the terminal: :bash:`echo "Hello World"`
@@ -87,7 +87,7 @@ Input and Output
 - Writing to a file: :bash:`echo "Some text." > output.txt`. Can also redirect commands: :bash:`ls > output.txt`
 
 .. note::
-    The `>` operator overwrites a file if it already has content in it
+    The ``>`` operator overwrites a file if it already has content in it
 
 - Appending to a file: :bash:`echo "More text." >> output.txt`
 
@@ -107,10 +107,10 @@ Conditional Statements
         statement
     fi
 
-- You can use logical operators in the condition check, e.g. `-a` (AND), `-o` (OR), `-gt` (>), `-lt` (<), `-le` (<=) etc.
+- You can use logical operators in the condition check, e.g. ``-a`` (AND), ``-o`` (OR), ``-gt`` (>), ``-lt`` (<), ``-le`` (<=) etc.
 
 .. note::
-    There is a slight difference between using double `[[]]` and single `[]`, but mostly can be used in a similar way
+    There is a slight difference between using double ``[[]]`` and single ``[]``, but mostly can be used in a similar way
 
 Looping and Branching
 ---------------------
@@ -194,26 +194,26 @@ Cron is a utility that allows you to schedule jobs.  on Unix-like systems
     0 0 1-7 * * sh /path/to/script.sh
 
 .. note::
-    You can manage and edit cron jobs using `crontab`. e.g. `crontab -l` lists all cron jobs for a user
+    You can manage and edit cron jobs using ``crontab``. e.g. ``crontab -l`` lists all cron jobs for a user
 
-- cron logs can be found at `/var/log/syslog`
+- cron logs can be found at ``/var/log/syslog``
 
 Debugging
 ---------
 
-- Use `set -x` at the start of your bash script
+- Use ``set -x`` at the start of your bash script
     - This will print each command it executes to the terminal
     - You can also just pass in the flag when calling the script: :bash:`bash -x my_script.sh`
 
-- Checking exit code: `$?` will give the exit code of the previous command
+- Checking exit code: ``$?`` will give the exit code of the previous command
 
-- Use the `-e` flag to make your script exit on an error, and not keep running
-    - Can also do `set -e` at the start
+- Use the ``-e`` flag to make your script exit on an error, and not keep running
+    - Can also do ``set -e`` at the start
 
 Executing Shell Commands in bash
 --------------------------------
 
-- You can create a new subshell with `$( )`
+- You can create a new subshell with ``$( )``
 
 - It is then possible to use this output in other commands:
 
@@ -245,33 +245,33 @@ Comparison Operators
 --------------------
 
 - Arithmetic:
-    - `-lt` (<)
-    - `-gt` (>)
-    - `-le` (<=)
-    - `-ge` (>=)
-    - `-eq` (==)
-    - `-ne` (!=)
+    - ``-lt`` (<)
+    - ``-gt`` (>)
+    - ``-le`` (<=)
+    - ``-ge`` (>=)
+    - ``-eq`` (==)
+    - ``-ne`` (!=)
 
 - String:
-    - `=`: equal
-    - `!=`: not equal
-    - `<`: less than
-    - `>`: greater than
-    - `-n s1`: string s1 is not empty
-    - `-z s1`: string s1 is empty
+    - ``=``: equal
+    - ``!=``: not equal
+    - ``<``: less than
+    - ``>``: greater than
+    - ``-n s1``: string s1 is not empty
+    - ``-z s1``: string s1 is empty
 
 File Testing
 ------------
 
 It is possible to test characteristics of files/directories in bash:
 
-- `-d dir_name`: Check if dir exists
-- `-e filename`: Check if file exists
-- `-L filename`: Symbolic link
-- `-r file`: File is readable
-- `-s file`: File is non-zero size
-- `-w file`: File is writable
-- `-x file`: File is executable
+- ``-d dir_name``: Check if dir exists
+- ``-e filename``: Check if file exists
+- ``-L filename``: Symbolic link
+- ``-r file``: File is readable
+- ``-s file``: File is non-zero size
+- ``-w file``: File is writable
+- ``-x file``: File is executable
 
 .. code-block:: bash
     :caption: Example with file testing
@@ -321,13 +321,13 @@ Single and Double Quotes
 
 Single quotes in bash will suppress special meanings of meta characters.
 
-Double quotes suppresses the meanings, except from `$ \`
-In this case you can use escape characters like: `\a` -> alert (bell)
+Double quotes suppresses the meanings, except from ``$ \``
+In this case you can use escape characters like: ``\a`` -> alert (bell)
 
 Let keyword
 -----------
 
-`let` is used when evaluating arithmetic expressions on shell variables
+``let`` is used when evaluating arithmetic expressions on shell variables
 
 :bash:`let my_var++`
 
