@@ -57,6 +57,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#test-execution-results">Test Execution Results</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pytest-hooks">PyTest Hooks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-multiple-instances-of-pytest-on-the-same-code">Running multiple instances of pytest on the same code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sources">Sources</a></li>
 </ul>
 </li>
@@ -67,6 +68,7 @@
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ssh.html">SSH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bash.html">Bash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="git.html">Git</a></li>
 </ul>
 
         </div>
@@ -356,6 +358,15 @@ that finishes, execution returns to the hookwrapper to complete:</p>
 </ul>
 </section>
 <hr class="docutils" />
+<section id="running-multiple-instances-of-pytest-on-the-same-code">
+<h2>Running multiple instances of pytest on the same code<a class="headerlink" href="#running-multiple-instances-of-pytest-on-the-same-code" title="Permalink to this heading"></a></h2>
+<p>There might be a situation where you want to run multiple configs for pytest
+on the same repo.</p>
+<p>To avoid using the same config, use a <em>pytest.ini</em> file to root the pytest instance you are calling.</p>
+<p>This can cause an issue with your code trying to find some libraries in higher directory levels.
+One thing that might help, is to run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pytest</span> <span class="pre">...</span></code> instead of <code class="docutils literal notranslate"><span class="pre">pytest</span></code> directly. They
+are mostly the same except the first one adds more paths than just <code class="docutils literal notranslate"><span class="pre">pytest</span></code> by itself.</p>
+</section>
 <section id="sources">
 <h2>Sources<a class="headerlink" href="#sources" title="Permalink to this heading"></a></h2>
 <ul class="simple">

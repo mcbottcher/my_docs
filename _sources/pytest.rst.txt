@@ -297,6 +297,18 @@ Options
 
 ----
 
+Running multiple instances of pytest on the same code
+-----------------------------------------------------
+
+There might be a situation where you want to run multiple configs for pytest
+on the same repo.
+
+To avoid using the same config, use a *pytest.ini* file to root the pytest instance you are calling.
+
+This can cause an issue with your code trying to find some libraries in higher directory levels.
+One thing that might help, is to run ``python -m pytest ...`` instead of ``pytest`` directly. They
+are mostly the same except the first one adds more paths than just ``pytest`` by itself.
+
 Sources
 -------
 
