@@ -28,4 +28,5 @@ Contents
    linux_commands
    ssh
    bash
+   git
    
