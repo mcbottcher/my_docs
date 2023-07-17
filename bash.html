@@ -71,6 +71,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#let-keyword">Let keyword</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#redirecting-std-streans">Redirecting STD streans</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exec-command">exec command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bash-eval-statement">Bash eval statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#print-colour-to-the-console">Print Colour to the console</a></li>
 </ul>
 </li>
 </ul>
@@ -488,8 +490,8 @@ In this case you can use escape characters like: <code class="docutils literal n
 </section>
 <section id="exec-command">
 <h2>exec command<a class="headerlink" href="#exec-command" title="Permalink to this heading"></a></h2>
-<p>Bash includes a built-in command called <cite>exec</cite>.
-Calling this replaces the process of the current shell with a process of the command specified after the <cite>exec</cite> command.</p>
+<p>Bash includes a built-in command called <code class="docutils literal notranslate"><span class="pre">exec</span></code>.
+Calling this replaces the process of the current shell with a process of the command specified after the <code class="docutils literal notranslate"><span class="pre">exec</span></code> command.</p>
 <p>Because the command is replacing the shell, it will cause a bash script to end after executing.</p>
 <div class="literal-block-wrapper docutils container" id="id15">
 <div class="code-block-caption"><span class="caption-text">Example of return</span><a class="headerlink" href="#id15" title="Permalink to this code"></a></div>
@@ -513,6 +515,48 @@ Calling this replaces the process of the current shell with a process of the com
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>STDIN is 0, STDOUT is 1, and STDERR is 2</p>
+</div>
+</section>
+<section id="bash-eval-statement">
+<h2>Bash eval statement<a class="headerlink" href="#bash-eval-statement" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">eval</span></code> statement allows you to run a command based on a variable.</p>
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-text">Example using eval statement</span><a class="headerlink" href="#id17" title="Permalink to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">MY_COMMAND</span><span class="o">=</span><span class="s2">&quot;git br -a&quot;</span>
+
+<span class="nb">eval</span> <span class="nv">$MY_COMMAND</span> &gt; my_file.txt
+
+<span class="nv">RETURN_CODE</span><span class="o">=</span><span class="nv">$?</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="print-colour-to-the-console">
+<h2>Print Colour to the console<a class="headerlink" href="#print-colour-to-the-console" title="Permalink to this heading"></a></h2>
+<p>Printing colour requires the use of escape characters. You can achieve this using <code class="docutils literal notranslate"><span class="pre">printf</span></code> commands, or <code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">-e</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id18">
+<div class="code-block-caption"><span class="caption-text">Example printing colour</span><a class="headerlink" href="#id18" title="Permalink to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1"># Color variables</span>
+<span class="nv">red</span><span class="o">=</span><span class="s1">&#39;\033[0;31m&#39;</span>
+<span class="nv">green</span><span class="o">=</span><span class="s1">&#39;\033[0;32m&#39;</span>
+<span class="nv">yellow</span><span class="o">=</span><span class="s1">&#39;\033[0;33m&#39;</span>
+<span class="nv">blue</span><span class="o">=</span><span class="s1">&#39;\033[0;34m&#39;</span>
+<span class="nv">magenta</span><span class="o">=</span><span class="s1">&#39;\033[0;35m&#39;</span>
+<span class="nv">cyan</span><span class="o">=</span><span class="s1">&#39;\033[0;36m&#39;</span>
+<span class="c1"># Clear the color after that</span>
+<span class="nv">clear</span><span class="o">=</span><span class="s1">&#39;\033[0m&#39;</span>
+
+<span class="c1"># Examples</span>
+<span class="nb">echo</span> -e <span class="s2">&quot;The color is: </span><span class="si">${</span><span class="nv">red</span><span class="si">}</span><span class="s2">red</span><span class="si">${</span><span class="nv">clear</span><span class="si">}</span><span class="s2">!&quot;</span>
+<span class="nb">echo</span> -e <span class="s2">&quot;The color is: </span><span class="si">${</span><span class="nv">green</span><span class="si">}</span><span class="s2">green</span><span class="si">${</span><span class="nv">clear</span><span class="si">}</span><span class="s2">!&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The yellow colour given in the example looks quite nice for giving example shell commands</p>
 </div>
 </section>
 </section>
