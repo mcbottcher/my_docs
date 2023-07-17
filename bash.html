@@ -70,6 +70,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#single-and-double-quotes">Single and Double Quotes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#let-keyword">Let keyword</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#redirecting-std-streans">Redirecting STD streans</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exec-command">exec command</a></li>
 </ul>
 </li>
 </ul>
@@ -484,6 +485,35 @@ In this case you can use escape characters like: <code class="docutils literal n
 </div></blockquote>
 </li>
 </ul>
+</section>
+<section id="exec-command">
+<h2>exec command<a class="headerlink" href="#exec-command" title="Permalink to this heading"></a></h2>
+<p>Bash includes a built-in command called <cite>exec</cite>.
+Calling this replaces the process of the current shell with a process of the command specified after the <cite>exec</cite> command.</p>
+<p>Because the command is replacing the shell, it will cause a bash script to end after executing.</p>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">Example of return</span><a class="headerlink" href="#id15" title="Permalink to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">exec</span> <span class="nb">echo</span> <span class="s2">&quot;Hello&quot;</span>
+<span class="nb">exec</span> <span class="nb">echo</span> <span class="s2">&quot;World&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>The above example only prints <em>“Hello”</em></p>
+<p>It can also be used for redirecting std streams to log files:</p>
+<div class="literal-block-wrapper docutils container" id="id16">
+<div class="code-block-caption"><span class="caption-text">Example routing stdout to log file</span><a class="headerlink" href="#id16" title="Permalink to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">exec</span> <span class="m">1</span>&gt;log.txt
+
+<span class="nb">echo</span> <span class="s2">&quot;Hello&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;World&quot;</span>
+</pre></div>
+</div>
+</div>
+<p><em>“Hello World”</em> is written to the <em>log.txt</em> file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>STDIN is 0, STDOUT is 1, and STDERR is 2</p>
+</div>
 </section>
 </section>
 
