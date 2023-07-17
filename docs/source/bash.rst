@@ -342,4 +342,33 @@ Redirecting STD streans
 
     :bash:`cat $1 2>&1`
 
+exec command
+------------
 
+Bash includes a built-in command called `exec`.
+Calling this replaces the process of the current shell with a process of the command specified after the `exec` command.
+
+Because the command is replacing the shell, it will cause a bash script to end after executing.
+
+.. code-block:: bash
+    :caption: Example of return
+
+    exec echo "Hello"
+    exec echo "World"
+
+The above example only prints *"Hello"*
+
+It can also be used for redirecting std streams to log files:
+
+.. code-block:: bash
+    :caption: Example routing stdout to log file
+
+    exec 1>log.txt
+
+    echo "Hello"
+    echo "World"
+
+*"Hello World"* is written to the *log.txt* file.
+
+.. note::
+    STDIN is 0, STDOUT is 1, and STDERR is 2
