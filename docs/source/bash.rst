@@ -345,8 +345,8 @@ Redirecting STD streans
 exec command
 ------------
 
-Bash includes a built-in command called `exec`.
-Calling this replaces the process of the current shell with a process of the command specified after the `exec` command.
+Bash includes a built-in command called ``exec``.
+Calling this replaces the process of the current shell with a process of the command specified after the ``exec`` command.
 
 Because the command is replacing the shell, it will cause a bash script to end after executing.
 
@@ -372,3 +372,44 @@ It can also be used for redirecting std streams to log files:
 
 .. note::
     STDIN is 0, STDOUT is 1, and STDERR is 2
+
+Bash eval statement
+-------------------
+
+The ``eval`` statement allows you to run a command based on a variable.
+
+.. code-block:: bash
+    :caption: Example using eval statement
+
+    MY_COMMAND="git br -a"
+
+    eval $MY_COMMAND > my_file.txt
+
+    RETURN_CODE=$?
+
+Print Colour to the console
+---------------------------
+
+Printing colour requires the use of escape characters. You can achieve this using ``printf`` commands, or ``echo -e``.
+
+.. code-block:: bash
+    :caption: Example printing colour
+
+    #!/bin/bash
+
+    # Color variables
+    red='\033[0;31m'
+    green='\033[0;32m'
+    yellow='\033[0;33m'
+    blue='\033[0;34m'
+    magenta='\033[0;35m'
+    cyan='\033[0;36m'
+    # Clear the color after that
+    clear='\033[0m'
+
+    # Examples
+    echo -e "The color is: ${red}red${clear}!"
+    echo -e "The color is: ${green}green${clear}!"
+
+.. note::
+    The yellow colour given in the example looks quite nice for giving example shell commands
