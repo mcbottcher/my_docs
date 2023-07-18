@@ -71,6 +71,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#working-with-paths">Working with Paths</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pickle-saving-objects-to-files">Pickle - Saving objects to files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#named-tuple">Named Tuple</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
@@ -497,6 +498,26 @@ source code for example.</p>
 <span class="n">user_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MY_USER_NAME&#39;</span><span class="p">)</span>
 <span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MY_PASSWORD&#39;</span><span class="p">)</span>
 </pre></div>
+</div>
+</section>
+<section id="named-tuple">
+<h2>Named Tuple<a class="headerlink" href="#named-tuple" title="Permalink to this heading"></a></h2>
+<p>A named tuple allows you to use a tuple but read the elements in that tuple by name.</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example using named tuple</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+<span class="n">Color</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Color&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">])</span>
+
+<span class="n">my_color</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">143</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">78</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">my_color</span><span class="o">.</span><span class="n">red</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Remember tuples are immutable so you can’t write to these elements</p>
 </div>
 </section>
 </section>
