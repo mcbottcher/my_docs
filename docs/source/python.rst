@@ -408,3 +408,21 @@ source code for example.
   user_name = os.environ.get('MY_USER_NAME')
   password = os.environ.get('MY_PASSWORD')
 
+Named Tuple
+-----------
+
+A named tuple allows you to use a tuple but read the elements in that tuple by name.
+
+.. code-block:: python
+  :caption: Example using named tuple
+
+  from collections import namedtuple
+
+  Color = namedtuple('Color', ['red', 'green', 'blue'])
+
+  my_color = Color(red=55, green=143, blue=78)
+
+  print(my_color.red)
+
+.. note::
+  Remember tuples are immutable so you can't write to these elements
