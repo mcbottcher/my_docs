@@ -95,7 +95,7 @@ They can be used to feed data to a test function.
 The scope is limited to the file you have created it in by default. However, if it is included
 in your *conftest.py* file, you can change the scope.
 
-You can set the scope of a fixture to ``session, module, function...`` by using :python:`@pytest.fixture(scope='session')`
+You can set the scope of a fixture to ``session, module, function, class, package`` by using :python:`@pytest.fixture(scope='session')`
 
 You can also set :python:`autouse=True` if you want it enabled for all test functions in the scope.
 
@@ -121,6 +121,58 @@ decorator to use the fixture in a test function.
   You can view a list of builtin fixtures by using ``pytest --fixtures``. These are ones
   you don't have to specify but can just use the name of the fixture e.g. ``tmp_path`` 
 
+
+Using fixtures for setup and teardown
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can use fixtures for setup and teardown functions for tests.
+Using it as a setup is useful since you can pass in data to your test function.
+Using the teardown fixture is useful, since on an assert inside your test function, the remaining
+functionality won't be run, meaning if you have teardown logic inside the test, it won't be run on
+an ``assert``.
+
+.. code-block:: python
+  :caption: Example using fixtures for setup and teardown
+
+  @pytest.fixture(scope="function")
+  def test_setup():
+      print("Test Specific Setup")
+      test_data = 5
+      return test_data
+
+  @pytest.fixture(scope="function")
+  def test_teardown():
+      yield
+      print("Test Specific Teardown")
+
+  # test_teardown doesn't provide a value so can be declared like this
+  @pytest.usefixtures('test_teardown')
+  def test_example(test_setup):
+    assert test_setup == 3
+    
+
+It is also possible to chain fixtures:
+
+.. code-block:: python
+  :caption: Example chaining fixtures
+
+  @pytest.fixture(scope="function")
+  def test_setup():
+      print("Test Specific Setup")
+      test_data = 5
+      return test_data
+
+  @pytest.fixture(scope="function")
+  def test_teardown(test_setup):
+      yield test_setup
+      print("Test Specific Teardown")
+
+  def test_example(test_teardown):
+    assert test_teardown == 3  
+
+In this example, the setup will run first, then the teardown yields to the test.
+Once the test is complete, due to the ``yield`` statement, the rest of the teardown
+is run.
 
 ----
 
