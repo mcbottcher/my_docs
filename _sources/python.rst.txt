@@ -1,8 +1,8 @@
 .. role:: python(code)
     :language: python
 
-Python
-======
+|:snake:| Python
+================
 
 Lambda
 ------
