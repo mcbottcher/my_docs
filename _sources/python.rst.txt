@@ -236,6 +236,44 @@ Exceptions
     print('My custom exception was triggered')
 
 
+- It is also possible to catch an exception, run some code, then re-raise the exception:
+
+.. code-block:: python
+  :caption: Example re-raising an exception
+
+  try:
+    raise MyException
+  except:
+    print("Exception caught")
+    # raise the exception again
+    raise
+
+.. warning::
+  When you don't specify a specific exception in the ``except`` block, it will also catch 
+  Keyboard interrupts like CTRL+C. You can specify to catch these with ``KeyboardInterrupt``
+
+Handling Signals
+^^^^^^^^^^^^^^^^
+
+You can set functions for handling specified signals in python:
+
+.. code-block:: python
+  :caption: Example setting a Signal Handler
+
+  #!/usr/bin/env python
+  import signal
+  import sys
+
+  def signal_handler(sig, frame):
+      print('You pressed Ctrl+C!')
+      sys.exit(0)
+
+  # register a signal handler here
+  signal.signal(signal.SIGINT, signal_handler)
+  print('Press Ctrl+C')
+  # thread is paused until a signal is recieved
+  signal.pause()
+
 List comprehension
 ------------------
 

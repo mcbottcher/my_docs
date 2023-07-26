@@ -62,7 +62,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#zip">Zip</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#timing-code">Timing code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#handling-signals">Handling Signals</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#list-comprehension">List comprehension</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#iterator">Iterator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#generator">Generator</a></li>
@@ -339,6 +342,47 @@ to the console for example.</p>
   <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;My custom exception was triggered&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<ul class="simple">
+<li><p>It is also possible to catch an exception, run some code, then re-raise the exception:</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example re-raising an exception</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+  <span class="k">raise</span> <span class="n">MyException</span>
+<span class="k">except</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exception caught&quot;</span><span class="p">)</span>
+  <span class="c1"># raise the exception again</span>
+  <span class="k">raise</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When you don’t specify a specific exception in the <code class="docutils literal notranslate"><span class="pre">except</span></code> block, it will also catch
+Keyboard interrupts like CTRL+C. You can specify to catch these with <code class="docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code></p>
+</div>
+<section id="handling-signals">
+<h3>Handling Signals<a class="headerlink" href="#handling-signals" title="Permalink to this heading"></a></h3>
+<p>You can set functions for handling specified signals in python:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example setting a Signal Handler</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">def</span> <span class="nf">signal_handler</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You pressed Ctrl+C!&#39;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># register a signal handler here</span>
+<span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">,</span> <span class="n">signal_handler</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Press Ctrl+C&#39;</span><span class="p">)</span>
+<span class="c1"># thread is paused until a signal is recieved</span>
+<span class="n">signal</span><span class="o">.</span><span class="n">pause</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
 </section>
 <section id="list-comprehension">
 <h2>List comprehension<a class="headerlink" href="#list-comprehension" title="Permalink to this heading"></a></h2>
@@ -465,8 +509,8 @@ arguments and return value, which can be done using <code class="docutils litera
 <p>You can dump an object’s value to a file so it can be stored in non-volatile memory.
 Maybe you want to save some things but don’t have enough RAM to store everything at once</p>
 <p>Objects need to be written in a binary format:</p>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">Example storing an object to memory and retreiving it</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Example storing an object to memory and retreiving it</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
 
 <span class="n">my_var</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
@@ -503,8 +547,8 @@ source code for example.</p>
 <section id="named-tuple">
 <h2>Named Tuple<a class="headerlink" href="#named-tuple" title="Permalink to this heading"></a></h2>
 <p>A named tuple allows you to use a tuple but read the elements in that tuple by name.</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">Example using named tuple</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Example using named tuple</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 
 <span class="n">Color</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Color&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">])</span>
