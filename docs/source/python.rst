@@ -464,3 +464,92 @@ A named tuple allows you to use a tuple but read the elements in that tuple by n
 
 .. note::
   Remember tuples are immutable so you can't write to these elements
+
+Python Packages
+---------------
+
+A python module is simply a single ``.py`` file.
+They can be imported with the ``import`` statement.
+
+A package is a set of python modules with related functionality. These modules are 
+organised in a directory hierachry. It organises modules in a single namespace.
+
+Packages can be imported with a package manager like ``pip``.
+Each package must also contain a ``__init__.py`` file.
+
+Using a python package has an advantage in the python will add that directory to the
+PATH search so it is easier to specify imports etc.
+
+You can also declare package wide constants/vairables in the ``__init__.py`` file.
+
+Multithreading
+--------------
+
+Python has a global interpreter lock (GIL), which means that it is all run in one thread. This is one
+of the reasons it is slow since it can only make use of one thread.
+
+Mutlithreading in python allows to create mutliple threads. These threads still run on the same
+interpreter and the GIL still applies. However, using mutlithreading allows the interpreter to better
+manage execution time.
+
+For example, if one thread is waiting for an IO operation to complete or is sleeping, then it makes sense
+for the interpreter to do other tasks while this is happening.
+
+Mutliprocessing in python is different and this is where a new interpreter and memory space is spawned for
+each new process you make.
+
+.. code-block:: python
+  :caption: Example of a multi-threaded program
+
+  import threading
+  import time
+
+  def func_1():
+      for _ in range(10):
+          print("Hello")
+          time.sleep(1)
+
+  def func_2():
+      for _ in range(10):
+          print("World")
+          time.sleep(1) 
+
+  t1 = threading.Thread(target=func_1)
+  t2 = threading.Thread(target=func_2)
+
+  t1.start()
+  t2.start()
+
+  # join pauses execution here until the specified thread is complete
+  t1.join()
+  t2.join()
+
+  print("Finish")
+
+.. warning::
+  If an exception is raised in a thread, it is not propogated back to the main thread, so you
+  need to consider how to deal with exceptions happening inside a thread you have spawned.
+
+Obviously, mutliple threads accessing the same resource at a time could cause issues.
+Threading provides a mutex lock to allow resources to be used only by one thread at a time
+
+.. code-block:: python
+  :caption: Example using mutex lock
+
+  import threading
+
+  lock = threading.Lock()
+
+  # wait for lock to be availble and aquire it
+  lock.aquire()
+
+  # ... shared resource code goes here
+
+  # allow the resource to be used by other threads
+  lock.release()
+
+  # you can also make this easier by using the with statement
+  with lock:
+    # ... shared resource code goes here
+
+  # automatically released
