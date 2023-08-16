@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -108,8 +107,8 @@
 <section id="executing-scripts">
 <h2>Executing Scripts<a class="headerlink" href="#executing-scripts" title="Permalink to this heading"></a></h2>
 <p>By convention, bash scripts end with the <code class="docutils literal notranslate"><span class="pre">.sh</span></code> file extension.
-You can make a script executable using <code class="docutils literal notranslate"><span class="pre">chmod</span></code> e.g. <code class="code highlight bash docutils literal highlight-bash">chmod u+x my_script.sh</code>.
-You can then run the script with <code class="code highlight bash docutils literal highlight-bash">./my_script.sh</code>, <code class="code highlight bash docutils literal highlight-bash">sh my_script.sh</code>, <code class="code highlight bash docutils literal highlight-bash">bash my_script.sh</code></p>
+You can make a script executable using <code class="docutils literal notranslate"><span class="pre">chmod</span></code> e.g. <code class="code highlight bash docutils literal highlight-bash">chmod<span class="w"> </span>u+x<span class="w"> </span>my_script.sh</code>.
+You can then run the script with <code class="code highlight bash docutils literal highlight-bash">./my_script.sh</code>, <code class="code highlight bash docutils literal highlight-bash">sh<span class="w"> </span>my_script.sh</code>, <code class="code highlight bash docutils literal highlight-bash">bash<span class="w"> </span>my_script.sh</code></p>
 <p>Add a <em>shebang</em> to let your shell know what to execute the script with.
 For bash, this is the path to where bash is e.g. <code class="docutils literal notranslate"><span class="pre">#!/bin/bash</span></code></p>
 </section>
@@ -124,10 +123,10 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Assigning and accessing variables</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">my_var</span><span class="o">=</span>hello
-<span class="nb">echo</span> <span class="nv">$my_var</span>
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$my_var</span>
 
 <span class="c1"># also valid</span>
-<span class="nb">echo</span> <span class="si">${</span><span class="nv">my_var</span><span class="si">}</span>
+<span class="nb">echo</span><span class="w"> </span><span class="si">${</span><span class="nv">my_var</span><span class="si">}</span>
 </pre></div>
 </div>
 </div>
@@ -142,11 +141,11 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <div class="code-block-caption"><span class="caption-text">Example with global and local vars</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">VAR</span><span class="o">=</span><span class="s2">&quot;global variable&quot;</span>
 
-<span class="k">function</span> bash <span class="o">{</span>
-    <span class="c1"># Define bash local variable</span>
-    <span class="c1"># This variable is local to bash function only</span>
-    <span class="nb">local</span> <span class="nv">VAR</span><span class="o">=</span><span class="s2">&quot;local variable&quot;</span>
-    <span class="nb">echo</span> <span class="nv">$VAR</span>
+<span class="k">function</span><span class="w"> </span>bash<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="c1"># Define bash local variable</span>
+<span class="w">    </span><span class="c1"># This variable is local to bash function only</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">VAR</span><span class="o">=</span><span class="s2">&quot;local variable&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$VAR</span>
 <span class="o">}</span>
 </pre></div>
 </div>
@@ -154,7 +153,7 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <ul class="simple">
 <li><dl class="simple">
 <dt>Arrays:</dt><dd><ul>
-<li><p>4 element array: <code class="code highlight bash docutils literal highlight-bash"><span class="nv">ARRAY</span><span class="o">=(</span>MY NAME IS <span class="m">4</span><span class="o">)</span></code></p></li>
+<li><p>4 element array: <code class="code highlight bash docutils literal highlight-bash"><span class="nv">ARRAY</span><span class="o">=(</span>MY<span class="w"> </span>NAME<span class="w"> </span>IS<span class="w"> </span><span class="m">4</span><span class="o">)</span></code></p></li>
 <li><p>Get number of elements in an array: <code class="code highlight bash docutils literal highlight-bash"><span class="nv">ELEMENTS</span><span class="o">=</span><span class="si">${#</span><span class="nv">ARRAY</span><span class="p">[@]</span><span class="si">}</span></code></p></li>
 <li><p>Loop through array:</p></li>
 </ul>
@@ -164,8 +163,8 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </ul>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">Example looping through array</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="o">((</span> <span class="nv">i</span><span class="o">=</span><span class="m">0</span><span class="p">;</span>i&lt;<span class="nv">$ELEMENTS</span><span class="p">;</span>i++<span class="o">))</span><span class="p">;</span> <span class="k">do</span>
-    <span class="nb">echo</span> <span class="si">${</span><span class="nv">ARRAY</span><span class="p">[</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="p">]</span><span class="si">}</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="o">((</span><span class="w"> </span><span class="nv">i</span><span class="o">=</span><span class="m">0</span><span class="p">;</span>i&lt;<span class="nv">$ELEMENTS</span><span class="p">;</span>i++<span class="o">))</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="si">${</span><span class="nv">ARRAY</span><span class="p">[</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="p">]</span><span class="si">}</span>
 <span class="k">done</span>
 </pre></div>
 </div>
@@ -174,13 +173,13 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <section id="input-and-output">
 <h2>Input and Output<a class="headerlink" href="#input-and-output" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>User input - use the <code class="docutils literal notranslate"><span class="pre">read</span></code> command: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">read</span> var_to_hold_input</code></p></li>
+<li><p>User input - use the <code class="docutils literal notranslate"><span class="pre">read</span></code> command: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">read</span><span class="w"> </span>var_to_hold_input</code></p></li>
 <li><p>Read lines of a file:</p></li>
 </ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="nb">read</span> line
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>line
 <span class="k">do</span>
-    <span class="nb">echo</span> <span class="nv">$line</span>
-<span class="k">done</span> &lt; input.txt
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$line</span>
+<span class="k">done</span><span class="w"> </span>&lt;<span class="w"> </span>input.txt
 </pre></div>
 </div>
 <ul class="simple">
@@ -192,15 +191,15 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </dd>
 </dl>
 </li>
-<li><p>Printing to the terminal: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">echo</span> <span class="s2">&quot;Hello World&quot;</span></code></p></li>
-<li><p>Writing to a file: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">echo</span> <span class="s2">&quot;Some text.&quot;</span> &gt; output.txt</code>. Can also redirect commands: <code class="code highlight bash docutils literal highlight-bash">ls &gt; output.txt</code></p></li>
+<li><p>Printing to the terminal: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Hello World&quot;</span></code></p></li>
+<li><p>Writing to a file: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Some text.&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>output.txt</code>. Can also redirect commands: <code class="code highlight bash docutils literal highlight-bash">ls<span class="w"> </span>&gt;<span class="w"> </span>output.txt</code></p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">&gt;</span></code> operator overwrites a file if it already has content in it</p>
 </div>
 <ul class="simple">
-<li><p>Appending to a file: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">echo</span> <span class="s2">&quot;More text.&quot;</span> &gt;&gt; output.txt</code></p></li>
+<li><p>Appending to a file: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;More text.&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>output.txt</code></p></li>
 </ul>
 </section>
 <section id="conditional-statements">
@@ -210,12 +209,12 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </ul>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">if else example</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">[</span> condition <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    statement
-<span class="k">elif</span> <span class="o">[</span> condition <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    statement
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>condition<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span>statement
+<span class="k">elif</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>condition<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span>statement
 <span class="k">else</span>
-    statement
+<span class="w">    </span>statement
 <span class="k">fi</span>
 </pre></div>
 </div>
@@ -236,9 +235,9 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <div class="literal-block-wrapper docutils container" id="id5">
 <div class="code-block-caption"><span class="caption-text">Example while loop</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">i</span><span class="o">=</span><span class="m">1</span>
-<span class="k">while</span> <span class="o">[[</span> <span class="nv">$i</span> -le <span class="m">10</span> <span class="o">]]</span> <span class="p">;</span> <span class="k">do</span>
-    <span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$i</span><span class="s2">&quot;</span>
-    <span class="o">((</span> <span class="nv">i</span> <span class="o">+=</span> <span class="m">1</span> <span class="o">))</span>
+<span class="k">while</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="nv">$i</span><span class="w"> </span>-le<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$i</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="o">((</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">))</span>
 <span class="k">done</span>
 </pre></div>
 </div>
@@ -248,9 +247,9 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </ul>
 <div class="literal-block-wrapper docutils container" id="id6">
 <div class="code-block-caption"><span class="caption-text">Example of a for loop</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> i <span class="k">in</span> <span class="o">{</span><span class="m">1</span>..5<span class="o">}</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">{</span><span class="m">1</span>..5<span class="o">}</span>
 <span class="k">do</span>
-    <span class="nb">echo</span> <span class="nv">$i</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$i</span>
 <span class="k">done</span>
 </pre></div>
 </div>
@@ -262,10 +261,10 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <div class="code-block-caption"><span class="caption-text">Until loop example</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="nv">file</span><span class="o">=</span><span class="s2">&quot;./file&quot;</span>
-<span class="k">if</span> <span class="o">[</span> -e <span class="nv">$file</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;File exists&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">$file</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;File exists&quot;</span>
 <span class="k">else</span>
-    <span class="nb">echo</span> <span class="s2">&quot;File does not exist&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;File does not exist&quot;</span>
 <span class="k">fi</span>
 </pre></div>
 </div>
@@ -275,19 +274,19 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </ul>
 <div class="literal-block-wrapper docutils container" id="id8">
 <div class="code-block-caption"><span class="caption-text">Example case statement</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> expression <span class="k">in</span>
-    pattern1<span class="o">)</span>
-        <span class="c1"># code to execute if expression matches pattern1</span>
-        <span class="p">;;</span>
-    pattern2<span class="o">)</span>
-        <span class="c1"># code to execute if expression matches pattern2</span>
-        <span class="p">;;</span>
-    pattern3<span class="o">)</span>
-        <span class="c1"># code to execute if expression matches pattern3</span>
-        <span class="p">;;</span>
-    *<span class="o">)</span>
-        <span class="c1"># code to execute if none of the above patterns match expression</span>
-        <span class="p">;;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span>expression<span class="w"> </span><span class="k">in</span>
+<span class="w">    </span>pattern1<span class="o">)</span>
+<span class="w">        </span><span class="c1"># code to execute if expression matches pattern1</span>
+<span class="w">        </span><span class="p">;;</span>
+<span class="w">    </span>pattern2<span class="o">)</span>
+<span class="w">        </span><span class="c1"># code to execute if expression matches pattern2</span>
+<span class="w">        </span><span class="p">;;</span>
+<span class="w">    </span>pattern3<span class="o">)</span>
+<span class="w">        </span><span class="c1"># code to execute if expression matches pattern3</span>
+<span class="w">        </span><span class="p">;;</span>
+<span class="w">    </span>*<span class="o">)</span>
+<span class="w">        </span><span class="c1"># code to execute if none of the above patterns match expression</span>
+<span class="w">        </span><span class="p">;;</span>
 <span class="k">esac</span>
 </pre></div>
 </div>
@@ -300,19 +299,19 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <div class="code-block-caption"><span class="caption-text">Syntax for cron and some examples</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># syntax</span>
 <span class="c1"># represents mins, hours, days, months, weekday</span>
-* * * * * sh /path/to/script.sh
+*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>sh<span class="w"> </span>/path/to/script.sh
 
 <span class="c1"># midnight every day</span>
-<span class="m">0</span> <span class="m">0</span> * * * sh /path/to/script.sh
+<span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>sh<span class="w"> </span>/path/to/script.sh
 
 <span class="c1"># every 5 minutes</span>
-*/5 * * * * sh /path/to/script.sh
+*/5<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>sh<span class="w"> </span>/path/to/script.sh
 
 <span class="c1"># 6am mon-fri</span>
-<span class="m">0</span> <span class="m">6</span> * * <span class="m">1</span>-5 sh /path/to/script.sh
+<span class="m">0</span><span class="w"> </span><span class="m">6</span><span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span><span class="m">1</span>-5<span class="w"> </span>sh<span class="w"> </span>/path/to/script.sh
 
 <span class="c1"># first 7 days of every month</span>
-<span class="m">0</span> <span class="m">0</span> <span class="m">1</span>-7 * * sh /path/to/script.sh
+<span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span>-7<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>sh<span class="w"> </span>/path/to/script.sh
 </pre></div>
 </div>
 </div>
@@ -330,7 +329,7 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <li><dl class="simple">
 <dt>Use <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">-x</span></code> at the start of your bash script</dt><dd><ul>
 <li><p>This will print each command it executes to the terminal</p></li>
-<li><p>You can also just pass in the flag when calling the script: <code class="code highlight bash docutils literal highlight-bash">bash -x my_script.sh</code></p></li>
+<li><p>You can also just pass in the flag when calling the script: <code class="code highlight bash docutils literal highlight-bash">bash<span class="w"> </span>-x<span class="w"> </span>my_script.sh</code></p></li>
 </ul>
 </dd>
 </dl>
@@ -353,7 +352,7 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </ul>
 <div class="literal-block-wrapper docutils container" id="id10">
 <div class="code-block-caption"><span class="caption-text">Example using subshell</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s2">&quot;My current git branch is </span><span class="k">$(</span>git branch --show-current<span class="k">)</span><span class="s2">&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;My current git branch is </span><span class="k">$(</span>git<span class="w"> </span>branch<span class="w"> </span>--show-current<span class="k">)</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -363,13 +362,13 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <p>Bash can catch signals that you send to it, e.g. <em>ctrl+c</em></p>
 <div class="literal-block-wrapper docutils container" id="id11">
 <div class="code-block-caption"><span class="caption-text">Example catching a signal interrupt</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">trap</span> bashtrap INT
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">trap</span><span class="w"> </span>bashtrap<span class="w"> </span>INT
 
 <span class="c1"># bash trap function is executed when CTRL-C is pressed:</span>
 <span class="c1"># bash prints message =&gt; Executing bash trap subrutine !</span>
 bashtrap<span class="o">()</span>
 <span class="o">{</span>
-    <span class="nb">echo</span> <span class="s2">&quot;CTRL+C Detected !...executing bash trap !&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CTRL+C Detected !...executing bash trap !&quot;</span>
 <span class="o">}</span>
 
 <span class="c1"># rest of script</span>
@@ -422,10 +421,10 @@ bashtrap<span class="o">()</span>
 <div class="code-block-caption"><span class="caption-text">Example with file testing</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="nv">file</span><span class="o">=</span><span class="s2">&quot;./file&quot;</span>
-<span class="k">if</span> <span class="o">[</span> -e <span class="nv">$file</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;File exists&quot;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">$file</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;File exists&quot;</span>
 <span class="k">else</span>
-    <span class="nb">echo</span> <span class="s2">&quot;File does not exist&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;File does not exist&quot;</span>
 <span class="k">fi</span>
 </pre></div>
 </div>
@@ -435,16 +434,16 @@ bashtrap<span class="o">()</span>
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h2>
 <div class="literal-block-wrapper docutils container" id="id13">
 <div class="code-block-caption"><span class="caption-text">Example function</span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">function</span> my_func <span class="o">{</span>
-    <span class="nb">echo</span> <span class="m">5</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span>my_func<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="m">5</span>
 <span class="o">}</span>
 
-<span class="k">function</span> my_arg_func <span class="o">{</span>
-    <span class="nb">echo</span> <span class="nv">$1</span>
+<span class="k">function</span><span class="w"> </span>my_arg_func<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$1</span>
 <span class="o">}</span>
 
-<span class="nb">echo</span> <span class="s2">&quot;My special number is </span><span class="si">${</span><span class="nv">my_func</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="nb">echo</span> <span class="s2">&quot;My special number is </span><span class="si">${</span><span class="nv">my_arg_func</span><span class="p"> 3</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;My special number is </span><span class="si">${</span><span class="nv">my_func</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;My special number is </span><span class="si">${</span><span class="nv">my_arg_func</span><span class="p"> 3</span><span class="si">}</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -455,10 +454,10 @@ bashtrap<span class="o">()</span>
 <div class="literal-block-wrapper docutils container" id="id14">
 <div class="code-block-caption"><span class="caption-text">Example using user selection</span><a class="headerlink" href="#id14" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">PS3</span><span class="o">=</span><span class="s1">&#39;Choose an option: &#39;</span>
-<span class="k">select</span> word <span class="k">in</span> <span class="s2">&quot;Yes&quot;</span> <span class="s2">&quot;No&quot;</span>
+<span class="k">select</span><span class="w"> </span>word<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;Yes&quot;</span><span class="w"> </span><span class="s2">&quot;No&quot;</span>
 <span class="k">do</span>
-    <span class="nb">echo</span> <span class="s2">&quot;You chose </span><span class="si">${</span><span class="nv">word</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="nb">break</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;You chose </span><span class="si">${</span><span class="nv">word</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">break</span>
 <span class="k">done</span>
 </pre></div>
 </div>
@@ -473,19 +472,19 @@ In this case you can use escape characters like: <code class="docutils literal n
 <section id="let-keyword">
 <h2>Let keyword<a class="headerlink" href="#let-keyword" title="Permalink to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">let</span></code> is used when evaluating arithmetic expressions on shell variables</p>
-<p><code class="code highlight bash docutils literal highlight-bash"><span class="nb">let</span> my_var++</code></p>
+<p><code class="code highlight bash docutils literal highlight-bash"><span class="nb">let</span><span class="w"> </span>my_var++</code></p>
 </section>
 <section id="redirecting-std-streans">
 <h2>Redirecting STD streans<a class="headerlink" href="#redirecting-std-streans" title="Permalink to this heading"></a></h2>
 <ul>
 <li><p>STDOUT to STDERR:</p>
 <blockquote>
-<div><p><code class="code highlight bash docutils literal highlight-bash"><span class="nb">echo</span> <span class="s2">&quot;Redirect&quot;</span> <span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span></code></p>
+<div><p><code class="code highlight bash docutils literal highlight-bash"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Redirect&quot;</span><span class="w"> </span><span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span></code></p>
 </div></blockquote>
 </li>
 <li><p>STDERR to STDOUT</p>
 <blockquote>
-<div><p><code class="code highlight bash docutils literal highlight-bash">cat <span class="nv">$1</span> <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span></code></p>
+<div><p><code class="code highlight bash docutils literal highlight-bash">cat<span class="w"> </span><span class="nv">$1</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span></code></p>
 </div></blockquote>
 </li>
 </ul>
@@ -497,8 +496,8 @@ Calling this replaces the process of the current shell with a process of the com
 <p>Because the command is replacing the shell, it will cause a bash script to end after executing.</p>
 <div class="literal-block-wrapper docutils container" id="id15">
 <div class="code-block-caption"><span class="caption-text">Example of return</span><a class="headerlink" href="#id15" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">exec</span> <span class="nb">echo</span> <span class="s2">&quot;Hello&quot;</span>
-<span class="nb">exec</span> <span class="nb">echo</span> <span class="s2">&quot;World&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">exec</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Hello&quot;</span>
+<span class="nb">exec</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;World&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -506,10 +505,10 @@ Calling this replaces the process of the current shell with a process of the com
 <p>It can also be used for redirecting std streams to log files:</p>
 <div class="literal-block-wrapper docutils container" id="id16">
 <div class="code-block-caption"><span class="caption-text">Example routing stdout to log file</span><a class="headerlink" href="#id16" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">exec</span> <span class="m">1</span>&gt;log.txt
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">exec</span><span class="w"> </span><span class="m">1</span>&gt;log.txt
 
-<span class="nb">echo</span> <span class="s2">&quot;Hello&quot;</span>
-<span class="nb">echo</span> <span class="s2">&quot;World&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Hello&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;World&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -526,7 +525,7 @@ Calling this replaces the process of the current shell with a process of the com
 <div class="code-block-caption"><span class="caption-text">Example using eval statement</span><a class="headerlink" href="#id17" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">MY_COMMAND</span><span class="o">=</span><span class="s2">&quot;git br -a&quot;</span>
 
-<span class="nb">eval</span> <span class="nv">$MY_COMMAND</span> &gt; my_file.txt
+<span class="nb">eval</span><span class="w"> </span><span class="nv">$MY_COMMAND</span><span class="w"> </span>&gt;<span class="w"> </span>my_file.txt
 
 <span class="nv">RETURN_CODE</span><span class="o">=</span><span class="nv">$?</span>
 </pre></div>
@@ -551,8 +550,8 @@ Calling this replaces the process of the current shell with a process of the com
 <span class="nv">clear</span><span class="o">=</span><span class="s1">&#39;\033[0m&#39;</span>
 
 <span class="c1"># Examples</span>
-<span class="nb">echo</span> -e <span class="s2">&quot;The color is: </span><span class="si">${</span><span class="nv">red</span><span class="si">}</span><span class="s2">red</span><span class="si">${</span><span class="nv">clear</span><span class="si">}</span><span class="s2">!&quot;</span>
-<span class="nb">echo</span> -e <span class="s2">&quot;The color is: </span><span class="si">${</span><span class="nv">green</span><span class="si">}</span><span class="s2">green</span><span class="si">${</span><span class="nv">clear</span><span class="si">}</span><span class="s2">!&quot;</span>
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;The color is: </span><span class="si">${</span><span class="nv">red</span><span class="si">}</span><span class="s2">red</span><span class="si">${</span><span class="nv">clear</span><span class="si">}</span><span class="s2">!&quot;</span>
+<span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;The color is: </span><span class="si">${</span><span class="nv">green</span><span class="si">}</span><span class="s2">green</span><span class="si">${</span><span class="nv">clear</span><span class="si">}</span><span class="s2">!&quot;</span>
 </pre></div>
 </div>
 </div>

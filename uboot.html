@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -130,20 +129,20 @@ For example loadb uses kermit.</p></li>
 <p>You can use several implementations, this is one:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Installing the TFTP server</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt install tftp-hpa
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>tftp-hpa
 </pre></div>
 </div>
 </div>
 <p>After this you can check the config for your server, such as the directory to keep your files in</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat /etc/default/tftpd-hpa
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>/etc/default/tftpd-hpa
 </pre></div>
 </div>
 <p>Change the owner of the TFTP home directory to your user:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo chown -R <span class="nv">$USER</span> /srv/tftp
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span><span class="nv">$USER</span><span class="w"> </span>/srv/tftp
 </pre></div>
 </div>
 <p>Check the status, start/stop/restart your tftp server service using the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo systemctl status tftpd-hpa
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>tftpd-hpa
 </pre></div>
 </div>
 <p>You can store files you want available over TFTP in the <em>/srv/tftp</em> directory</p>
@@ -175,12 +174,12 @@ to the <code class="docutils literal notranslate"><span class="pre">socfpga_de10
 <p>The script will contain something like this:</p>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">Script that pulls the Kenrel Image and Device tree, and boots using these</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>tftp <span class="si">${</span><span class="nv">kernel_addr_r</span><span class="si">}</span> zImage
-tftp <span class="si">${</span><span class="nv">fdt_addr_r</span><span class="si">}</span> system.dtb
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>tftp<span class="w"> </span><span class="si">${</span><span class="nv">kernel_addr_r</span><span class="si">}</span><span class="w"> </span>zImage
+tftp<span class="w"> </span><span class="si">${</span><span class="nv">fdt_addr_r</span><span class="si">}</span><span class="w"> </span>system.dtb
 
-setenv bootargs <span class="nv">root</span><span class="o">=</span>/dev/mmcblk0p2 rootwait rw earlyprintk <span class="nv">console</span><span class="o">=</span>ttyS0,115200n8
+setenv<span class="w"> </span>bootargs<span class="w"> </span><span class="nv">root</span><span class="o">=</span>/dev/mmcblk0p2<span class="w"> </span>rootwait<span class="w"> </span>rw<span class="w"> </span>earlyprintk<span class="w"> </span><span class="nv">console</span><span class="o">=</span>ttyS0,115200n8
 
-bootz <span class="si">${</span><span class="nv">kernel_addr_r</span><span class="si">}</span> - <span class="si">${</span><span class="nv">fdt_addr_r</span><span class="si">}</span>
+bootz<span class="w"> </span><span class="si">${</span><span class="nv">kernel_addr_r</span><span class="si">}</span><span class="w"> </span>-<span class="w"> </span><span class="si">${</span><span class="nv">fdt_addr_r</span><span class="si">}</span>
 </pre></div>
 </div>
 </div>
@@ -192,9 +191,9 @@ bootz <span class="si">${</span><span class="nv">kernel_addr_r</span><span class
 <p>To make a script into a U-Boot readable script, use the <em>mkimage</em> utility:</p>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">Example making a script execuable by uboot</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo apt install u-boot-tools
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>u-boot-tools
 
-sudo mkimage -A arm -O u-boot -T script -C none -a <span class="m">0</span> -e <span class="m">0</span> -n <span class="s2">&quot;TFTP Boot Script&quot;</span> -d tftp_boot.script.txt /srv/tftp/tftp_boot.scr
+sudo<span class="w"> </span>mkimage<span class="w"> </span>-A<span class="w"> </span>arm<span class="w"> </span>-O<span class="w"> </span>u-boot<span class="w"> </span>-T<span class="w"> </span>script<span class="w"> </span>-C<span class="w"> </span>none<span class="w"> </span>-a<span class="w"> </span><span class="m">0</span><span class="w"> </span>-e<span class="w"> </span><span class="m">0</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;TFTP Boot Script&quot;</span><span class="w"> </span>-d<span class="w"> </span>tftp_boot.script.txt<span class="w"> </span>/srv/tftp/tftp_boot.scr
 </pre></div>
 </div>
 </div>

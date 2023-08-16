@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -137,10 +136,10 @@ in the current directory or subdirectories.</p>
 <p>Can run a subset of tests in two ways:</p>
 <ol class="arabic simple">
 <li><p>String matching of test name:
-<code class="code highlight bash docutils literal highlight-bash">pytest -k great -v</code> will only run tests with ‘great’ in their name</p></li>
+<code class="code highlight bash docutils literal highlight-bash">pytest<span class="w"> </span>-k<span class="w"> </span>great<span class="w"> </span>-v</code> will only run tests with ‘great’ in their name</p></li>
 <li><p>Test Markers:
 <code class="code highlight python docutils literal highlight-python"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.&lt;</span><span class="n">markername</span><span class="o">&gt;</span></code>
-<code class="code highlight bash docutils literal highlight-bash">pytest -m &lt;markername&gt; -v</code></p></li>
+<code class="code highlight bash docutils literal highlight-bash">pytest<span class="w"> </span>-m<span class="w"> </span>&lt;markername&gt;<span class="w"> </span>-v</code></p></li>
 </ol>
 </section>
 <hr class="docutils" />
@@ -262,9 +261,9 @@ is run.</p>
 <section id="running-tests-in-parallel">
 <h2>Running Tests in Parallel<a class="headerlink" href="#running-tests-in-parallel" title="Permalink to this heading"></a></h2>
 <p>To run tests in parallel, you need the <code class="docutils literal notranslate"><span class="pre">pytest-xdist</span></code> plugin.</p>
-<p><code class="code highlight bash docutils literal highlight-bash">pip install pytest-xdist</code></p>
+<p><code class="code highlight bash docutils literal highlight-bash">pip<span class="w"> </span>install<span class="w"> </span>pytest-xdist</code></p>
 <p>Now you can specify how many workers you want to use to run the tests in parallel:</p>
-<p><code class="code highlight bash docutils literal highlight-bash">pytest -n &lt;number_of_workers&gt;</code></p>
+<p><code class="code highlight bash docutils literal highlight-bash">pytest<span class="w"> </span>-n<span class="w"> </span>&lt;number_of_workers&gt;</code></p>
 </section>
 <hr class="docutils" />
 <section id="markers">
@@ -308,7 +307,7 @@ mark name errors. Or add something like this to your pytest.ini</p>
 <h2>Test Execution Results<a class="headerlink" href="#test-execution-results" title="Permalink to this heading"></a></h2>
 <p>The results from the test execution can be written to an XML file. This can be
 used in a dashboard that displays test results.</p>
-<p><code class="code highlight bash docutils literal highlight-bash">pytest test_multiplication.py -v --junitxml<span class="o">=</span><span class="s2">&quot;results.xml&quot;</span></code></p>
+<p><code class="code highlight bash docutils literal highlight-bash">pytest<span class="w"> </span>test_multiplication.py<span class="w"> </span>-v<span class="w"> </span>--junitxml<span class="o">=</span><span class="s2">&quot;results.xml&quot;</span></code></p>
 </section>
 <hr class="docutils" />
 <section id="pytest-hooks">

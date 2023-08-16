@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -87,7 +86,7 @@
 <li><p><code class="code highlight shell docutils literal highlight-shell"><span class="nb">cd</span></code> : Change Directory</p>
 <ul>
 <li><p><code class="code highlight shell docutils literal highlight-shell"><span class="nb">cd</span></code> itself will default to the home DIR</p></li>
-<li><p><code class="code highlight shell docutils literal highlight-shell"><span class="nb">cd</span> -</code> takes you back to the previous directory you were at</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell"><span class="nb">cd</span><span class="w"> </span>-</code> takes you back to the previous directory you were at</p></li>
 </ul>
 </li>
 </ul>
@@ -103,8 +102,8 @@
 <ul class="simple">
 <li><p><code class="code highlight shell docutils literal highlight-shell">wc</code>: get file size info</p>
 <ul>
-<li><p><code class="code highlight shell docutils literal highlight-shell">wc -c unix.md</code> : Get number of bytes of file</p></li>
-<li><p><code class="code highlight shell docutils literal highlight-shell">wc -l unix.md</code> : Get number of lines of file</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">wc<span class="w"> </span>-c<span class="w"> </span>unix.md</code> : Get number of bytes of file</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">wc<span class="w"> </span>-l<span class="w"> </span>unix.md</code> : Get number of lines of file</p></li>
 </ul>
 </li>
 </ul>
@@ -112,7 +111,7 @@
 <ul class="simple">
 <li><p><code class="code highlight shell docutils literal highlight-shell">diff</code>: Compares two files</p>
 <ul>
-<li><p><code class="code highlight shell docutils literal highlight-shell">diff -y &lt;file1&gt; &lt;file2&gt;</code>: Outputs diff of file1 and file2 side-by-side</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">diff<span class="w"> </span>-y<span class="w"> </span>&lt;file1&gt;<span class="w"> </span>&lt;file2&gt;</code>: Outputs diff of file1 and file2 side-by-side</p></li>
 </ul>
 </li>
 </ul>
@@ -120,7 +119,7 @@
 <ul class="simple">
 <li><p><code class="code highlight shell docutils literal highlight-shell">find</code>: Find a file</p>
 <ul>
-<li><p><code class="code highlight shell docutils literal highlight-shell">find . -name <span class="s2">&quot;*.py&quot;</span></code>: Finds all .py files from current directory and down</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">find<span class="w"> </span>.<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.py&quot;</span></code>: Finds all .py files from current directory and down</p></li>
 </ul>
 </li>
 </ul>
@@ -136,15 +135,15 @@
 <ul class="simple">
 <li><p><code class="code highlight shell docutils literal highlight-shell">curl</code>: cURL lets us query URLs from the command line</p>
 <ul>
-<li><p><code class="code highlight shell docutils literal highlight-shell">curl www.google.com</code>: Returns HTML/Scripts of google.com</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">curl<span class="w"> </span>www.google.com</code>: Returns HTML/Scripts of google.com</p></li>
 <li><p>option <code class="code highlight shell docutils literal highlight-shell">-i</code> gives information header</p></li>
-<li><p>option <code class="code highlight shell docutils literal highlight-shell">-d or --data</code> can be used to post data to a url</p>
+<li><p>option <code class="code highlight shell docutils literal highlight-shell">-d<span class="w"> </span>or<span class="w"> </span>--data</code> can be used to post data to a url</p>
 <ul>
-<li><p><code class="code highlight shell docutils literal highlight-shell">curl -d <span class="s2">&quot;first=Bob&amp;last=Ross&quot;</span> http://&lt;url&gt;</code></p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">curl<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;first=Bob&amp;last=Ross&quot;</span><span class="w"> </span>http://&lt;url&gt;</code></p></li>
 </ul>
 </li>
-<li><p>pass in username and password: <code class="code highlight shell docutils literal highlight-shell">curl -u &lt;username&gt;:&lt;password&gt; &lt;url&gt;</code></p></li>
-<li><p>Download response e.g. picture: <code class="code highlight shell docutils literal highlight-shell">curl -o test.jpg &lt;url&gt;</code> -&gt; outputs response to test.jpg</p></li>
+<li><p>pass in username and password: <code class="code highlight shell docutils literal highlight-shell">curl<span class="w"> </span>-u<span class="w"> </span>&lt;username&gt;:&lt;password&gt;<span class="w"> </span>&lt;url&gt;</code></p></li>
+<li><p>Download response e.g. picture: <code class="code highlight shell docutils literal highlight-shell">curl<span class="w"> </span>-o<span class="w"> </span>test.jpg<span class="w"> </span>&lt;url&gt;</code> -&gt; outputs response to test.jpg</p></li>
 </ul>
 </li>
 </ul>
@@ -152,27 +151,27 @@
 <ul class="simple">
 <li><p><code class="code highlight shell docutils literal highlight-shell">grep</code>: Search for word or expression in a file</p>
 <ul>
-<li><p><code class="code highlight shell docutils literal highlight-shell">grep <span class="s2">&quot;expression&quot;</span> &lt;file&gt;</code></p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">grep<span class="w"> </span><span class="s2">&quot;expression&quot;</span><span class="w"> </span>&lt;file&gt;</code></p></li>
 <li><p>Use <code class="code highlight shell docutils literal highlight-shell">-i</code> to search for expression without being case sensitive</p></li>
-<li><p>Can use it with pipe: <code class="code highlight shell docutils literal highlight-shell">cat my_file.txt <span class="p">|</span> grep <span class="s2">&quot;hello world&quot;</span></code></p></li>
-<li><p>Use with extended regualar expressions: <code class="code highlight shell docutils literal highlight-shell">grep -E <span class="s1">&#39;pattern1|pattern2&#39;</span> fileName</code></p>
+<li><p>Can use it with pipe: <code class="code highlight shell docutils literal highlight-shell">cat<span class="w"> </span>my_file.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;hello world&quot;</span></code></p></li>
+<li><p>Use with extended regualar expressions: <code class="code highlight shell docutils literal highlight-shell">grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;pattern1|pattern2&#39;</span><span class="w"> </span>fileName</code></p>
 <ul>
 <li><p>Or regular grep:</p>
 <ul>
-<li><p><code class="code highlight shell docutils literal highlight-shell">grep <span class="s1">&#39;pattern1|pattern2&#39;</span> fileName</code></p></li>
-<li><p><code class="code highlight shell docutils literal highlight-shell">grep -e <span class="s1">&#39;pattern1&#39;</span> -e <span class="s1">&#39;pattern2&#39;</span> fileName</code></p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">grep<span class="w"> </span><span class="s1">&#39;pattern1|pattern2&#39;</span><span class="w"> </span>fileName</code></p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">grep<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;pattern1&#39;</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;pattern2&#39;</span><span class="w"> </span>fileName</code></p></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><p>Use <code class="code highlight shell docutils literal highlight-shell">-c</code> to get a count of number of grep matches</p></li>
-<li><p>Can also search multiple files: <code class="code highlight shell docutils literal highlight-shell">grep -c <span class="s1">&#39;warning|error&#39;</span> /var/log/*log</code> -&gt; Searches all log files…</p>
+<li><p>Can also search multiple files: <code class="code highlight shell docutils literal highlight-shell">grep<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;warning|error&#39;</span><span class="w"> </span>/var/log/*log</code> -&gt; Searches all log files…</p>
 <ul>
 <li><p>Use the -R flag to recursivly search subdirectories too</p></li>
 </ul>
 </li>
-<li><p><code class="code highlight shell docutils literal highlight-shell">grep -r <span class="s2">&quot;pattern&quot;</span> *</code>: This will search recursivly all files in the current dir and below</p></li>
-<li><p><code class="code highlight shell docutils literal highlight-shell">grep -P <span class="s2">&quot;(?&lt;=hello)(.*)(?=world)&quot;</span></code>: Use a pearl regex. This returns all
+<li><p><code class="code highlight shell docutils literal highlight-shell">grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;pattern&quot;</span><span class="w"> </span>*</code>: This will search recursivly all files in the current dir and below</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">grep<span class="w"> </span>-P<span class="w"> </span><span class="s2">&quot;(?&lt;=hello)(.*)(?=world)&quot;</span></code>: Use a pearl regex. This returns all
 expressions found between “hello” and “world”.</p></li>
 </ul>
 </li>
@@ -185,18 +184,18 @@ expressions found between “hello” and “world”.</p></li>
 <ul class="simple">
 <li><p><code class="code highlight shell docutils literal highlight-shell">ps</code>: “Process Status”, prints info about running processes</p>
 <ul>
-<li><p><code class="code highlight shell docutils literal highlight-shell">ps -A</code> or <code class="code highlight shell docutils literal highlight-shell">ps -e</code> prints all running processes</p></li>
-<li><p><code class="code highlight shell docutils literal highlight-shell">ps aux</code> shows all running processes in BSD format</p></li>
-<li><p><code class="code highlight shell docutils literal highlight-shell">ps -u &lt;user&gt;</code> allows you to filter by user</p></li>
-<li><p><code class="code highlight shell docutils literal highlight-shell">ps -C process_name</code> searches the PID of a process by name</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">ps<span class="w"> </span>-A</code> or <code class="code highlight shell docutils literal highlight-shell">ps<span class="w"> </span>-e</code> prints all running processes</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">ps<span class="w"> </span>aux</code> shows all running processes in BSD format</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">ps<span class="w"> </span>-u<span class="w"> </span>&lt;user&gt;</code> allows you to filter by user</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">ps<span class="w"> </span>-C<span class="w"> </span>process_name</code> searches the PID of a process by name</p></li>
 </ul>
 </li>
 </ul>
 <hr class="docutils" />
 <ul class="simple">
-<li><p><code class="code highlight shell docutils literal highlight-shell">pidof &lt;process_name&gt;</code>: This returns the PID only of the process</p>
+<li><p><code class="code highlight shell docutils literal highlight-shell">pidof<span class="w"> </span>&lt;process_name&gt;</code>: This returns the PID only of the process</p>
 <ul>
-<li><p><code class="code highlight shell docutils literal highlight-shell">sudo <span class="nb">kill</span> <span class="k">$(</span>pidof &lt;process_name&gt;<span class="k">)</span></code></p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">sudo<span class="w"> </span><span class="nb">kill</span><span class="w"> </span><span class="k">$(</span>pidof<span class="w"> </span>&lt;process_name&gt;<span class="k">)</span></code></p></li>
 </ul>
 </li>
 </ul>
@@ -204,7 +203,7 @@ expressions found between “hello” and “world”.</p></li>
 <ul class="simple">
 <li><p><code class="code highlight shell docutils literal highlight-shell">chown</code>: Change the owner of a file</p>
 <ul>
-<li><p><code class="code highlight shell docutils literal highlight-shell">sudo chown root &lt;my_file&gt;</code>: Example changing owner to root</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">sudo<span class="w"> </span>chown<span class="w"> </span>root<span class="w"> </span>&lt;my_file&gt;</code>: Example changing owner to root</p></li>
 </ul>
 </li>
 </ul>
@@ -219,7 +218,7 @@ expressions found between “hello” and “world”.</p></li>
 - 4: read permission
 - 2: write permission
 - 1: execute permission</p></li>
-<li><p><code class="code highlight shell docutils literal highlight-shell">chmod <span class="m">764</span> &lt;file_name&gt;</code>: Sets RWX permission for owner, RW for Group and R only for users.</p></li>
+<li><p><code class="code highlight shell docutils literal highlight-shell">chmod<span class="w"> </span><span class="m">764</span><span class="w"> </span>&lt;file_name&gt;</code>: Sets RWX permission for owner, RW for Group and R only for users.</p></li>
 <li><p>Adding with letters:
 - <cite>chmod +x &lt;file_name&gt;</cite>: This will add execute permissions for Owner, Group and Users</p></li>
 </ul>
@@ -229,7 +228,7 @@ expressions found between “hello” and “world”.</p></li>
 <ul class="simple">
 <li><p><code class="code highlight shell docutils literal highlight-shell"><span class="nb">echo</span></code>: Prints a string to console/file</p>
 <ul>
-<li><p>Use with <cite>-e</cite> to for formatting characters: <code class="code highlight shell docutils literal highlight-shell"><span class="nb">echo</span> -e <span class="s2">&quot;nThis is a newline&quot;</span></code></p></li>
+<li><p>Use with <cite>-e</cite> to for formatting characters: <code class="code highlight shell docutils literal highlight-shell"><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;nThis is a newline&quot;</span></code></p></li>
 </ul>
 </li>
 </ul>

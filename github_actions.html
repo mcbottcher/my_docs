@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -174,41 +173,41 @@ contains one or more <em>jobs</em> which can be run sequentially or in parallel.
 <section id="workflow-yaml-file">
 <h2>Workflow YAML file<a class="headerlink" href="#workflow-yaml-file" title="Permalink to this heading"></a></h2>
 <ul>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">name</span><span class="p">:</span><span class="w"></span></code>: The name of the workflow that appears in the “Actions” tab in GitHub</p></li>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">run-name</span><span class="p">:</span><span class="w"></span></code>: The name of the workflow run that will appear on GitHub</p>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">name</span><span class="p">:</span></code>: The name of the workflow that appears in the “Actions” tab in GitHub</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">run-name</span><span class="p">:</span></code>: The name of the workflow run that will appear on GitHub</p>
 <blockquote>
 <div><p>This can be customised by incrementing a number or showing the username of the person that
-triggered the action e.g. <code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">run-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.actor }} workflow run</span><span class="w"></span></code></p>
+triggered the action e.g. <code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">run-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.actor }} workflow run</span></code></p>
 </div></blockquote>
 </li>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">on</span><span class="p">:</span><span class="w"></span></code>: Specifies the trigger(s) for the workflow</p></li>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">jobs</span><span class="p">:</span><span class="w"></span></code>: Groups together jobs that run in the workflow</p></li>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">runs-on</span><span class="p">:</span><span class="w"></span></code>: Specifies where the job will be run</p></li>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">steps</span><span class="p">:</span><span class="w"></span></code>: Lists the steps for the job</p></li>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"></span></code>: Specifies the pre-defined action that a step will use</p></li>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">run</span><span class="p">:</span><span class="w"></span></code>: Tells the job to execute a command on the runner</p></li>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">needs</span><span class="p">:</span><span class="w"></span></code>: Used when a job needs to wait for another job to complete</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">on</span><span class="p">:</span></code>: Specifies the trigger(s) for the workflow</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">jobs</span><span class="p">:</span></code>: Groups together jobs that run in the workflow</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">runs-on</span><span class="p">:</span></code>: Specifies where the job will be run</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">steps</span><span class="p">:</span></code>: Lists the steps for the job</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span></code>: Specifies the pre-defined action that a step will use</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">run</span><span class="p">:</span></code>: Tells the job to execute a command on the runner</p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">needs</span><span class="p">:</span></code>: Used when a job needs to wait for another job to complete</p></li>
 </ul>
 <section id="using-variables">
 <h3>Using Variables<a class="headerlink" href="#using-variables" title="Permalink to this heading"></a></h3>
 <p>You can add custom variables to your worflow YAML file. In the example the variables will be
 available to the given script.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_script.scr</span><span class="w"></span>
-<span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">MY_VAR_1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">53</span><span class="w"></span>
-<span class="w">        </span><span class="nt">MY_VAR_2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_script.scr</span>
+<span class="w">      </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">MY_VAR_1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">53</span>
+<span class="w">        </span><span class="nt">MY_VAR_2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello</span>
 </pre></div>
 </div>
 </section>
 <section id="using-scripts-and-shell-commands">
 <h3>Using Scripts and Shell Commands<a class="headerlink" href="#using-scripts-and-shell-commands" title="Permalink to this heading"></a></h3>
 <p>You can either run just a single command, or a script from your local repo, provided with a shell type</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">npm install -g bats</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run script</span><span class="w"></span>
-<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./.github/scripts/build.sh</span><span class="w"></span>
-<span class="w">      </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">npm install -g bats</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run script</span>
+<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./.github/scripts/build.sh</span>
+<span class="w">      </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span>
 </pre></div>
 </div>
 </section>
@@ -219,28 +218,28 @@ you can save them as artifacts.</p>
 <ul class="simple">
 <li><p>Creating an artifact:</p></li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">example-job</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Save output</span><span class="w"></span>
-<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span><span class="w"></span>
-<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">        </span><span class="no">expr 1 + 1 &gt; output.log</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload output file</span><span class="w"></span>
-<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3</span><span class="w"></span>
-<span class="w">      </span><span class="nt">with</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output-log-file</span><span class="w"></span>
-<span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output.log</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">example-job</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Save output</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span>
+<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">expr 1 + 1 &gt; output.log</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload output file</span>
+<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3</span>
+<span class="w">      </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output-log-file</span>
+<span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output.log</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p>Downloading an artifact</p></li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">example-job</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download a single artifact</span><span class="w"></span>
-<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/download-artifact@v3</span><span class="w"></span>
-<span class="w">      </span><span class="nt">with</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output-log-file</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">example-job</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download a single artifact</span>
+<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/download-artifact@v3</span>
+<span class="w">      </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output-log-file</span>
 </pre></div>
 </div>
 </section>
@@ -280,7 +279,7 @@ change in a python file.</p></li>
 <ul class="simple">
 <li><dl class="simple">
 <dt>From Marketplace:</dt><dd><ul>
-<li><p>Copy the <em>uses</em> tag to your worflow e.g. <code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3.1.2</span><span class="w"></span></code></p></li>
+<li><p>Copy the <em>uses</em> tag to your worflow e.g. <code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3.1.2</span></code></p></li>
 <li><p>The action may require you to provide inputs</p></li>
 </ul>
 </dd>
@@ -294,7 +293,7 @@ change in a python file.</p></li>
 </dl>
 </li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./.github/actions/hello-world-action</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./.github/actions/hello-world-action</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -325,21 +324,21 @@ automatic updates.</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Using tags</dt><dd><ul>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/javascript-action@v1.0.1</span><span class="w"></span></code></p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/javascript-action@v1.0.1</span></code></p></li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
 <dt>Using SHA</dt><dd><ul>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/javascript-action@a824008085750b8e136effc585c3cd6082bd575f</span><span class="w"></span></code></p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/javascript-action@a824008085750b8e136effc585c3cd6082bd575f</span></code></p></li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
 <dt>Using branches</dt><dd><ul>
-<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/javascript-action@main</span><span class="w"></span></code></p></li>
+<li><p><code class="code highlight yaml docutils literal highlight-yaml"><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/javascript-action@main</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -349,16 +348,16 @@ automatic updates.</p>
 <section id="action-inputs-and-outputs">
 <h3>Action Inputs and Outputs<a class="headerlink" href="#action-inputs-and-outputs" title="Permalink to this heading"></a></h3>
 <p>To see the inputs and outputs of an action, check the <code class="docutils literal notranslate"><span class="pre">action.yml</span></code> in the root of the repo.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Example&quot;</span><span class="w"></span>
-<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Receives</span><span class="nv"> </span><span class="s">file</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">generates</span><span class="nv"> </span><span class="s">output&quot;</span><span class="w"></span>
-<span class="nt">inputs</span><span class="p">:</span><span class="w"></span>
-<span class="nt">file-path</span><span class="p">:</span><span class="w"> </span><span class="c1"># id of input</span><span class="w"></span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Path</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">test</span><span class="nv"> </span><span class="s">script&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;test-file.js&quot;</span><span class="w"></span>
-<span class="nt">outputs</span><span class="p">:</span><span class="w"></span>
-<span class="nt">results-file</span><span class="p">:</span><span class="w"> </span><span class="c1"># id of output</span><span class="w"></span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Path</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">results</span><span class="nv"> </span><span class="s">file&quot;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Example&quot;</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Receives</span><span class="nv"> </span><span class="s">file</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">generates</span><span class="nv"> </span><span class="s">output&quot;</span>
+<span class="nt">inputs</span><span class="p">:</span>
+<span class="nt">file-path</span><span class="p">:</span><span class="w"> </span><span class="c1"># id of input</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Path</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">test</span><span class="nv"> </span><span class="s">script&quot;</span>
+<span class="w">    </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;test-file.js&quot;</span>
+<span class="nt">outputs</span><span class="p">:</span>
+<span class="nt">results-file</span><span class="p">:</span><span class="w"> </span><span class="c1"># id of output</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Path</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">results</span><span class="nv"> </span><span class="s">file&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -376,20 +375,20 @@ automatic updates.</p>
 <dt>runs<span class="classifier">Specifies how the action is executed</span></dt><dd><ul class="simple">
 <li><p>runs composite actions:</p></li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runs</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">using</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;composite&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Run</span><span class="nv"> </span><span class="s">Sphinx</span><span class="nv"> </span><span class="s">Build</span><span class="nv"> </span><span class="s">Script&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$GITHUB_ACTION_PATH/script.sh</span><span class="w"></span>
-<span class="w">      </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">using</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;composite&quot;</span>
+<span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Run</span><span class="nv"> </span><span class="s">Sphinx</span><span class="nv"> </span><span class="s">Build</span><span class="nv"> </span><span class="s">Script&quot;</span>
+<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$GITHUB_ACTION_PATH/script.sh</span>
+<span class="w">      </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p>runs Docker container:</p></li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runs</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">using</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;docker&#39;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Dockerfile&#39;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">runs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">using</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;docker&#39;</span>
+<span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Dockerfile&#39;</span>
 </pre></div>
 </div>
 </dd>
@@ -411,11 +410,11 @@ to run docker from the root pointing at the Dockerfile further down the director
 <section id="running-scripts">
 <h2>Running Scripts<a class="headerlink" href="#running-scripts" title="Permalink to this heading"></a></h2>
 <p>You can run scripts as part of your <code class="docutils literal notranslate"><span class="pre">composite</span> <span class="pre">steps</span></code> section of either a action file or workflow file.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">using</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;composite&quot;</span><span class="w"></span>
-<span class="nt">steps</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Run</span><span class="nv"> </span><span class="s">Sphinx</span><span class="nv"> </span><span class="s">Build</span><span class="nv"> </span><span class="s">Script&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$GITHUB_ACTION_PATH/script.sh</span><span class="w"></span>
-<span class="w">    </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">using</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;composite&quot;</span>
+<span class="nt">steps</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Run</span><span class="nv"> </span><span class="s">Sphinx</span><span class="nv"> </span><span class="s">Build</span><span class="nv"> </span><span class="s">Script&quot;</span>
+<span class="w">    </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$GITHUB_ACTION_PATH/script.sh</span>
+<span class="w">    </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -429,7 +428,7 @@ directory when the script starts is the root of the github repo.</p>
 </div>
 <p>If you want a script to run, you have to make sure it has it’s permission set to executable.
 This executable status is included when you commit the file to GitHub.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo chmod +x &lt;your_script.sh&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>&lt;your_script.sh&gt;
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -447,28 +446,28 @@ your script file to cause the script to exit with error on the first command tha
 <p>If you use the expression within an <code class="docutils literal notranslate"><span class="pre">if</span></code> conditional, you can ommit the expression syntax above.</p>
 <section id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/hello-world-javascript-action@e76147da8e5c81eaf017dede5645551d4b94427b</span><span class="w"></span>
-<span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ &lt;expression&gt; }}</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/hello-world-javascript-action@e76147da8e5c81eaf017dede5645551d4b94427b</span>
+<span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ &lt;expression&gt; }}</span>
 </pre></div>
 </div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">MY_ENV_VAR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ &lt;expression&gt; }}</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">MY_ENV_VAR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ &lt;expression&gt; }}</span>
 </pre></div>
 </div>
 </section>
 <section id="literals">
 <h3>Literals<a class="headerlink" href="#literals" title="Permalink to this heading"></a></h3>
 <p>You can use: boolean, null, number or string data types</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">myNull</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ null }}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">myBoolean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ false }}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">myIntegerNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ 711 }}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">myFloatNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ -9.2 }}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">myHexNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ 0xff }}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">myExponentialNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ -2.99e-2 }}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">myString</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Mona the Octocat</span><span class="w"></span>
-<span class="w">  </span><span class="nt">myStringInBraces</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ &#39;It&#39;&#39;s open source!&#39; }}</span><span class="w"> </span><span class="c1"># note the &#39;&#39;, which is required to output It&#39;s</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">myNull</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ null }}</span>
+<span class="w">  </span><span class="nt">myBoolean</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ false }}</span>
+<span class="w">  </span><span class="nt">myIntegerNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ 711 }}</span>
+<span class="w">  </span><span class="nt">myFloatNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ -9.2 }}</span>
+<span class="w">  </span><span class="nt">myHexNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ 0xff }}</span>
+<span class="w">  </span><span class="nt">myExponentialNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ -2.99e-2 }}</span>
+<span class="w">  </span><span class="nt">myString</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Mona the Octocat</span>
+<span class="w">  </span><span class="nt">myStringInBraces</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ &#39;It&#39;&#39;s open source!&#39; }}</span><span class="w"> </span><span class="c1"># note the &#39;&#39;, which is required to output It&#39;s</span>
 </pre></div>
 </div>
 </section>
@@ -559,8 +558,8 @@ Each context is an object that contains properties, which can be strings or othe
 <p>Attempting to dereference a non-existent property evaluates to an empty string</p>
 </div>
 <p>You can print a context to the log if you want to see what is inside of them:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &#39;${{ toJSON(github) }}&#39;</span><span class="w"></span>
-<span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &#39;${{ toJSON(steps) }}&#39;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &#39;${{ toJSON(github) }}&#39;</span>
+<span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &#39;${{ toJSON(steps) }}&#39;</span>
 </pre></div>
 </div>
 <p>Contexts have many attributes so it is best to look <a class="reference external" href="https://docs.github.com/en/actions/learn-github-actions/contexts">here</a> for documentation.</p>
@@ -600,9 +599,9 @@ repository or environment level.</p>
 <h2>Example Commenting on PR<a class="headerlink" href="#example-commenting-on-pr" title="Permalink to this heading"></a></h2>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Adding PR to your workflow Events</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">on</span><span class="p">:</span><span class="w"></span>
-<span class="nt">pull_request</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">opened</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">synchronize</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">reopened</span><span class="p p-Indicator">]</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">on</span><span class="p">:</span>
+<span class="nt">pull_request</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">opened</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">synchronize</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">reopened</span><span class="p p-Indicator">]</span>
 </pre></div>
 </div>
 </div>
@@ -610,17 +609,17 @@ repository or environment level.</p>
 and re-opened. Synchronize triggers the event when the PR is updated with a push.</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">Example step</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update PR</span><span class="w"></span>
-<span class="w">  </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.event_name == &#39;pull_request&#39; }}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/github-script@v6</span><span class="w"></span>
-<span class="w">  </span><span class="nt">with</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">      </span><span class="no">github.rest.issues.createComment({</span><span class="w"></span>
-<span class="w">      </span><span class="no">issue_number: context.issue.number,</span><span class="w"></span>
-<span class="w">      </span><span class="no">owner: context.repo.owner,</span><span class="w"></span>
-<span class="w">      </span><span class="no">repo: context.repo.repo,</span><span class="w"></span>
-<span class="w">      </span><span class="no">body: &#39;👋 Check the Sphinx build passed before merge!&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="no">})</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update PR</span>
+<span class="w">  </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.event_name == &#39;pull_request&#39; }}</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/github-script@v6</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">github.rest.issues.createComment({</span>
+<span class="w">      </span><span class="no">issue_number: context.issue.number,</span>
+<span class="w">      </span><span class="no">owner: context.repo.owner,</span>
+<span class="w">      </span><span class="no">repo: context.repo.repo,</span>
+<span class="w">      </span><span class="no">body: &#39;👋 Check the Sphinx build passed before merge!&#39;</span>
+<span class="w">      </span><span class="no">})</span>
 </pre></div>
 </div>
 </div>

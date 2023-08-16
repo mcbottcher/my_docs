@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -136,55 +135,55 @@
 <h2>Bitbake Commands<a class="headerlink" href="#bitbake-commands" title="Permalink to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Before running a lot of these commands, you might have to source the environment. e.g. <code class="code highlight bash docutils literal highlight-bash"><span class="nb">source</span> poky/oe-init-build-env &lt;build_dir&gt;</code></p>
+<p>Before running a lot of these commands, you might have to source the environment. e.g. <code class="code highlight bash docutils literal highlight-bash"><span class="nb">source</span><span class="w"> </span>poky/oe-init-build-env<span class="w"> </span>&lt;build_dir&gt;</code></p>
 </div>
 <ul>
-<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake &lt;image-name&gt;</code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake<span class="w"> </span>&lt;image-name&gt;</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>This will build your linux image using the &lt;image-name&gt; as the root .bb file.</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake-layers create-layer meta-&lt;name&gt;</code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake-layers<span class="w"> </span>create-layer<span class="w"> </span>meta-&lt;name&gt;</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>This creates the basic directory structure for a layer. The name should start with <em>meta</em>.</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -c &lt;cmd&gt; &lt;image&gt;</code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake<span class="w"> </span>-c<span class="w"> </span>&lt;cmd&gt;<span class="w"> </span>&lt;image&gt;</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Run a command from an image. The command is a task available to the image.</p></li>
-<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -c cleanall my_image</code></p></li>
-<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -c clean my_image</code></p></li>
-<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -c compile my_image</code></p></li>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake<span class="w"> </span>-c<span class="w"> </span>cleanall<span class="w"> </span>my_image</code></p></li>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake<span class="w"> </span>-c<span class="w"> </span>clean<span class="w"> </span>my_image</code></p></li>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake<span class="w"> </span>-c<span class="w"> </span>compile<span class="w"> </span>my_image</code></p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -e</code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake<span class="w"> </span>-e</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Shows the bitbake environment for the most recent build</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -g &lt;package_name&gt;</code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake<span class="w"> </span>-g<span class="w"> </span>&lt;package_name&gt;</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Creates a dependancy tree for the package, which you can view in <em>task-depends.dot</em></p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code highlight bash docutils literal highlight-bash"><span class="nv">BBDEBUG</span><span class="o">=</span><span class="m">3</span> bitbake custom-image</code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash"><span class="nv">BBDEBUG</span><span class="o">=</span><span class="m">3</span><span class="w"> </span>bitbake<span class="w"> </span>custom-image</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Prints debug information from your build</p></li>
 </ul>
 </div></blockquote>
 </li>
-<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake -c devshell &lt;target&gt;</code></p>
+<li><p><code class="code highlight bash docutils literal highlight-bash">bitbake<span class="w"> </span>-c<span class="w"> </span>devshell<span class="w"> </span>&lt;target&gt;</code></p>
 <blockquote>
 <div><ul class="simple">
 <li><p>This is a shell where you can run bitbake commands, and see environment variables like <code class="docutils literal notranslate"><span class="pre">$CC</span></code></p></li>
@@ -206,18 +205,18 @@
 </dl>
 <p>You will want something similar to this in your <em>CMakeLists.txt</em>, which installs the program in <em>usr/bin</em></p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">1.9</span><span class="p">)</span>
-<span class="nb">project</span> <span class="p">(</span><span class="s">hellocmake</span><span class="p">)</span>
+<span class="nb">project</span><span class="w"> </span><span class="p">(</span><span class="s">hellocmake</span><span class="p">)</span>
 <span class="nb">add_executable</span><span class="p">(</span><span class="s">hellocmake</span><span class="w"> </span><span class="s">helloworld.c</span><span class="p">)</span>
 <span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span><span class="w"> </span><span class="s">hellocmake</span><span class="w"> </span><span class="s">RUNTIME</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s">bin</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If you want pull files from GitHub for example, you something like in the example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SRCREV</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">AUTOREV</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="nv">PV</span> <span class="o">=</span> <span class="s2">&quot;0.1+git</span><span class="si">${</span><span class="nv">SRCPV</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="nv">SRC_URI</span> <span class="o">=</span> <span class="s2">&quot;git://github.com/mcbemlogic/yocto_pull_test;protocol=http;branch=main&quot;</span>
-<span class="nv">S</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">WORKDIR</span><span class="si">}</span><span class="s2">/git&quot;</span>
-inherit cmake
-<span class="nv">EXTRA_OECMAKE</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SRCREV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">AUTOREV</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="nv">PV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;0.1+git</span><span class="si">${</span><span class="nv">SRCPV</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="nv">SRC_URI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;git://github.com/mcbemlogic/yocto_pull_test;protocol=http;branch=main&quot;</span>
+<span class="nv">S</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">WORKDIR</span><span class="si">}</span><span class="s2">/git&quot;</span>
+inherit<span class="w"> </span>cmake
+<span class="nv">EXTRA_OECMAKE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -408,7 +407,7 @@ The name of the patch file doesn’t matter too much. The file it targets is nam
 There are some conventions though of the naming of patch files that you can look up.</p>
 <div class="literal-block-wrapper docutils container" id="id7">
 <div class="code-block-caption"><span class="caption-text">Example creating a diff file</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git diff --no-index socfpga_common.h.orig socfpga_common.h &gt; <span class="m">0001</span>-add-uboot-bootcmd.patch
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>diff<span class="w"> </span>--no-index<span class="w"> </span>socfpga_common.h.orig<span class="w"> </span>socfpga_common.h<span class="w"> </span>&gt;<span class="w"> </span><span class="m">0001</span>-add-uboot-bootcmd.patch
 </pre></div>
 </div>
 </div>
@@ -416,8 +415,8 @@ There are some conventions though of the naming of patch files that you can look
 will search for and apply patch files.</p>
 <div class="literal-block-wrapper docutils container" id="id8">
 <div class="code-block-caption"><span class="caption-text">Adding the patch file</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>FILESEXTRAPATHS:prepend :<span class="o">=</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">THISDIR</span><span class="si">}</span><span class="s2">:&quot;</span>
-<span class="nv">SRC_URI</span> <span class="o">+=</span> <span class="s2">&quot;file://0001-add-uboot-bootcmd.patch&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>FILESEXTRAPATHS:prepend<span class="w"> </span>:<span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">THISDIR</span><span class="si">}</span><span class="s2">:&quot;</span>
+<span class="nv">SRC_URI</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;file://0001-add-uboot-bootcmd.patch&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -441,9 +440,9 @@ Device tree also have a function to override certain attributes, by using a refe
 This example updates the watchdog0 node to have status okay:</p>
 <div class="literal-block-wrapper docutils container" id="id9">
 <div class="code-block-caption"><span class="caption-text">Example overriding status attribute</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
-<div class="highlight-dts notranslate"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="na">watchdog0</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="kr">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;okay&quot;</span><span class="p">;</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<div class="highlight-dts notranslate"><div class="highlight"><pre><span></span><span class="o">&amp;</span><span class="na">watchdog0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kr">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;okay&quot;</span><span class="p">;</span>
+<span class="p">};</span>
 </pre></div>
 </div>
 </div>
@@ -535,7 +534,7 @@ build by using: <code class="docutils literal notranslate"><span class="pre">inh
 <p>An example of using an SDK after it is installed is given here. This sources the environment
 variables which will point to the correct tools and environment variables to build
 software for your target.</p>
-<p><code class="code highlight bash docutils literal highlight-bash">. /opt/poky/4.1.3/environment-setup-cortexa9t2hf-neon-poky-linux-gnueabi</code></p>
+<p><code class="code highlight bash docutils literal highlight-bash">.<span class="w"> </span>/opt/poky/4.1.3/environment-setup-cortexa9t2hf-neon-poky-linux-gnueabi</code></p>
 </section>
 <section id="recipe-naming">
 <h2>Recipe Naming<a class="headerlink" href="#recipe-naming" title="Permalink to this heading"></a></h2>
@@ -550,8 +549,8 @@ at the end of their name, e.g. <code class="docutils literal notranslate"><span 
 <p>Bitbake has changed it syntax recently so sometimes if you copy something that uses the
 old syntax bitbake will throw an error.</p>
 <p>There is a script that helps update old syntax:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> poky
-scripts/contrib/convert-overrides.py &lt;your-layer&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>poky
+scripts/contrib/convert-overrides.py<span class="w"> </span>&lt;your-layer&gt;
 </pre></div>
 </div>
 </section>

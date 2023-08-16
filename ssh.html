@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -135,7 +134,7 @@ server from that server. The host server will use the credentials from your loca
 the client server</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Forwarding Credentials</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh -A &lt;username&gt;@&lt;remote_host&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh<span class="w"> </span>-A<span class="w"> </span>&lt;username&gt;@&lt;remote_host&gt;
 </pre></div>
 </div>
 </div>
@@ -148,7 +147,7 @@ the client server</p>
 <h3>Generating a SSH key pair<a class="headerlink" href="#generating-a-ssh-key-pair" title="Permalink to this heading"></a></h3>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">Generate key pair</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh-keygen
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh-keygen
 </pre></div>
 </div>
 </div>
@@ -165,20 +164,20 @@ is compromised.</p>
 <h3>Key Options<a class="headerlink" href="#key-options" title="Permalink to this heading"></a></h3>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">Generating an SSH key with 4096 bits</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh-keygen -b <span class="m">4096</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh-keygen<span class="w"> </span>-b<span class="w"> </span><span class="m">4096</span>
 </pre></div>
 </div>
 </div>
 <p>SSH keys are 2048 by default, but if you want a more secure key use more bits.</p>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">Removing or adding new ssh key password</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh-keygen -p
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh-keygen<span class="w"> </span>-p
 </pre></div>
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id5">
 <div class="code-block-caption"><span class="caption-text">Displaying the SSH key fingerprint</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh-keygen -l
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh-keygen<span class="w"> </span>-l
 </pre></div>
 </div>
 </div>
@@ -191,7 +190,7 @@ is compromised.</p>
 </ol>
 <div class="literal-block-wrapper docutils container" id="id6">
 <div class="code-block-caption"><span class="caption-text">Copying using ssh-copy-id</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh-copy-id &lt;username&gt;@&lt;remote_host&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh-copy-id<span class="w"> </span>&lt;username&gt;@&lt;remote_host&gt;
 </pre></div>
 </div>
 </div>
@@ -207,20 +206,20 @@ is compromised.</p>
 <h2>Basic Connections<a class="headerlink" href="#basic-connections" title="Permalink to this heading"></a></h2>
 <div class="literal-block-wrapper docutils container" id="id7">
 <div class="code-block-caption"><span class="caption-text">Connecting with same username as host username</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh &lt;remote_host&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh<span class="w"> </span>&lt;remote_host&gt;
 </pre></div>
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id8">
 <div class="code-block-caption"><span class="caption-text">Connecting with specifying username</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh &lt;username&gt;@&lt;remote_host&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh<span class="w"> </span>&lt;username&gt;@&lt;remote_host&gt;
 </pre></div>
 </div>
 </div>
 <p>You can run just a single command over ssh, and the session will automatically close after:</p>
 <div class="literal-block-wrapper docutils container" id="id9">
 <div class="code-block-caption"><span class="caption-text">Running a single command</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh &lt;username&gt;@&lt;remote_host&gt; &lt;command_to_run&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh<span class="w"> </span>&lt;username&gt;@&lt;remote_host&gt;<span class="w"> </span>&lt;command_to_run&gt;
 </pre></div>
 </div>
 </div>
@@ -228,7 +227,7 @@ is compromised.</p>
 you can specify the port number:</p>
 <div class="literal-block-wrapper docutils container" id="id10">
 <div class="code-block-caption"><span class="caption-text">Specifying to use a different port number to connect through</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh -p &lt;port_num&gt; &lt;username&gt;@&lt;remote_host&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh<span class="w"> </span>-p<span class="w"> </span>&lt;port_num&gt;<span class="w"> </span>&lt;username&gt;@&lt;remote_host&gt;
 </pre></div>
 </div>
 </div>
@@ -306,7 +305,7 @@ TCP connection instead of creating new TCP connecions for each instance.</p>
 <blockquote>
 <div><p>If you have already setup your ssh keys, it can be a good idea to disable password access, since
 this is less secure.</p>
-<p>Restart the ssh service for the changes to take place: <code class="code highlight bash docutils literal highlight-bash">$ sudo service ssh restart</code></p>
+<p>Restart the ssh service for the changes to take place: <code class="code highlight bash docutils literal highlight-bash">$<span class="w"> </span>sudo<span class="w"> </span>service<span class="w"> </span>ssh<span class="w"> </span>restart</code></p>
 <div class="literal-block-wrapper docutils container" id="id16">
 <div class="code-block-caption"><span class="caption-text">Configure the <em>/etc/ssh/sshd_config</em> file</span><a class="headerlink" href="#id16" title="Permalink to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PasswordAuthentication</span> <span class="n">no</span>
@@ -347,9 +346,9 @@ this is less secure.</p>
 <p>You can create a group as follows:</p>
 <div class="literal-block-wrapper docutils container" id="id20">
 <div class="code-block-caption"><span class="caption-text">Creating a User group</span><a class="headerlink" href="#id20" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo groupadd -r sshmembers
-$ sudo usermod -a -G sshmembers user2
-$ sudo usermod -a -G sshmembers user1
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>groupadd<span class="w"> </span>-r<span class="w"> </span>sshmembers
+$<span class="w"> </span>sudo<span class="w"> </span>usermod<span class="w"> </span>-a<span class="w"> </span>-G<span class="w"> </span>sshmembers<span class="w"> </span>user2
+$<span class="w"> </span>sudo<span class="w"> </span>usermod<span class="w"> </span>-a<span class="w"> </span>-G<span class="w"> </span>sshmembers<span class="w"> </span>user1
 </pre></div>
 </div>
 </div>
@@ -401,7 +400,7 @@ support for X windows.</p>
 <p>When you connect from the client, use the X windows flag:</p>
 <div class="literal-block-wrapper docutils container" id="id25">
 <div class="code-block-caption"><span class="caption-text">Using X Window Forwarding</span><a class="headerlink" href="#id25" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh -X &lt;username&gt;@&lt;remote_host&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh<span class="w"> </span>-X<span class="w"> </span>&lt;username&gt;@&lt;remote_host&gt;
 </pre></div>
 </div>
 </div>
@@ -426,9 +425,9 @@ issues, or if you want that data to be encrypted when it otherwise wouldn’t be
 </ul>
 <div class="literal-block-wrapper docutils container" id="id26">
 <div class="code-block-caption"><span class="caption-text">Example setting up a local tunnel</span><a class="headerlink" href="#id26" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh -L &lt;your_port&gt;:&lt;site_or_IP_to_access&gt;:&lt;site_port&gt; &lt;username&gt;@&lt;host&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh<span class="w"> </span>-L<span class="w"> </span>&lt;your_port&gt;:&lt;site_or_IP_to_access&gt;:&lt;site_port&gt;<span class="w"> </span>&lt;username&gt;@&lt;host&gt;
 
-$ ssh -L <span class="m">8888</span>:&lt;your_domain&gt;:80 &lt;username&gt;@&lt;host&gt;
+$<span class="w"> </span>ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">8888</span>:&lt;your_domain&gt;:80<span class="w"> </span>&lt;username&gt;@&lt;host&gt;
 </pre></div>
 </div>
 </div>
@@ -446,9 +445,9 @@ from the remote (server) side to your local host.</p>
 <p>Instead, use the <code class="docutils literal notranslate"><span class="pre">-R</span></code> option.</p>
 <div class="literal-block-wrapper docutils container" id="id27">
 <div class="code-block-caption"><span class="caption-text">Example setting up a remote tunnel</span><a class="headerlink" href="#id27" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh -L &lt;site_port&gt;:&lt;site_or_IP_to_access&gt;:&lt;your_port&gt; &lt;username&gt;@&lt;host&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh<span class="w"> </span>-L<span class="w"> </span>&lt;site_port&gt;:&lt;site_or_IP_to_access&gt;:&lt;your_port&gt;<span class="w"> </span>&lt;username&gt;@&lt;host&gt;
 
-$ ssh -L <span class="m">8888</span>:&lt;your_domain&gt;:80 &lt;username&gt;@&lt;host&gt;
+$<span class="w"> </span>ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">8888</span>:&lt;your_domain&gt;:80<span class="w"> </span>&lt;username&gt;@&lt;host&gt;
 </pre></div>
 </div>
 </div>
@@ -466,22 +465,22 @@ $ ssh -L <span class="m">8888</span>:&lt;your_domain&gt;:80 &lt;username&gt;@&lt
 </div>
 <div class="literal-block-wrapper docutils container" id="id28">
 <div class="code-block-caption"><span class="caption-text">Closing the connection from the Client side</span><a class="headerlink" href="#id28" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ~.
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>~.
 </pre></div>
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id29">
 <div class="code-block-caption"><span class="caption-text">Placing Session into background</span><a class="headerlink" href="#id29" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ~<span class="o">[</span>CTRL-z<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>~<span class="o">[</span>CTRL-z<span class="o">]</span>
 </pre></div>
 </div>
 </div>
 <p>This will place the connection in the background and return you to your shell.
-Reactivate the most recent backgrounded task using <code class="code highlight bash docutils literal highlight-bash">$ <span class="nb">fg</span></code>, or see your backgrounded
-tasks using <code class="code highlight bash docutils literal highlight-bash">$ <span class="nb">jobs</span></code>.</p>
+Reactivate the most recent backgrounded task using <code class="code highlight bash docutils literal highlight-bash">$<span class="w"> </span><span class="nb">fg</span></code>, or see your backgrounded
+tasks using <code class="code highlight bash docutils literal highlight-bash">$<span class="w"> </span><span class="nb">jobs</span></code>.</p>
 <div class="literal-block-wrapper docutils container" id="id30">
 <div class="code-block-caption"><span class="caption-text">Opening a SSH command line interface</span><a class="headerlink" href="#id30" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ~C
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>~C
 </pre></div>
 </div>
 </div>
@@ -495,8 +494,8 @@ forwards or cancel them etc.</p>
 Then it can be used without a passphrase for the duration of the terminal session.</p>
 <div class="literal-block-wrapper docutils container" id="id31">
 <div class="code-block-caption"><span class="caption-text">Starting the SSH Agent, and adding a private key</span><a class="headerlink" href="#id31" title="Permalink to this code"></a></div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ssh-agent
-$ ssh-add
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ssh-agent
+$<span class="w"> </span>ssh-add
 </pre></div>
 </div>
 </div>
