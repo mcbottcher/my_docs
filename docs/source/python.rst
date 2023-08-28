@@ -553,3 +553,99 @@ Threading provides a mutex lock to allow resources to be used only by one thread
     # ... shared resource code goes here
 
   # automatically released
+
+Decorators
+----------
+
+Decorators change the behaviour of a function without changing the function itself.
+
+Decorators utilise a few concepts:
+
+1. A function is an object in python, therefore it can be assigned to a variable.
+2. A function can be nested within another function.
+3. A function can be passed as an argument to another function.
+
+Decorate functions
+^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+  :caption: Example using a custom decorator function
+
+  def my_decorator(func):
+
+    def wrapper(*args, *kwargs):
+      # Do something before the function
+      func(*args, *kwargs)
+      # Do something after the function
+
+    return wrapper
+
+  
+  @my_decorator
+  def my_func(my_arg):
+
+    print(f"{my_arg=}")
+
+The above example shows the use of a custom decorator, which is able to pass on the
+given arguments.
+
+.. note::
+  ``*args`` refers to an unlimited number of arguments such as ``10``, ``True`` or ``'hello'``.
+  ``*kwargs`` refers to an unlimited number of keyword arguments such as ``number=10``, ``success=True`` or ``my_string='hello'``.
+
+.. warning::
+  Decorators hide the function they are decorating, so if you want to get the correct features sich as ``__name``
+  you can use :python:`from functools import wraps` and decorate your wrapper function with :python:`@wraps(func)`
+  where ``func`` is the function you are wrapping.
+
+Decorate classes
+^^^^^^^^^^^^^^^^
+
+It is also possible use classes to decorate a function too.
+
+.. code-block:: python
+  :caption: Example using a Class decorator. `Source <https://www.freecodecamp.org/news/python-decorators-explained-with-examples/>`_
+
+  class LimitQuery:
+
+    def __init__(self, func):
+        self.func = func
+        self.count = 0
+
+    def __call__(self, *args, **kwargs):
+        self.limit = args[0]
+        if self.count < self.limit:
+            self.count += 1
+            return self.func(*args, **kwargs)
+        else:
+            print(f'No queries left. All {self.count} queries used.')
+            return
+
+  @LimitQuery
+  def get_coin_price(limit):
+      '''View the Bitcoin Price Index (BPI)'''
+      
+      url = requests.get('https://api.coindesk.com/v1/bpi/currentprice.json')
+
+      if url.status_code == 200:
+          text = url.json()
+          return f"${float(text['bpi']['USD']['rate_float']):.2f}"
+
+  print(get_coin_price(5))
+  print(get_coin_price(5))
+  print(get_coin_price(5))
+  print(get_coin_price(5))
+  print(get_coin_price(5))
+  print(get_coin_price(5))
+
+.. code-block::
+  :caption: Output
+
+  $35968.25
+  $35896.55
+  $34368.14
+  $35962.27
+  $34058.26
+  No queries left. All 5 queries used.
+
+In the example you see using the ``__call__`` method when the function is called and the class created.
