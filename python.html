@@ -11,11 +11,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e031e9a9"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -76,6 +76,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#named-tuple">Named Tuple</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#python-packages">Python Packages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#multithreading">Multithreading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#decorators">Decorators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#decorate-functions">Decorate functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decorate-classes">Decorate classes</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
@@ -646,6 +651,103 @@ Threading provides a mutex lock to allow resources to be used only by one thread
 </pre></div>
 </div>
 </div>
+</section>
+<section id="decorators">
+<h2>Decorators<a class="headerlink" href="#decorators" title="Permalink to this heading"></a></h2>
+<p>Decorators change the behaviour of a function without changing the function itself.</p>
+<p>Decorators utilise a few concepts:</p>
+<ol class="arabic simple">
+<li><p>A function is an object in python, therefore it can be assigned to a variable.</p></li>
+<li><p>A function can be nested within another function.</p></li>
+<li><p>A function can be passed as an argument to another function.</p></li>
+</ol>
+<section id="decorate-functions">
+<h3>Decorate functions<a class="headerlink" href="#decorate-functions" title="Permalink to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Example using a custom decorator function</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+
+  <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># Do something before the function</span>
+    <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="c1"># Do something after the function</span>
+
+  <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="nd">@my_decorator</span>
+<span class="k">def</span> <span class="nf">my_func</span><span class="p">(</span><span class="n">my_arg</span><span class="p">):</span>
+
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">my_arg</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The above example shows the use of a custom decorator, which is able to pass on the
+given arguments.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">*args</span></code> refers to an unlimited number of arguments such as <code class="docutils literal notranslate"><span class="pre">10</span></code>, <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">'hello'</span></code>.
+<code class="docutils literal notranslate"><span class="pre">*kwargs</span></code> refers to an unlimited number of keyword arguments such as <code class="docutils literal notranslate"><span class="pre">number=10</span></code>, <code class="docutils literal notranslate"><span class="pre">success=True</span></code> or <code class="docutils literal notranslate"><span class="pre">my_string='hello'</span></code>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Decorators hide the function they are decorating, so if you want to get the correct features sich as <code class="docutils literal notranslate"><span class="pre">__name</span></code>
+you can use <code class="code highlight python docutils literal highlight-python"><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span></code> and decorate your wrapper function with <code class="code highlight python docutils literal highlight-python"><span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span></code>
+where <code class="docutils literal notranslate"><span class="pre">func</span></code> is the function you are wrapping.</p>
+</div>
+</section>
+<section id="decorate-classes">
+<h3>Decorate classes<a class="headerlink" href="#decorate-classes" title="Permalink to this heading"></a></h3>
+<p>It is also possible use classes to decorate a function too.</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Example using a Class decorator. <a class="reference external" href="https://www.freecodecamp.org/news/python-decorators-explained-with-examples/">Source</a></span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LimitQuery</span><span class="p">:</span>
+
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+  <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">limit</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="p">:</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+          <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+          <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No queries left. All </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s1"> queries used.&#39;</span><span class="p">)</span>
+          <span class="k">return</span>
+
+<span class="nd">@LimitQuery</span>
+<span class="k">def</span> <span class="nf">get_coin_price</span><span class="p">(</span><span class="n">limit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;View the Bitcoin Price Index (BPI)&#39;&#39;&#39;</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://api.coindesk.com/v1/bpi/currentprice.json&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="s1">&#39;bpi&#39;</span><span class="p">][</span><span class="s1">&#39;USD&#39;</span><span class="p">][</span><span class="s1">&#39;rate_float&#39;</span><span class="p">])</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">get_coin_price</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">get_coin_price</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">get_coin_price</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">get_coin_price</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">get_coin_price</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">get_coin_price</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">Output</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$35968.25
+$35896.55
+$34368.14
+$35962.27
+$34058.26
+No queries left. All 5 queries used.
+</pre></div>
+</div>
+</div>
+<p>In the example you see using the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method when the function is called and the class created.</p>
+</section>
 </section>
 </section>
 
