@@ -81,6 +81,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#decorate-classes">Decorate classes</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#context-managers">Context Managers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#exception-handling">Exception Handling</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
@@ -747,6 +751,61 @@ No queries left. All 5 queries used.
 </div>
 </div>
 <p>In the example you see using the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method when the function is called and the class created.</p>
+</section>
+</section>
+<section id="context-managers">
+<h2>Context Managers<a class="headerlink" href="#context-managers" title="Permalink to this heading"></a></h2>
+<p>Context managers let you use an object within a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.
+When it is in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement, it will call the <code class="docutils literal notranslate"><span class="pre">__enter__</span></code> method. At the end it will call
+the <code class="docutils literal notranslate"><span class="pre">__exit__</span></code> method.</p>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">Example using context manager</span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
+
+  <span class="c1"># called when object is created</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+  <span class="c1"># called when used in context manager</span>
+  <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+  <span class="c1"># called when used in context manager</span>
+  <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+  <span class="c1"># called when object is destroyed</span>
+  <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+  <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>
+
+<span class="c1"># __init__</span>
+<span class="k">with</span> <span class="n">MyClass</span><span class="p">()</span> <span class="k">as</span> <span class="n">myobject</span><span class="p">:</span>
+  <span class="c1"># __enter__</span>
+  <span class="n">myobject</span><span class="o">.</span><span class="n">func</span><span class="p">()</span>
+  <span class="c1"># __exit__</span>
+<span class="c1"># __del__</span>
+
+<span class="c1"># __init__</span>
+<span class="n">myobject</span> <span class="o">=</span> <span class="n">MyClass</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">myobject</span><span class="p">:</span>
+  <span class="c1"># __enter__</span>
+  <span class="n">myobject</span><span class="o">.</span><span class="n">func</span><span class="p">()</span>
+  <span class="c1"># __exit__</span>
+
+<span class="c1"># myobject still exists here (not out of scope)</span>
+</pre></div>
+</div>
+</div>
+<section id="exception-handling">
+<h3>Exception Handling<a class="headerlink" href="#exception-handling" title="Permalink to this heading"></a></h3>
+<p>You can handle exceptions that occur within the context in the <code class="docutils literal notranslate"><span class="pre">__exit__</span></code> method.
+Information about the exception will be passed to the method. If it returns <code class="docutils literal notranslate"><span class="pre">True</span></code>, then
+the exception is considered handled and is not propogated further. If <code class="docutils literal notranslate"><span class="pre">__exit__</span></code> returns <code class="docutils literal notranslate"><span class="pre">False</span></code>,
+then the exception is propogated outside the context block.</p>
 </section>
 </section>
 </section>

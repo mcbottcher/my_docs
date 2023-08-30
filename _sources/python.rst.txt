@@ -649,3 +649,59 @@ It is also possible use classes to decorate a function too.
   No queries left. All 5 queries used.
 
 In the example you see using the ``__call__`` method when the function is called and the class created.
+
+Context Managers
+----------------
+
+Context managers let you use an object within a ``with`` statement.
+When it is in a ``with`` statement, it will call the ``__enter__`` method. At the end it will call
+the ``__exit__`` method.
+
+.. code-block:: python
+  :caption: Example using context manager
+
+  class MyClass:
+
+    # called when object is created
+    def __init__(self):
+      pass
+
+    # called when used in context manager
+    def __enter__(self):
+      pass
+
+    # called when used in context manager
+    def __exit__(self):
+      pass
+
+    # called when object is destroyed
+    def __del__(self):
+      pass
+
+    def func(self):
+      print("Hello")
+
+  # __init__
+  with MyClass() as myobject:
+    # __enter__
+    myobject.func()
+    # __exit__
+  # __del__
+
+  # __init__
+  myobject = MyClass()
+
+  with myobject:
+    # __enter__
+    myobject.func()
+    # __exit__
+
+  # myobject still exists here (not out of scope)
+
+Exception Handling
+^^^^^^^^^^^^^^^^^^
+
+You can handle exceptions that occur within the context in the ``__exit__`` method.
+Information about the exception will be passed to the method. If it returns ``True``, then
+the exception is considered handled and is not propogated further. If ``__exit__`` returns ``False``,
+then the exception is propogated outside the context block.
