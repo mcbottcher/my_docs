@@ -48,3 +48,22 @@ You can also use pre-commits specified only in your repository:
             entry: ./run_tests_hook.sh
             language: system
 
+Other Hooks
+^^^^^^^^^^^
+
+You can also run the other hook types using the pre-commit module.
+
+.. code-block:: yaml
+  :caption: Install hook configs
+
+  default_install_hook_types: [pre-commit, post-commit]
+
+With this in the ``.pre-commit-config.yaml``, when you run ``pre-commit install``,
+it will install scripts for both pre-commit and post-commit in this case.
+
+To make a hook run in a particular stage, set ``stages: [post-commit]``
+to the stage or stages you want it to run in.
+
+You can also specify a deafult for all hooks specified with ``default_stages: [commit]``.
+
+Run a particular hook stage with ``pre-commit run --hook-stage post-commit``

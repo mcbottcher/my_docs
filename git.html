@@ -55,6 +55,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Git</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#git-hooks">Git Hooks</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pre-commit">Pre-commit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-hooks">Other Hooks</a></li>
 </ul>
 </li>
 </ul>
@@ -124,6 +125,22 @@ options for pre-commits you can run. You can choose them based on the <code clas
 </pre></div>
 </div>
 </div>
+</section>
+<section id="other-hooks">
+<h3>Other Hooks<a class="headerlink" href="#other-hooks" title="Permalink to this heading"></a></h3>
+<p>You can also run the other hook types using the pre-commit module.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Install hook configs</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">default_install_hook_types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">pre-commit</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">post-commit</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<p>With this in the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code>, when you run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code>,
+it will install scripts for both pre-commit and post-commit in this case.</p>
+<p>To make a hook run in a particular stage, set <code class="docutils literal notranslate"><span class="pre">stages:</span> <span class="pre">[post-commit]</span></code>
+to the stage or stages you want it to run in.</p>
+<p>You can also specify a deafult for all hooks specified with <code class="docutils literal notranslate"><span class="pre">default_stages:</span> <span class="pre">[commit]</span></code>.</p>
+<p>Run a particular hook stage with <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span> <span class="pre">--hook-stage</span> <span class="pre">post-commit</span></code></p>
 </section>
 </section>
 </section>
