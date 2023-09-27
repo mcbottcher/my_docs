@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🥷 Jinja &mdash; MyDocs 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e031e9a9"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Git" href="git.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MyDocs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="github_actions.html">GitHub Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pytest.html">PyTest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yocto.html">Yocto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uboot.html">U-Boot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="systemd.html">SystemD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">🐍 Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssh.html">SSH</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bash.html">Bash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="git.html">Git</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">🥷 Jinja</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage">Basic Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#comments">Comments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#flow-control">Flow Control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#if-statements"><code class="docutils literal notranslate"><span class="pre">if</span></code> statements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#for-loops"><code class="docutils literal notranslate"><span class="pre">for</span></code> loops</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#nesting-templates">Nesting templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inlcuding-templates">Inlcuding Templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#built-in-filters">Built-in Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#macros">Macros</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#macros-in-separate-file">Macros in separate file</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MyDocs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">🥷 Jinja</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/jinja.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ninja-jinja">
+<h1>🥷 Jinja<a class="headerlink" href="#ninja-jinja" title="Permalink to this heading"></a></h1>
+<p>Jinja is a template engine, which allows you to generate text from a template.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<p>Jinja2 is the version compatible with python3. You can install using pip:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">Jinja2</span></code></p>
+</section>
+<section id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading"></a></h2>
+<p>With Jinja you provide a template file with variables that should be filled in.
+You load this file and then ‘render’ these varibales.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Basic Load and Rendering Example</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">FileSystemLoader</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;jinja&quot;</span>
+<span class="n">environment</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span><span class="n">loader</span><span class="o">=</span><span class="n">FileSystemLoader</span><span class="p">(</span><span class="s2">&quot;templates/&quot;</span><span class="p">))</span>
+<span class="n">template</span> <span class="o">=</span> <span class="n">environment</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;message.txt&quot;</span><span class="p">)</span>
+
+<span class="c1"># returns rendered template as a string</span>
+<span class="n">content</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Example template file</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Hello</span><span class="p">,</span> <span class="n">my</span> <span class="n">name</span> <span class="ow">is</span> <span class="p">{{</span> <span class="n">name</span> <span class="p">}}</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+<section id="comments">
+<h3>Comments<a class="headerlink" href="#comments" title="Permalink to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Example of Jinja Comment</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="c1"># This is a comment #}</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="flow-control">
+<h2>Flow Control<a class="headerlink" href="#flow-control" title="Permalink to this heading"></a></h2>
+<section id="if-statements">
+<h3><code class="docutils literal notranslate"><span class="pre">if</span></code> statements<a class="headerlink" href="#if-statements" title="Permalink to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example if statement</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">score</span> <span class="o">&lt;</span> <span class="mi">80</span> <span class="o">%</span><span class="p">}</span>
+<span class="n">You</span> <span class="n">FAILED</span>
+<span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}</span>
+<span class="n">You</span> <span class="n">PASSED</span>
+<span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="for-loops">
+<h3><code class="docutils literal notranslate"><span class="pre">for</span></code> loops<a class="headerlink" href="#for-loops" title="Permalink to this heading"></a></h3>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example using Jinja for loop</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">students</span> <span class="o">%</span><span class="p">}</span>
+<span class="n">Hello</span><span class="p">,</span> <span class="n">my</span> <span class="n">name</span> <span class="ow">is</span> <span class="p">{{</span> <span class="n">student</span> <span class="p">}}</span>
+<span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="nesting-templates">
+<h2>Nesting templates<a class="headerlink" href="#nesting-templates" title="Permalink to this heading"></a></h2>
+<p>As you get more templates, you might want to keep common code in the same place.
+You can use Jinja’s template inhertiance.</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Example base template</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Hello</span> <span class="n">my</span> <span class="n">name</span> <span class="ow">is</span> <span class="p">{{</span> <span class="n">name</span> <span class="p">}}</span><span class="o">.</span>
+
+<span class="p">{</span><span class="o">%</span> <span class="n">block</span> <span class="n">age</span> <span class="o">%</span><span class="p">}</span> <span class="n">By</span> <span class="n">default</span> <span class="n">my</span> <span class="n">age</span> <span class="ow">is</span> <span class="p">{{</span> <span class="n">age</span> <span class="p">}}</span> <span class="p">{</span><span class="o">%</span> <span class="n">endblock</span> <span class="n">age</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Example child template</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="n">extends</span> <span class="s2">&quot;base.template&quot;</span> <span class="o">%</span><span class="p">}</span>
+
+<span class="p">{</span><span class="o">%</span> <span class="n">block</span> <span class="n">age</span> <span class="o">%</span><span class="p">}</span> <span class="n">My</span> <span class="n">new</span> <span class="n">age</span> <span class="ow">is</span> <span class="p">{{</span> <span class="n">age</span> <span class="p">}}</span> <span class="p">{</span><span class="o">%</span> <span class="n">endblock</span> <span class="n">age</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>If the block age is not given in the overriding template, then the content from the default
+template will be used.</p>
+</section>
+<section id="inlcuding-templates">
+<h2>Inlcuding Templates<a class="headerlink" href="#inlcuding-templates" title="Permalink to this heading"></a></h2>
+<p>You are also able to include a whole other template in another template.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Template files which are meant to be included should be prefixed with an underscore in their name.</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Example of Jinja include</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="n">include</span> <span class="s2">&quot;_other.template&quot;</span> <span class="o">%</span><span class="p">}</span>
+
+<span class="n">Some</span> <span class="n">more</span> <span class="n">words</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="whitespace">
+<h2>Whitespace<a class="headerlink" href="#whitespace" title="Permalink to this heading"></a></h2>
+<p>You need take care about where Jinja will add in whitespace.</p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Example template</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Hello</span>
+<span class="p">{</span><span class="c1"># Just a comment #}</span>
+<span class="n">You</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Produced text</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Hello</span>
+
+<span class="n">You</span>
+</pre></div>
+</div>
+</div>
+<p>There a few ways you can avoid this.</p>
+<ol class="arabic simple">
+<li><p>Enable <code class="docutils literal notranslate"><span class="pre">trim_blocks</span></code> and <code class="docutils literal notranslate"><span class="pre">lstrip_blocks</span></code> rendering options</p></li>
+<li><p>Use a <code class="docutils literal notranslate"><span class="pre">-</span></code> at the start or end of a block. e.g. <code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">var</span> <span class="pre">==</span> <span class="pre">&quot;1&quot;</span> <span class="pre">-%}</span></code></p></li>
+</ol>
+</section>
+<section id="built-in-filters">
+<h2>Built-in Filters<a class="headerlink" href="#built-in-filters" title="Permalink to this heading"></a></h2>
+<p>You can see a list of built-in filters here: <a class="reference external" href="https://jinja.palletsprojects.com/en/3.1.x/templates/#builtin-filters">https://jinja.palletsprojects.com/en/3.1.x/templates/#builtin-filters</a>
+You can apply a filter by using the pipe symbol <code class="docutils literal notranslate"><span class="pre">|</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Example Jinja filter</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">First</span> <span class="n">name</span><span class="p">:</span> <span class="p">{{</span> <span class="n">first_name</span> <span class="o">|</span> <span class="n">capitalize</span> <span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">Example chaining filters</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{{</span> <span class="n">scraped_acl</span> <span class="o">|</span> <span class="n">first</span> <span class="o">|</span> <span class="n">trim</span> <span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+<p>Jinja allows you to write your own filters too. These are basically just python functions.
+See <a class="reference external" href="https://ttl255.com/jinja2-tutorial-part-4-template-filters/#:~:text=on%20our%20list.-,Writing%20Your%20Own%20Filters,-As%20I%20already">https://ttl255.com/jinja2-tutorial-part-4-template-filters/#:~:text=on%20our%20list.-,Writing%20Your%20Own%20Filters,-As%20I%20already</a>
+for more info.</p>
+</section>
+<section id="macros">
+<h2>Macros<a class="headerlink" href="#macros" title="Permalink to this heading"></a></h2>
+<p>Macros are nice for creating re-usable components.</p>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">Example Macros</span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="n">macro</span> <span class="n">banner</span><span class="p">()</span> <span class="o">-%</span><span class="p">}</span>
+<span class="o">===========================================</span>
+<span class="o">|</span>   <span class="n">This</span> <span class="n">device</span> <span class="ow">is</span> <span class="nb">property</span> <span class="n">of</span> <span class="n">BigCorpCo</span>  <span class="o">|</span>
+<span class="o">|</span>   <span class="n">Unauthorized</span> <span class="n">access</span> <span class="ow">is</span> <span class="n">unauthorized</span>   <span class="o">|</span>
+<span class="o">|</span>  <span class="n">Unless</span> <span class="n">you</span><span class="s1">&#39;re authorized to access it  |</span>
+<span class="o">|</span>  <span class="n">In</span> <span class="n">which</span> <span class="n">case</span> <span class="n">play</span> <span class="n">nice</span> <span class="ow">and</span> <span class="n">stay</span> <span class="n">safe</span>  <span class="o">|</span>
+<span class="o">===========================================</span>
+<span class="p">{</span><span class="o">%</span> <span class="n">endmacro</span> <span class="o">-%</span><span class="p">}</span>
+
+<span class="p">{{</span> <span class="n">banner</span><span class="p">()</span> <span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">Example output</span><a class="headerlink" href="#id14" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">===========================================</span>
+<span class="o">|</span>   <span class="n">This</span> <span class="n">device</span> <span class="ow">is</span> <span class="nb">property</span> <span class="n">of</span> <span class="n">BigCorpCo</span>  <span class="o">|</span>
+<span class="o">|</span>   <span class="n">Unauthorized</span> <span class="n">access</span> <span class="ow">is</span> <span class="n">unauthorized</span>   <span class="o">|</span>
+<span class="o">|</span>  <span class="n">Unless</span> <span class="n">you</span><span class="s1">&#39;re authorized to access it  |</span>
+<span class="o">|</span>  <span class="n">In</span> <span class="n">which</span> <span class="n">case</span> <span class="n">play</span> <span class="n">nice</span> <span class="ow">and</span> <span class="n">stay</span> <span class="n">safe</span>  <span class="o">|</span>
+<span class="o">===========================================</span>
+</pre></div>
+</div>
+</div>
+<p>You are also able to pass arguments to macro calls.</p>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">Example with arguments</span><a class="headerlink" href="#id15" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="o">%</span> <span class="n">macro</span> <span class="n">def_if_desc</span><span class="p">(</span><span class="n">if_role</span><span class="p">)</span> <span class="o">-%</span><span class="p">}</span>
+<span class="n">Unused</span> <span class="n">port</span><span class="p">,</span> <span class="n">dedicated</span> <span class="n">to</span> <span class="p">{{</span> <span class="n">if_role</span> <span class="p">}}</span> <span class="n">devices</span>
+<span class="p">{</span><span class="o">%-</span> <span class="n">endmacro</span> <span class="o">-%</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>Macros are similar to python function in that they also can have args and kwargs.</p>
+<section id="macros-in-separate-file">
+<h3>Macros in separate file<a class="headerlink" href="#macros-in-separate-file" title="Permalink to this heading"></a></h3>
+<p>You can store macros in a separate file and import them into your file as needed.</p>
+<p>For example, to import: <code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">import</span> <span class="pre">'macros.file'</span> <span class="pre">as</span> <span class="pre">macros</span> <span class="pre">-%}</span></code>.
+You can access a macro by using <code class="docutils literal notranslate"><span class="pre">macro.&lt;macro_name&gt;</span></code>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="git.html" class="btn btn-neutral float-left" title="Git" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Mikkel Caschetto-Bottcher.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
