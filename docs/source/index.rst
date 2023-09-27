@@ -29,4 +29,4 @@ Contents
    ssh
    bash
    git
-   
+   jinja
