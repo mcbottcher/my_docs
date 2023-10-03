@@ -67,3 +67,32 @@ to the stage or stages you want it to run in.
 You can also specify a deafult for all hooks specified with ``default_stages: [commit]``.
 
 Run a particular hook stage with ``pre-commit run --hook-stage post-commit``
+
+Commit Messages
+---------------
+
+Different people like to have different formats for commit messaging.
+
+One of the common ones is Conventional Commits: https://www.conventionalcommits.org/en/v1.0.0/
+
+Conventional commit requires a format as such:
+
+.. code-block::
+  :caption: Example commit format
+
+  <type>[optional scope]: <description>
+
+Some types:
+  - ``fix``: patches a bug in the code base
+  - ``feat``: introduces a new feature to the code base
+  - ``chore``: updating dependancies
+  - ``refactor``: resturcture of code, no functional change
+  - ``style``: code styling, e.g. black formatter changes
+  - ``docs``: updates to documentation e.g. READMEs
+  - ``ci``: changes to CI 
+  - ``test``: adding/correcting tests
+
+.. code-block::
+  :caption: Example commit message
+
+  docs(git.rst): Added commit messages section

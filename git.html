@@ -59,6 +59,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#other-hooks">Other Hooks</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#commit-messages">Commit Messages</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="jinja.html">🥷 Jinja</a></li>
@@ -144,6 +145,37 @@ to the stage or stages you want it to run in.</p>
 <p>You can also specify a deafult for all hooks specified with <code class="docutils literal notranslate"><span class="pre">default_stages:</span> <span class="pre">[commit]</span></code>.</p>
 <p>Run a particular hook stage with <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span> <span class="pre">--hook-stage</span> <span class="pre">post-commit</span></code></p>
 </section>
+</section>
+<section id="commit-messages">
+<h2>Commit Messages<a class="headerlink" href="#commit-messages" title="Permalink to this heading"></a></h2>
+<p>Different people like to have different formats for commit messaging.</p>
+<p>One of the common ones is Conventional Commits: <a class="reference external" href="https://www.conventionalcommits.org/en/v1.0.0/">https://www.conventionalcommits.org/en/v1.0.0/</a></p>
+<p>Conventional commit requires a format as such:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example commit format</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="nb">type</span><span class="o">&gt;</span><span class="p">[</span><span class="n">optional</span> <span class="n">scope</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">description</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<dl class="simple">
+<dt>Some types:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fix</span></code>: patches a bug in the code base</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feat</span></code>: introduces a new feature to the code base</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chore</span></code>: updating dependancies</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">refactor</span></code>: resturcture of code, no functional change</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">style</span></code>: code styling, e.g. black formatter changes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docs</span></code>: updates to documentation e.g. READMEs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ci</span></code>: changes to CI</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test</span></code>: adding/correcting tests</p></li>
+</ul>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example commit message</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docs</span><span class="p">(</span><span class="n">git</span><span class="o">.</span><span class="n">rst</span><span class="p">):</span> <span class="n">Added</span> <span class="n">commit</span> <span class="n">messages</span> <span class="n">section</span>
+</pre></div>
+</div>
+</div>
 </section>
 </section>
 
