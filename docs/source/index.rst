@@ -30,3 +30,4 @@ Contents
    bash
    git
    jinja
+   mermaid

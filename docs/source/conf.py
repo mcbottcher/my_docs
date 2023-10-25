@@ -18,6 +18,7 @@ extensions = [
     'sphinx.ext.duration',
     'sphinx_rtd_theme',
     'sphinxemoji.sphinxemoji',
+    'sphinxmermaid',
 ]
 
 templates_path = ['_templates']
