@@ -132,3 +132,11 @@ Linux Commands
 
   - Use with `-e` to for formatting characters: :shell:`echo -e "\nThis is a newline"`
 
+----
+
+- :shell:`ctrl+R`: Reverse i search.
+
+  - Allows you to search through previous commands.
+  - Press :shell:`ctrl+R` and start typing the search string. Hit :shell:`ctrl+R` to move to the next matching
+    command.
+  - Use the arrow keys if you want to modify the command before running it.
