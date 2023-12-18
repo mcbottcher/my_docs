@@ -705,3 +705,15 @@ You can handle exceptions that occur within the context in the ``__exit__`` meth
 Information about the exception will be passed to the method. If it returns ``True``, then
 the exception is considered handled and is not propogated further. If ``__exit__`` returns ``False``,
 then the exception is propogated outside the context block.
+
+Virtual Environment
+-------------------
+
+Python has a way to separate your environments for different projects. This is handy
+if you want to install different packages only for a certain project for example.
+
+To start a virtual environment, call ``python3 -m venv <path to venv (.venv)>``
+To activate the virtual environment, call ``source .venv/bin/activate``
+Activating will add a keyword ``deactivate``, which you can use to leave the environment.
+
+Inside the environment you can do ``pip install`` to install packages to your local environment.

@@ -89,6 +89,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#exception-handling">Exception Handling</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#virtual-environment">Virtual Environment</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
@@ -813,6 +814,15 @@ Information about the exception will be passed to the method. If it returns <cod
 the exception is considered handled and is not propogated further. If <code class="docutils literal notranslate"><span class="pre">__exit__</span></code> returns <code class="docutils literal notranslate"><span class="pre">False</span></code>,
 then the exception is propogated outside the context block.</p>
 </section>
+</section>
+<section id="virtual-environment">
+<h2>Virtual Environment<a class="headerlink" href="#virtual-environment" title="Permalink to this heading"></a></h2>
+<p>Python has a way to separate your environments for different projects. This is handy
+if you want to install different packages only for a certain project for example.</p>
+<p>To start a virtual environment, call <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">venv</span> <span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">venv</span> <span class="pre">(.venv)&gt;</span></code>
+To activate the virtual environment, call <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">.venv/bin/activate</span></code>
+Activating will add a keyword <code class="docutils literal notranslate"><span class="pre">deactivate</span></code>, which you can use to leave the environment.</p>
+<p>Inside the environment you can do <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> to install packages to your local environment.</p>
 </section>
 </section>
 
