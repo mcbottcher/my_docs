@@ -79,6 +79,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#example-commenting-on-pr">Example Commenting on PR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#github-actions-security">GitHub Actions Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#triggering-actions-in-another-repo">Triggering Actions in another Repo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sources">Sources</a></li>
 </ul>
 </li>
@@ -642,6 +643,41 @@ the workflow has completed successfully. This is done automatically.</p>
 <section id="github-actions-security">
 <h2>GitHub Actions Security<a class="headerlink" href="#github-actions-security" title="Permalink to this heading"></a></h2>
 <p>Check out this link: <a class="reference external" href="https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions">https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions</a></p>
+</section>
+<hr class="docutils" />
+<section id="triggering-actions-in-another-repo">
+<h2>Triggering Actions in another Repo<a class="headerlink" href="#triggering-actions-in-another-repo" title="Permalink to this heading"></a></h2>
+<p>You can use action files from another repo in your workflow.</p>
+<p>If you are using your own action, it is recommended to have a separate repository for your
+action.
+However it is also possible to have your action within your repo with other things in it.</p>
+<p>For example, an action file in <code class="docutils literal notranslate"><span class="pre">actions/my_action/action.yml</span></code></p>
+<p>To call an action from another repo, you have to alter your repo settings to allow calls from
+other repositories to access actions.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Example workflow calling action in another repo</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">runs</span><span class="o">-</span><span class="n">on</span><span class="p">:</span> <span class="n">ubuntu</span><span class="o">-</span><span class="n">latest</span>
+<span class="n">steps</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Test-action&quot;</span>
+    <span class="n">uses</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">repository_owner</span><span class="o">&gt;/&lt;</span><span class="n">repository_name</span><span class="o">&gt;/</span><span class="n">actions</span><span class="o">/</span><span class="n">my_action</span><span class="o">@&lt;</span><span class="n">branch_name</span> <span class="ow">or</span> <span class="n">reference</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example action.yml</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>using: &quot;composite&quot;
+steps:
+    - run: |
+        python ${{ github.action_path }}/../my_script.py
+      shell: bash
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As seen in the example, you need to use the <code class="docutils literal notranslate"><span class="pre">github.action_path</span></code> to reference files
+in relation to the actions file.</p>
+</div>
 </section>
 <hr class="docutils" />
 <section id="sources">
