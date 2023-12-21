@@ -473,6 +473,43 @@ Check out this link: https://docs.github.com/en/actions/security-guides/security
 
 ----
 
+Triggering Actions in another Repo
+----------------------------------
+
+You can use action files from another repo in your workflow.
+
+If you are using your own action, it is recommended to have a separate repository for your
+action.
+However it is also possible to have your action within your repo with other things in it.
+
+For example, an action file in ``actions/my_action/action.yml``
+
+To call an action from another repo, you have to alter your repo settings to allow calls from
+other repositories to access actions.
+
+.. code-block::
+    :caption: Example workflow calling action in another repo
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Test-action"
+        uses: <repository_owner>/<repository_name>/actions/my_action@<branch_name or reference>
+
+.. code-block::
+    :caption: Example action.yml
+
+    using: "composite"
+    steps:
+        - run: |
+            python ${{ github.action_path }}/../my_script.py
+          shell: bash
+
+.. note::
+    As seen in the example, you need to use the ``github.action_path`` to reference files
+    in relation to the actions file. 
+
+----
+
 Sources
 -------
 
