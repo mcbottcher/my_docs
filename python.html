@@ -78,7 +78,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#pickle-saving-objects-to-files">Pickle - Saving objects to files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#named-tuple">Named Tuple</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#python-packages">Python Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-packages">Python Packages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#making-a-package">Making a package</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#multithreading">Multithreading</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#decorators">Decorators</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#decorate-functions">Decorate functions</a></li>
@@ -592,6 +595,45 @@ Each package must also contain a <code class="docutils literal notranslate"><spa
 <p>Using a python package has an advantage in the python will add that directory to the
 PATH search so it is easier to specify imports etc.</p>
 <p>You can also declare package wide constants/vairables in the <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file.</p>
+<section id="making-a-package">
+<h3>Making a package<a class="headerlink" href="#making-a-package" title="Permalink to this heading"></a></h3>
+<p>A more recent way to package a project is to use a <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.
+You will want your directory structure to look something like this:</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Example folder structure</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
+├── &lt;package_name&gt;
+│   ├── __init__.py
+│   ├── libraries
+│   │   └── library_one.py
+│   ├── module_one.py
+│   └── module_two.py
+└── pyproject.toml
+</pre></div>
+</div>
+</div>
+<p>In your pyproject.toml you’ll want something like this:</p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Example pyproject.toml</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[build-system]</span>
+<span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;setuptools&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;setuptools-scm&quot;</span><span class="p">]</span>
+<span class="n">build-backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;setuptools.build_meta&quot;</span>
+
+<span class="k">[project]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot; &lt;package name&gt; &quot;</span>
+<span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot; &lt;package version&gt; &quot;</span>
+<span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot; &lt;description&gt; &quot;</span>
+<span class="n">license</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;CLOSED&quot;</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>Inside your <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file, you’ll want to include the types that you want immediately accessable in
+your package. This basically runs when you first import your package into your current project.</p>
+<p>Once you have setup your project, you can run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code> in the same dir as your
+<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file. It seems this is a better result than <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code>. It might also be
+smart to do this in your project’s virtual environment. You can also use the <code class="docutils literal notranslate"><span class="pre">-e</span></code> flag to keep the
+package editable so you can use it and edit it at the same time.</p>
+</section>
 </section>
 <section id="multithreading">
 <h2>Multithreading<a class="headerlink" href="#multithreading" title="Permalink to this heading"></a></h2>
@@ -604,8 +646,8 @@ manage execution time.</p>
 for the interpreter to do other tasks while this is happening.</p>
 <p>Mutliprocessing in python is different and this is where a new interpreter and memory space is spawned for
 each new process you make.</p>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">Example of a multi-threaded program</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Example of a multi-threaded program</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
@@ -640,8 +682,8 @@ need to consider how to deal with exceptions happening inside a thread you have 
 </div>
 <p>Obviously, mutliple threads accessing the same resource at a time could cause issues.
 Threading provides a mutex lock to allow resources to be used only by one thread at a time</p>
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">Example using mutex lock</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Example using mutex lock</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">threading</span>
 
 <span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
@@ -674,8 +716,8 @@ Threading provides a mutex lock to allow resources to be used only by one thread
 </ol>
 <section id="decorate-functions">
 <h3>Decorate functions<a class="headerlink" href="#decorate-functions" title="Permalink to this heading"></a></h3>
-<div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">Example using a custom decorator function</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">Example using a custom decorator function</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
 
   <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="n">kwargs</span><span class="p">):</span>
@@ -710,8 +752,8 @@ where <code class="docutils literal notranslate"><span class="pre">func</span></
 <section id="decorate-classes">
 <h3>Decorate classes<a class="headerlink" href="#decorate-classes" title="Permalink to this heading"></a></h3>
 <p>It is also possible use classes to decorate a function too.</p>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">Example using a Class decorator. <a class="reference external" href="https://www.freecodecamp.org/news/python-decorators-explained-with-examples/">Source</a></span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">Example using a Class decorator. <a class="reference external" href="https://www.freecodecamp.org/news/python-decorators-explained-with-examples/">Source</a></span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LimitQuery</span><span class="p">:</span>
 
   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
@@ -746,8 +788,8 @@ where <code class="docutils literal notranslate"><span class="pre">func</span></
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id12">
-<div class="code-block-caption"><span class="caption-text">Output</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">Output</span><a class="headerlink" href="#id14" title="Permalink to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$35968.25
 $35896.55
 $34368.14
@@ -765,8 +807,8 @@ No queries left. All 5 queries used.
 <p>Context managers let you use an object within a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.
 When it is in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement, it will call the <code class="docutils literal notranslate"><span class="pre">__enter__</span></code> method. At the end it will call
 the <code class="docutils literal notranslate"><span class="pre">__exit__</span></code> method.</p>
-<div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">Example using context manager</span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">Example using context manager</span><a class="headerlink" href="#id15" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
 
   <span class="c1"># called when object is created</span>
