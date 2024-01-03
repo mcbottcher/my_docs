@@ -482,6 +482,63 @@ PATH search so it is easier to specify imports etc.
 
 You can also declare package wide constants/vairables in the ``__init__.py`` file.
 
+Making a package
+^^^^^^^^^^^^^^^^
+
+A more recent way to package a project is to use a ``pyproject.toml`` file.
+You will want your directory structure to look something like this:
+
+.. code-block::
+  :caption: Example folder structure
+
+  .
+  ├── <package_name>
+  │   ├── __init__.py
+  │   ├── libraries
+  │   │   └── library_one.py
+  │   ├── module_one.py
+  │   └── module_two.py
+  └── pyproject.toml
+
+
+In your pyproject.toml you'll want something like this:
+
+.. code-block:: toml
+  :caption: Example pyproject.toml
+
+  [build-system]
+  requires = ["setuptools", "setuptools-scm"]
+  build-backend = "setuptools.build_meta"
+
+  [project]
+  name = " <package name> "
+  version = " <package version> "
+  description = " <description> "
+  license = { text = "CLOSED" }
+
+
+Inside your ``__init__.py`` file, you'll want to include the types that you want immediately accessable in
+your package. This basically runs when you first import your package into your current project.
+
+.. code-block::python
+  :caption: Example __init__.py
+
+  from .module_one import ObjectOne
+  from .module_two import ObjectTwo
+
+.. code-block::python
+  :caption: Example module
+
+  from .libraries.library_one import ObjectLib
+
+  class ObjectOne:
+    ...
+
+Once you have setup your project, you can run ``python -m pip install .`` in the same dir as your 
+``pyproject.toml`` file. It seems this is a better result than ``pip install .``. It might also be
+smart to do this in your project's virtual environment. You can also use the ``-e`` flag to keep the
+package editable so you can use it and edit it at the same time.
+
 Multithreading
 --------------
 
