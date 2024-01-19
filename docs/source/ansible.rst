@@ -32,5 +32,33 @@ You can then run a simple ping test on all hosts specified in the ``hosts`` file
 
     ansible -i hosts all -m ping
 
+This is an example of an "ad-hoc" command.
+
 ----
 
+Playbooks
+---------
+
+This is a way for ansible to automate repeating tasks. This is done using structured files written
+in yaml as an ordered set of steps to run.
+
+.. code-block::yaml
+    :caption: Example of a playbook 
+
+    - name: Intro to Ansible Playbooks
+      hosts: all
+
+      tasks:
+        - name: Upgrade all apt packages
+          # Ansible module used for this task
+          apt:
+          force_apt_get: yes
+          upgrade: dist
+          # This task is run with elevated privilege i.e. sudo
+          become: yes
+
+You can run this using a command like:
+
+.. code-block::shell
+
+    ansible-playbook intro-playbook.yml --inventory hosts --extra-vars "ansible_sudo_pass=<user_password>"
