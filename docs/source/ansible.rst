@@ -62,3 +62,48 @@ You can run this using a command like:
 .. code-block::shell
 
     ansible-playbook intro-playbook.yml --inventory hosts --extra-vars "ansible_sudo_pass=<user_password>"
+
+Using Variables
+^^^^^^^^^^^^^^^
+
+You can add vairables in your playbook yaml files.
+
+.. code-block::yaml
+    :caption: Example using vairables
+
+    - name: Variables playbook
+      hosts: all
+      vars:
+        user: bob
+      tasks:
+        - name: Add the user {{ user }}
+          ansible.builtin.user:
+            name: "{{ user }}"
+
+Note when assigning a variable to another, you have to use the double quotes.
+
+You can also add arguments via the command line: e.g.
+
+.. code-block::shell
+    :caption: Example with command line vars
+
+    ansible-playbook <playbook>.yml -e "var1=hello var2=3"
+
+Modules
+-------
+
+Modules are discrete units of code that can be used from command line or in a playbook task.
+Ansible ships with a load of readily avaialble modules.
+
+.. note::
+    Use the command ``ansible-doc -l`` to list all modules. Or for documentation on a single module,
+    use ``ansible-doc <module>``.
+
+It is possible to enable a custom module by adding it to one of these locations:
+
+1. Add path to ``ANSIBLE_LIBRARY``
+2. ``~/.ansible/plugins/modules/``
+3. ``/usr/share/ansible/plugins/modules/``
+
+Follow this link for an example of creating your own module:
+ ``https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html#creating-a-module``
