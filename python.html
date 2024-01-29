@@ -635,6 +635,22 @@ You will want your directory structure to look something like this:</p>
 </div>
 <p>Inside your <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file, you’ll want to include the types that you want immediately accessable in
 your package. This basically runs when you first import your package into your current project.</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Example __init__.py</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">.module_one</span> <span class="kn">import</span> <span class="n">ObjectOne</span>
+<span class="kn">from</span> <span class="nn">.module_two</span> <span class="kn">import</span> <span class="n">ObjectTwo</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Example module</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">.libraries.library_one</span> <span class="kn">import</span> <span class="n">ObjectLib</span>
+
+<span class="k">class</span> <span class="nc">ObjectOne</span><span class="p">:</span>
+  <span class="o">...</span>
+</pre></div>
+</div>
+</div>
 <p>Once you have setup your project, you can run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code> in the same dir as your
 <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file. It seems this is a better result than <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code>. It might also be
 smart to do this in your project’s virtual environment. You can also use the <code class="docutils literal notranslate"><span class="pre">-e</span></code> flag to keep the
@@ -652,8 +668,8 @@ manage execution time.</p>
 for the interpreter to do other tasks while this is happening.</p>
 <p>Mutliprocessing in python is different and this is where a new interpreter and memory space is spawned for
 each new process you make.</p>
-<div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">Example of a multi-threaded program</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">Example of a multi-threaded program</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
@@ -688,8 +704,8 @@ need to consider how to deal with exceptions happening inside a thread you have 
 </div>
 <p>Obviously, mutliple threads accessing the same resource at a time could cause issues.
 Threading provides a mutex lock to allow resources to be used only by one thread at a time</p>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">Example using mutex lock</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">Example using mutex lock</span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">threading</span>
 
 <span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
@@ -722,8 +738,8 @@ Threading provides a mutex lock to allow resources to be used only by one thread
 </ol>
 <section id="decorate-functions">
 <h3>Decorate functions<a class="headerlink" href="#decorate-functions" title="Permalink to this heading"></a></h3>
-<div class="literal-block-wrapper docutils container" id="id12">
-<div class="code-block-caption"><span class="caption-text">Example using a custom decorator function</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">Example using a custom decorator function</span><a class="headerlink" href="#id14" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
 
   <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="n">kwargs</span><span class="p">):</span>
@@ -758,8 +774,8 @@ where <code class="docutils literal notranslate"><span class="pre">func</span></
 <section id="decorate-classes">
 <h3>Decorate classes<a class="headerlink" href="#decorate-classes" title="Permalink to this heading"></a></h3>
 <p>It is also possible use classes to decorate a function too.</p>
-<div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">Example using a Class decorator. <a class="reference external" href="https://www.freecodecamp.org/news/python-decorators-explained-with-examples/">Source</a></span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">Example using a Class decorator. <a class="reference external" href="https://www.freecodecamp.org/news/python-decorators-explained-with-examples/">Source</a></span><a class="headerlink" href="#id15" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LimitQuery</span><span class="p">:</span>
 
   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
@@ -794,8 +810,8 @@ where <code class="docutils literal notranslate"><span class="pre">func</span></
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id14">
-<div class="code-block-caption"><span class="caption-text">Output</span><a class="headerlink" href="#id14" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id16">
+<div class="code-block-caption"><span class="caption-text">Output</span><a class="headerlink" href="#id16" title="Permalink to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$35968.25
 $35896.55
 $34368.14
@@ -813,8 +829,8 @@ No queries left. All 5 queries used.
 <p>Context managers let you use an object within a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.
 When it is in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement, it will call the <code class="docutils literal notranslate"><span class="pre">__enter__</span></code> method. At the end it will call
 the <code class="docutils literal notranslate"><span class="pre">__exit__</span></code> method.</p>
-<div class="literal-block-wrapper docutils container" id="id15">
-<div class="code-block-caption"><span class="caption-text">Example using context manager</span><a class="headerlink" href="#id15" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-text">Example using context manager</span><a class="headerlink" href="#id17" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
 
   <span class="c1"># called when object is created</span>
@@ -882,8 +898,8 @@ This section will look a bit into using pydantic with yaml/json file inputs.</p>
 or json config file should contain. Pydantic uses this schema to validate an input from a yaml or
 json file. It can also output a schema file which you can use for type completion and error checking
 on a yaml or json file.</p>
-<div class="literal-block-wrapper docutils container" id="id16">
-<div class="code-block-caption"><span class="caption-text">Example generating schema</span><a class="headerlink" href="#id16" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id18">
+<div class="code-block-caption"><span class="caption-text">Example generating schema</span><a class="headerlink" href="#id18" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydantic</span>
 <span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">import</span> <span class="nn">json</span>
@@ -909,8 +925,8 @@ put in an <code class="docutils literal notranslate"><span class="pre">age</span
 <p>The schema can be applied in Vscode to yaml files by installing the yaml extension, then going
 to <code class="docutils literal notranslate"><span class="pre">Prefernce</span> <span class="pre">&gt;</span> <span class="pre">Settings</span></code>. Here you can modify the <code class="docutils literal notranslate"><span class="pre">settings.json</span></code> file (either for the User or
 the workspace) with something like this:</p>
-<div class="literal-block-wrapper docutils container" id="id17">
-<div class="code-block-caption"><span class="caption-text">Example for applying a schema to all yaml files called <code class="docutils literal notranslate"><span class="pre">my_configs.yml</span></code></span><a class="headerlink" href="#id17" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id19">
+<div class="code-block-caption"><span class="caption-text">Example for applying a schema to all yaml files called <code class="docutils literal notranslate"><span class="pre">my_configs.yml</span></code></span><a class="headerlink" href="#id19" title="Permalink to this code"></a></div>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;yaml.schemas&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;./schemas/my_schema.json&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_configs.yml&quot;</span>
 <span class="p">},</span>
@@ -921,8 +937,8 @@ the workspace) with something like this:</p>
 <section id="validation">
 <h3>Validation<a class="headerlink" href="#validation" title="Permalink to this heading"></a></h3>
 <p>Validation can be performed in a few ways:</p>
-<div class="literal-block-wrapper docutils container" id="id18">
-<div class="code-block-caption"><span class="caption-text">Two examples of validation</span><a class="headerlink" href="#id18" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id20">
+<div class="code-block-caption"><span class="caption-text">Two examples of validation</span><a class="headerlink" href="#id20" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydantic</span>
 <span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
@@ -958,8 +974,8 @@ For example, <code class="docutils literal notranslate"><span class="pre">ipaddr
 <p>For more complex types, e.g. 3rd party for example, some extra steps have to be performed for
 successful schema production and parsing.</p>
 <p>Here we have an example using <code class="docutils literal notranslate"><span class="pre">semver.Version</span></code></p>
-<div class="literal-block-wrapper docutils container" id="id19">
-<div class="code-block-caption"><span class="caption-text">Example using <code class="docutils literal notranslate"><span class="pre">semver.Verison</span></code></span><a class="headerlink" href="#id19" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id21">
+<div class="code-block-caption"><span class="caption-text">Example using <code class="docutils literal notranslate"><span class="pre">semver.Verison</span></code></span><a class="headerlink" href="#id21" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydantic</span>
 <span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">import</span> <span class="nn">semver</span>
