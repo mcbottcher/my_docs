@@ -93,6 +93,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#virtual-environment">Virtual Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pydantic">Pydantic</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#schemas">Schemas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#validation">Validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#type-management">Type Management</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
@@ -865,6 +871,50 @@ if you want to install different packages only for a certain project for example
 To activate the virtual environment, call <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">.venv/bin/activate</span></code>
 Activating will add a keyword <code class="docutils literal notranslate"><span class="pre">deactivate</span></code>, which you can use to leave the environment.</p>
 <p>Inside the environment you can do <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> to install packages to your local environment.</p>
+</section>
+<section id="pydantic">
+<h2>Pydantic<a class="headerlink" href="#pydantic" title="Permalink to this heading"></a></h2>
+<p>Pydantic is a python module which can be used for input validation.
+This section will look a bit into using pydantic with yaml/json file inputs.</p>
+<section id="schemas">
+<h3>Schemas<a class="headerlink" href="#schemas" title="Permalink to this heading"></a></h3>
+<p>One cool thing pydantic can do is create schemas. This is basically a description of what a yaml
+or json config file should contain. Pydantic uses this schema to validate an input from a yaml or
+json file. It can also output a schema file which you can use for type completion and error checking
+on a yaml or json file.</p>
+<p>The above example will generate a schema file.</p>
+<p>Vscode can check yaml files against this schema and also provide tab completion.
+For example, if you input an int for the <code class="docutils literal notranslate"><span class="pre">name</span></code> it will be shown as an error. If you
+put in an <code class="docutils literal notranslate"><span class="pre">age</span></code> above 99, it will show an error.</p>
+<p>The schema can be applied in Vscode to yaml files by installing the yaml extension, then going
+to <code class="docutils literal notranslate"><span class="pre">Prefernce</span> <span class="pre">&gt;</span> <span class="pre">Settings</span></code>. Here you can modify the <code class="docutils literal notranslate"><span class="pre">settings.json</span></code> file (either for the User or
+the workspace) with something like this:</p>
+</section>
+<section id="validation">
+<h3>Validation<a class="headerlink" href="#validation" title="Permalink to this heading"></a></h3>
+<p>Validation can be performed in a few ways:</p>
+<p>Here we see an example where <code class="docutils literal notranslate"><span class="pre">name</span></code> is contrained to either <code class="docutils literal notranslate"><span class="pre">same</span></code> or <code class="docutils literal notranslate"><span class="pre">bob</span></code>.
+For the age field, two checks will be performed. The <code class="docutils literal notranslate"><span class="pre">pydantic.field_validator</span></code> will
+perform a check when the config is loaded into the python object. This particular check
+checks for the age being between 0 and 99. The second check method used is the <code class="docutils literal notranslate"><span class="pre">pydantic.Field</span></code>
+option. Here we specified that the age should be less than 50. This check is included when
+a schema file is produced, but not the check in the <code class="docutils literal notranslate"><span class="pre">field_validator</span></code>.</p>
+</section>
+<section id="type-management">
+<h3>Type Management<a class="headerlink" href="#type-management" title="Permalink to this heading"></a></h3>
+<p>Pydantic already supports a number of types natively.
+For example, <code class="docutils literal notranslate"><span class="pre">ipaddress.IPv4Address</span></code> is supported and <code class="docutils literal notranslate"><span class="pre">Enum</span></code> types.</p>
+<p>For more complex types, e.g. 3rd party for example, some extra steps have to be performed for
+successful schema production and parsing.</p>
+<p>Here we have an example using <code class="docutils literal notranslate"><span class="pre">semver.Version</span></code></p>
+<p>In the generated <code class="docutils literal notranslate"><span class="pre">schema.json</span></code>, a field for major, minor and patch will be required.
+However, when the config file is loaded into python, these fields will be converted to
+a <code class="docutils literal notranslate"><span class="pre">semver.Version</span></code> type, and stored as such.</p>
+<p>The annotation on the <code class="docutils literal notranslate"><span class="pre">version</span></code> field has two jobs:
+1. It means intellisense will see <code class="docutils literal notranslate"><span class="pre">version</span></code> as a <code class="docutils literal notranslate"><span class="pre">semver.Version</span></code> so you can tab complete with it.
+2. It will make the schema produced use the <code class="docutils literal notranslate"><span class="pre">SchemaVersion</span></code>, so you have a way to produce the third
+party type that yaml will allow.</p>
+</section>
 </section>
 </section>
 
