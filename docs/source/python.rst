@@ -520,13 +520,13 @@ In your pyproject.toml you'll want something like this:
 Inside your ``__init__.py`` file, you'll want to include the types that you want immediately accessable in
 your package. This basically runs when you first import your package into your current project.
 
-.. code-block::python
+.. code-block:: python
   :caption: Example __init__.py
 
   from .module_one import ObjectOne
   from .module_two import ObjectTwo
 
-.. code-block::python
+.. code-block:: python
   :caption: Example module
 
   from .libraries.library_one import ObjectLib
