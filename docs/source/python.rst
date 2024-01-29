@@ -790,23 +790,23 @@ json file. It can also output a schema file which you can use for type completio
 on a yaml or json file.
 
 .. code-block::python
-    :caption: Example generating schema
+  :caption: Example generating schema
 
-    import pydantic
-    from pydantic.dataclasses import dataclass
-    import json
+  import pydantic
+  from pydantic.dataclasses import dataclass
+  import json
 
-    @dataclass
-    class Person:
-        name: str
-        # age must be an int and less than 99
-        age: int = pydantic.Field(lt=99) 
+  @dataclass
+  class Person:
+    name: str
+    # age must be an int and less than 99
+    age: int = pydantic.Field(lt=99) 
 
-    schema = pydantic.TypeAdapter(Person)
+  schema = pydantic.TypeAdapter(Person)
 
-    json_schema_file = Path().cwd().joinpath("schema.json")
-    with open(json_schema_file, "w") as file:
-        json.dump(schema.json_schema(), file)
+  json_schema_file = Path().cwd().joinpath("schema.json")
+  with open(json_schema_file, "w") as file:
+    json.dump(schema.json_schema(), file)
 
 The above example will generate a schema file.
 
@@ -819,11 +819,11 @@ to ``Prefernce > Settings``. Here you can modify the ``settings.json`` file (eit
 the workspace) with something like this:
 
 .. code-block::json
-    :caption: Example for applying a schema to all yaml files called ``my_configs.yml``
+  :caption: Example for applying a schema to all yaml files called ``my_configs.yml``
 
-    "yaml.schemas": {
-        "./schemas/my_schema.json": "my_configs.yml"
-    },
+  "yaml.schemas": {
+    "./schemas/my_schema.json": "my_configs.yml"
+  },
 
 Validation
 ^^^^^^^^^^
@@ -831,26 +831,26 @@ Validation
 Validation can be performed in a few ways:
 
 .. code-block::python
-    :caption: Two examples of validation 
+  :caption: Two examples of validation 
 
-    import pydantic
-    from pydantic.dataclasses import dataclass
-    from enum import Enum
+  import pydantic
+  from pydantic.dataclasses import dataclass
+  from enum import Enum
 
-    class Names(Enum):
-        SAM = "sam"
-        BOB = "bob"
+  class Names(Enum):
+    SAM = "sam"
+    BOB = "bob"
 
-    @dataclass(frozen=True)
-    class Person:
-        name: Names
-        age: int = pydantic.Field(lt=50)
+  @dataclass(frozen=True)
+  class Person:
+    name: Names
+    age: int = pydantic.Field(lt=50)
 
-        @pydantic.field_validator("age")
-        def validate_age(age):
-            if age < 0 or age > 99:
-                raise ValueError("Age must be between 0 and 99")
-            return age
+    @pydantic.field_validator("age")
+    def validate_age(age):
+      if age < 0 or age > 99:
+        raise ValueError("Age must be between 0 and 99")
+      return age
 
 Here we see an example where ``name`` is contrained to either ``same`` or ``bob``.
 For the age field, two checks will be performed. The ``pydantic.field_validator`` will
@@ -871,48 +871,48 @@ successful schema production and parsing.
 Here we have an example using ``semver.Version``
 
 .. code-block::python
-    :caption: Example using ``semver.Verison``
+  :caption: Example using ``semver.Verison``
 
-    import pydantic
-    from pydantic.dataclasses import dataclass
-    import semver
-    import yaml
-    from pathlib import Path
-    import json
-    from typing_extensions import Annotated
+  import pydantic
+  from pydantic.dataclasses import dataclass
+  import semver
+  import yaml
+  from pathlib import Path
+  import json
+  from typing_extensions import Annotated
 
-    @dataclass
-    # These are the fields that will appear in the JSON schema
-    class SchemaVersion:
-        major: int
-        minor: int
-        patch: int
+  @dataclass
+  # These are the fields that will appear in the JSON schema
+  class SchemaVersion:
+    major: int
+    minor: int
+    patch: int
 
-    # This will do the mapping from schema to semver.Version
-    HandleAsVersion = pydantic.GetPydanticSchema(lambda _s, h: h(SchemaVersion))
+  # This will do the mapping from schema to semver.Version
+  HandleAsVersion = pydantic.GetPydanticSchema(lambda _s, h: h(SchemaVersion))
 
-    @dataclass(frozen=True)
-    class Config:
-        name: str
-        version: Annotated[semver.Version, HandleAsVersion]
+  @dataclass(frozen=True)
+  class Config:
+    name: str
+    version: Annotated[semver.Version, HandleAsVersion]
 
-        @pydantic.field_validator("version")
-        def validate_version(version: SchemaVersion):
-            return semver.Version(version.major, version.minor, version.patch)
+    @pydantic.field_validator("version")
+    def validate_version(version: SchemaVersion):
+      return semver.Version(version.major, version.minor, version.patch)
 
-    schema = pydantic.TypeAdapter(Config)
+  schema = pydantic.TypeAdapter(Config)
 
-    config_file = Path("config.yaml")
-    with open(config_file) as file:
-        yaml_data = yaml.safe_load(file)
+  config_file = Path("config.yaml")
+  with open(config_file) as file:
+    yaml_data = yaml.safe_load(file)
 
-    json_string = json.dumps(yaml_data)
-    schema.validate_json(json_string)
+  json_string = json.dumps(yaml_data)
+  schema.validate_json(json_string)
 
-    config = Config(**yaml_data)
+  config = Config(**yaml_data)
 
-    print(config.version)
-    print(type(config.version))
+  print(config.version)
+  print(type(config.version))
 
 In the generated ``schema.json``, a field for major, minor and patch will be required.
 However, when the config file is loaded into python, these fields will be converted to
