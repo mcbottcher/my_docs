@@ -789,7 +789,7 @@ or json config file should contain. Pydantic uses this schema to validate an inp
 json file. It can also output a schema file which you can use for type completion and error checking
 on a yaml or json file.
 
-.. code-block::python
+.. code-block:: python
   :caption: Example generating schema
 
   import pydantic
@@ -818,7 +818,7 @@ The schema can be applied in Vscode to yaml files by installing the yaml extensi
 to ``Prefernce > Settings``. Here you can modify the ``settings.json`` file (either for the User or
 the workspace) with something like this:
 
-.. code-block::json
+.. code-block:: json
   :caption: Example for applying a schema to all yaml files called ``my_configs.yml``
 
   "yaml.schemas": {
@@ -830,7 +830,7 @@ Validation
 
 Validation can be performed in a few ways:
 
-.. code-block::python
+.. code-block:: python
   :caption: Two examples of validation 
 
   import pydantic
@@ -870,7 +870,7 @@ successful schema production and parsing.
 
 Here we have an example using ``semver.Version``
 
-.. code-block::python
+.. code-block:: python
   :caption: Example using ``semver.Verison``
 
   import pydantic
