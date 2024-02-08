@@ -99,6 +99,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#type-management">Type Management</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#dis-disassembler">dis - Disassembler</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
@@ -1027,6 +1028,25 @@ a <code class="docutils literal notranslate"><span class="pre">semver.Version</s
 2. It will make the schema produced use the <code class="docutils literal notranslate"><span class="pre">SchemaVersion</span></code>, so you have a way to produce the third
 party type that yaml will allow.</p>
 </section>
+</section>
+<hr class="docutils" />
+<section id="dis-disassembler">
+<h2>dis - Disassembler<a class="headerlink" href="#dis-disassembler" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">dis</span></code> module allows you to view the compiled byte code for CPython. This can be useful for a
+number of things, including maybe evaluating the performance of your code.</p>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">dis</span></code> module both in your python script and as a command line tool.</p>
+<div class="literal-block-wrapper docutils container" id="id22">
+<div class="code-block-caption"><span class="caption-text">Example of using <code class="docutils literal notranslate"><span class="pre">dis</span></code> from the command line</span><a class="headerlink" href="#id22" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">dis</span> <span class="o">&lt;</span><span class="n">python_file</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id23">
+<div class="code-block-caption"><span class="caption-text">Example disassembling a function in a script</span><a class="headerlink" href="#id23" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </section>
 </section>
 
