@@ -923,3 +923,22 @@ The annotation on the ``version`` field has two jobs:
 2. It will make the schema produced use the ``SchemaVersion``, so you have a way to produce the third
 party type that yaml will allow.
 
+----
+
+dis - Disassembler
+------------------
+
+The ``dis`` module allows you to view the compiled byte code for CPython. This can be useful for a
+number of things, including maybe evaluating the performance of your code.
+
+You can use the ``dis`` module both in your python script and as a command line tool.
+
+.. code-block::
+  :caption: Example of using ``dis`` from the command line
+
+  python -m dis <python_file>
+
+.. code-block:: python
+  :caption: Example disassembling a function in a script
+
+  dis.dis(myfunc)
