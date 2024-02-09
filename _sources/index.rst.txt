@@ -31,3 +31,4 @@ Contents
    git
    jinja
    mermaid
+   rust
