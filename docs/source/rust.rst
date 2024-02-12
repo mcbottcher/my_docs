@@ -464,3 +464,76 @@ for loop
     for i in (1..5).rev(){
         println!("Value is {i}");
     }
+
+Guessing Game Example - Misc.
+-----------------------------
+
+- Rust by default has a set of items defined in the standard library that it brings into the
+  program scope. This is known as the **prelude**.
+
+  If something you want to use is not in the prelude, you must bring it into scope manually
+  with the ``use`` statement. e.g. ``use std::io;``
+
+- When printing with ``println!``, you can print the variable directly with ``{<var>}`` or you can
+  print the result of evaluating an expression like this: ``println!("Your value is {}", x + 1);``
+
+- Getting a random number:
+  Rust doesn't have a random number generator in its std library, so we need to import a crate.
+  *https://crates.io/crates/rand*
+
+  The project we are building (with the executable) is known as a *binary crate*, and the random
+  crate we are pulling in is known as a *library crate*.
+
+  To include the crate, add ``rand = "0.8.5"`` to the ``[dependencies]`` section of the ``Cargo.toml``
+
+.. code-block:: rust
+    :caption: Getting a random number
+
+    use rand::Rng;
+
+    fn main {
+        let secret_number = rand::thread_rng().gen_range(1..=100);
+        println!("Secret number is {secret_number}");
+    }
+
+- Documentation: running ``cargo doc --open`` will compile documentation for the crates you are using
+  and open them in a browser for you to see!
+
+.. code-block:: rust
+    :caption: Guessing Game
+
+    use std::io;
+    use std::cmp::Ordering;
+    use rand::Rng;
+
+    fn main() {
+        
+        let secret_number = rand::thread_rng().gen_range(1..=100);
+        println!("Secret number is {secret_number}");
+
+        loop {
+            println!("Guess a number please:");
+
+            let mut guess: String = String::new();
+
+            io::stdin()
+                .read_line(&mut guess)
+                .expect("Failed to read line");
+
+            let guess: u32 = match guess.trim().parse() {
+                Ok(num) => num,
+                Err(_) => continue,
+            };
+
+            println!("You guessed {}", guess);
+
+            match guess.cmp(&secret_number){
+                Ordering::Less => println!("Too small"),
+                Ordering::Greater => println!("Too big"),
+                Ordering::Equal => {
+                    println!("Just right");
+                    break;
+                }
+            }
+        }
+    }
