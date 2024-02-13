@@ -537,3 +537,128 @@ Guessing Game Example - Misc.
             }
         }
     }
+
+Ownership
+---------
+
+*Basic Rules*:
+1. Each value in rust has an owner
+2. There can only be one owner at a time
+3. When the owner goes out of scope, the value will be dropped
+
+How does rust manage memory allocation?
+
+For literals like a string literal ``"hello"``, this is stored on the stack and when the variable assigned
+to that value goes out of scope, the data is popped from the stack.
+
+For types which are of variable size, e.g. ``String``, these have a pointer on the stack which points to
+allocated memory on the heap. When the variable assigned to the ``String`` goes out of scope, rust calls the
+``drop`` function to free the heap memory.
+
+Move
+^^^^
+
+If you allocate a new variable to a variable which has a heap component, the new variable will simply be a
+pointer (and length and capacity) on the stack to the same memory in the heap.
+
+Now we have two variables pointing to the same memory, they both can't be freed using ``drop`` since this would
+be a double free. To prevent this, if you assign a variable to another in this way, the first variable will become
+invalid.
+
+.. code-block:: rust
+    :caption: Example of invalid variable
+
+    let s1 = String::from("hello");
+    let s2 = s1;
+
+    // This won't work since s1 is no longer valid
+    println!("Value of string 1 is {s1}");
+
+This type of assignment is known as a ``move``, where the pointer, length and capacity are copied to the new variable,
+and the old variable being made invalid.
+
+.. note:: 
+    This is not true when assigning a variable of a fixed size to each other. e.g. ``let y: u32 = x;`` is fine
+    since this doesn't use any heap memory. Therefore ``x`` will still be valid after this assignment.
+    Variable types like these implement something called the ``Copy`` trait.
+
+Clone
+^^^^^
+
+If we want to make a copy of the heap data too (similar to deep copy), we can use the ``clone`` method.
+This will make a copy of the pointer, lenght and capacity on the stack, and allocate new memory on the heap
+and copy the contents of the first variable's heap data. The pointer of the new variable will point to this new
+heap data.
+
+.. code-block:: rust
+    :caption: Example using clone
+
+    let s1 = String::from("hello");
+    let s2 = s1.clone();
+
+    // s1 is valid since it was not made invalid by a move
+    println!("Value of string 1 is {s1}");
+
+Function Calls
+^^^^^^^^^^^^^^
+
+.. code-block:: rust
+    :caption: Example of functions and variable scope
+
+    fn main() {
+        let s1 = String::from("hello");
+
+        print_string(s1);
+
+        let x = 5;
+
+        print_int(x);
+
+        // This is ok
+        print_int(x);
+
+        // s1 no longer exists, so compile error
+        print_string(s1);
+
+    }
+
+    fn print_int(value: i32) {
+        println!("The value of the int is {value}");
+    } // since x is copied in, x is still valid after this, value is not
+
+    fn print_string(s1: String) {
+        println!("The value of s1 is {s1}");
+    } // s1 is dropped here
+
+As you can see from the example, different types behave differently when passed to functions.
+
+Return values from functions can also tranfer ownership:
+
+.. code-block:: rust
+    :caption: Example of returns tranferring ownership
+
+    fn main() {
+        let s1 = get_string();
+        let s2 = String::from("world");
+
+        let s3 = mirror(s2);
+
+        // Here s1 and s3 are valid, s2 is not
+        println!("Values are {s1} {s2} {s3}");
+    }
+
+    fn mirror(my_string: String) -> String {
+        my_string
+    } // s2 is moved to my_string so is not valid anymore
+
+    fn get_string() -> String {
+        let some_string = String::from("hello");
+        some_string
+    } // some_string is moved to s1, so some_string no longer valid
+
+References and Borrowing
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+If we don't want a function to take ownership of a variable we can use the concepts of references and borrowing.
+
+...
