@@ -661,4 +661,71 @@ References and Borrowing
 
 If we don't want a function to take ownership of a variable we can use the concepts of references and borrowing.
 
+A reference is a pointer to a varaible but it does not have ownership of the variable. Therefore, when it
+goes out of scope, the original variable is not dropped:
+
+.. code-block:: rust
+    :caption: Example using reference
+
+    fn main() {
+
+        let s2 = String::from("world");
+
+        let s3 = mirror(&s2);
+
+        // Values are World World
+        // It seems println! can print &String too...
+        println!("Values are {s2} {s3}");
+
+    }
+
+    fn mirror(my_string: &String) -> &String {
+        my_string
+    } // s2 is moved to my_string so is not valid anymore
+
+Using references in functions is known as borrowing. The function is borrowing the variable, so it can use
+it, but it does not own it. Like with borrowing the thing should be returned to the owner when finished.
+
+References, by default, are immutable, which means you cannot change the value of the borrowed variable.
+
+We can indicate that a borrowing function will mutate a variable by specifying a mutable reference.
+
+.. code-block:: rust
+    :caption: Example of a mutable reference
+
+    fn main() {
+
+        let mut s2 = 5;
+
+        mut_value(&mut s2);
+
+        // value is 6
+        println!("Values are {s2}");
+
+    }
+
+    fn mut_value(value: &mut i32) -> () {
+        *value = 6;
+    }
+
+You are not allowed to have more than one mutable reference to value at any one time!
+This prevents data races.
+In a similar fashion, we cannot have a mutable reference in existance when a immutable one
+exists. The user of an immuatable value should not have it change on them.
+
+.. note:: 
+    A variable is considered out of scope after its last use, so it is possible in the same
+    scope to declare a ``&mut`` after a immuatable reference if it is after the last use of the
+    immutable reference.
+
+The Slice Type
+^^^^^^^^^^^^^^
+
 ...
+
+
+
+
+
+
+
