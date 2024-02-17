@@ -721,11 +721,236 @@ exists. The user of an immuatable value should not have it change on them.
 The Slice Type
 ^^^^^^^^^^^^^^
 
-...
+Slices let you reference a contiguous sequence of elements in a collection.
+It is only a reference, so does not have ownership.
 
+.. code-block:: rust
+    :caption: Example string Slice
 
+    let s = String::from("Hello World");
 
+    // Starts at the 6th element, and includes upto the 11th
+    let world_slice = &s[6..11];
 
+.. note:: 
+    In rust's slice syntax, ``&s[0..2]`` and ``&s[..2]`` are equivilent.
+    Also if you want to include everything upto the last element, use something
+    like ``&s[2..]``.
+    Referencing all elements can be done like so ``&s[..]``
 
+.. note:: 
+    String literals are simply string slices. The value of the string is stored
+    in the compiled binary, so is immutable.
 
+The type of a string slice is ``&str``. This means you can also use a reference to an
+entire string with the same type.
+
+Slices also work for other types, for example arrays.
+
+.. code-block:: rust
+    :caption: Example of Array Slice Operation
+
+    let a = [1, 2, 3, 4, 5];
+
+    let slice = &a[1..3];
+
+    assert_eq!(slice, &[2, 3]);
+
+Structures
+----------
+
+Structures are a way of organising data types. They differ from tuples because
+you can name each element instead of relying on the order of elements like with a
+tuple.
+
+.. code-block:: rust
+    :caption: Example using a Struct
+
+    struct User {
+        active: bool,
+        username: String,
+        sign_in_count: u65,
+    }
+
+    let mut user1 = User {
+        active: true,
+        username: String::from("myusername"),
+        sign_in_count: 0,
+    };
+
+    // access elements with dot notation
+    user1.active = false;
+
+.. note::
+    To change an element in the struct, the whole struct needs to be mutable.
+    Rust doesn't support different mutability for different fields.
+
+.. note:: 
+    We can use field initialisation shorthand. Instead of writing something like:
+    ``active:active,`` in the struct initialisation with an input variable called
+    ``active``, simply just write ``active``
+
+Struct update syntax
+^^^^^^^^^^^^^^^^^^^^
+
+If we are copying over values from one struct to another, and only changing a few elements,
+we can use the struct update syntax to fill the rest of the struct with the given struct's
+values.
+
+.. code-block:: rust
+    :caption: Example using struct syntax update
+
+    let user2 = User {
+        active: false,
+        // rest of the values copied from user 1
+        ..user1
+    };
+
+.. note:: 
+    If ``user2`` copies any values from ``user1`` that don't implement the ``Copy``
+    trait (e.g. String), ``user1`` will become invalid.
+
+Tuple Structs
+^^^^^^^^^^^^^
+
+A tuple sturct is where you name the tuple type, and give the types of the fields,
+however, you don't name the fields.
+
+.. code-block:: rust
+    :caption: Example of tuple struct
+
+    struct Color(i32, i32, i32);
+    struct Point(i32, i32, i32);
+
+    let black = Color(0, 0, 0);
+
+    // access by index
+    println!("Red component of Black is {}", black.0);
+
+Example - Area of a rectangle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: rust
+    :caption: Simple example using rectangle struct
+
+    struct Rectangle {
+        width: u32,
+        height: u32,
+    }
+
+    fn main() {
+
+        let my_rect = Rectangle {
+            width: 4,
+            height: 8,
+        };
+
+        println!("Area of rectangle is {}", get_area(&my_rect));
+
+    }
+
+    fn get_area(rectangle: &Rectangle) -> u32 {
+        rectangle.width * rectangle.height
+    }
+
+Print trait
+"""""""""""
+
+Right now we can't print ``Rectangle`` in ``println!``. To do this, we need to implement
+the ``std::fmt::Display`` trait.
+
+It might be possible to use the ``{:?}`` or ``{:#?}```(pretty print) options inside the
+print macro. Using the curly braces indicates printing in debug mode, for which you also
+need the ``Debug`` trait.
+
+.. code-block:: rust
+    :caption: Updates to print struct
+
+    #[derive(Debug)]
+    struct Rectangle {
+        width: u32,
+        height: u32,
+    }
+
+    let my_rect = Rectangle {
+        width: 4,
+        height: 8,
+    };
+
+    println!("my_rect is {:?}", my_rect);
+
+It is also possible to use the ``dbg!`` macro to print a value in debug format.
+This is different from the print macro since it takes ownership of an expression
+instead of taking a reference like the print macro.
+``dbg!`` also prints to ``stderr`` whereas the print macro prints to ``stdout``
+
+.. code-block:: rust
+    :caption: Example using ``dbg!``
+
+    let my_rect = Rectangle {
+        // can debug individual assignments
+        width: dbg!(4),
+        height: 8,
+    };
+
+    dbg!(&my_rect);
+
+Struct Methods
+^^^^^^^^^^^^^^
+
+Methods are functions that belong to a struct.
+They are declared with the ``impl`` keyword.
+
+.. code-block:: rust
+    :caption: Example making struct method
+
+    struct Rectangle {
+        width: u32,
+        height: u32,
+    }
+
+    impl Rectangle {
+        fn area(&self) -> u32 {
+            self.width * self.height
+        }
+    }
+
+    fn main() {
+
+        let my_rect = Rectangle {
+            width: 4,
+            height: 8,
+        };
+
+        println!("Area is {}", my_rect.area());
+    }
+
+Struct methods use the ``self`` keyword, which represents the instance of the structure.
+Methods can take ownership of ``self``, borrow it immuatably or borrow it mutably.
+
+Associated Functions
+""""""""""""""""""""
+
+You can also define functions in the ``impl`` block which don't use the ``self``
+value. These are called associated functions.
+
+These are often used as constructors that will return a new instance of the struct.
+
+.. code-block:: rust
+    :caption: Example of constructor
+
+    impl Rectangle {
+        fn square(size: u32) -> Self {
+            Self {
+                width: size,
+                height: size,
+            }
+        }
+    }
+
+    let my_square = Rectangle::square(3);
+
+.. note:: 
+    It is also possible to have several ``impl`` blocks for a structure.
+    They are all valid for the structure.
 
