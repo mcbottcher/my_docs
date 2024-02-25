@@ -954,3 +954,159 @@ These are often used as constructors that will return a new instance of the stru
     It is also possible to have several ``impl`` blocks for a structure.
     They are all valid for the structure.
 
+Enums
+-----
+
+.. code-block:: rust
+    :caption: Basic Enum example
+
+    enum IpAddrKind {
+        V4,
+        V6,
+    }
+
+    let ip_kind = IpAddrKind::V4;
+
+Enums are namespaced under the identifier, so are accessed with the double colon
+notation.
+
+You can assign/associate values to enums too.
+As shown from the example, these can multiple types, and also each enum member
+can have different associations.
+
+.. code-block:: rust
+    :caption: Example associating values to an Enum
+
+    enum IpAddrKind {
+        V4(u8, u8, u8, u8), // Tuple struct
+        V6(String), // Tuple struct
+    }
+
+It is also possible to name the associated values, e.g. ``Move { x: i32, y: i32 }``.
+This is the same as associating a struct to the enum.
+The fields in the above example are the same as a tuple struct, and are accessed in the
+same way: ``V4.0``
+
+Just like with structs, we can define methods on enums:
+
+.. code-block:: rust
+    :caption: Example of enum method
+
+    enum Message {
+        QUIT,
+        MOVE { x: i32, y: i32 },
+    }
+
+    impl Message {
+        fn call(&self){
+            // method body here
+        }
+    }
+
+    let message = Message::QUIT();
+    message.call();
+
+Option Enum
+^^^^^^^^^^^
+
+Rust doesn't have a NULL type, but you can still encode that a varible either has a
+value or doesn't using the Option Enum.
+
+.. code-block:: rust
+    :caption: The Option Enum
+
+    enum Option<T> {
+        None,
+        Some(T),
+    }
+
+    let some_number: Option<i32> = Some(5);
+
+These are included in the prelude, so you can use ``None`` and ``Some(T)`` where you 
+want without the Namespacing.
+
+Match Control
+^^^^^^^^^^^^^
+
+Match control is a nice way to do some flow control covering all/ or some enum values.
+
+.. code-block:: rust
+    :caption: Example using match
+
+    enum Coin {
+        Penny,
+        Nickel,
+        Dime,
+        Quarter(UsState), //UsState is another enum
+    }
+
+    match coin {
+        Coin::Penny => {
+            println!("Lucky Coin!");
+            1
+        },
+        Coin::Nickel => 5,
+        Coin::Quarter(state) => {
+            println!("Value of state is {:?}", state);
+            25
+        },
+        ...
+    }
+
+It is also possible to include more code in a match statement, and not just
+returning a value. You can do this with the curly brackets like shown in the
+example.
+
+Accessing values from inside an enum can be seen in the example also.
+
+.. code-block:: rust
+    :caption: Example match with Option
+
+    fn plus_one(x: Option<i32>) -> Option<i32> {
+        match x {
+            None => None,
+            // if value is given, return + 1 to the value
+            Some(i) => Some(i + 1),
+        }
+    }
+
+.. note:: 
+    Rust match checks are exhaustive, so you have to provide a match arm for every
+    possibility.
+
+Catch-all Patterns
+^^^^^^^^^^^^^^^^^^
+
+.. code-block:: rust
+    :caption: Example handling all other options
+
+    match dice_roll {
+        1 => move_one(),
+        2 => move_two(),
+        // handles 3,4,5,6
+        other => move_n(other),
+        // alternative if we don't need to use the value:
+        // _ => dont_move(),
+    }
+
+We can use the ``other`` to catch all remaining options. We can also use 
+just an ``_``, which is the same but when you don't need to use the value.
+
+If you don't want anything to happen, you can just return the empty tuple type: ``_ => (),``
+
+if let
+^^^^^^
+
+For single checks on Option types, you can use the ``if let`` as a replacement:
+
+.. code-block:: rust
+    :caption: Example if let
+
+    let config_max = Some(3u8);
+    if let Some(max) = config_max {
+        // do the thing when config_max is Some
+    } else {
+        // do the thing when config_max is None,
+        // This else part is optional...
+    }
+
