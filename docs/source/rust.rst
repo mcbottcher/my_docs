@@ -1110,3 +1110,109 @@ For single checks on Option types, you can use the ``if let`` as a replacement:
         // This else part is optional...
     }
 
+Packages and Crates
+-------------------
+
+A crate is the smallest amount of code the rust compiler considers at a time.
+A crate can be in two forms: a binary crate is one that compiles into an executable.
+A library crate doesn't have a main function and are designed for functionality shared by
+multiple projects.
+
+A package is a set of crates that provide similar functionality. They come with a ``Cargo.toml``
+file that describes how to build those crates.
+
+If a crate contains a ``src/main.rs`` file, Cargo knowns that this crate is a binary crate
+with a name the same as the name of the crate automatically. If there is a ``src/lib.rs``,
+then it knows it is a library crate. If a package contains both these files, it has both
+a binary and library crate. A package can also have multiple binary crates located in the
+``src/bin`` path.
+
+Declaring Modules
+^^^^^^^^^^^^^^^^^
+
+When you declare a module, the compiler will look in three places for the code. e.g. ``mod garden;``
+
+1. Inline, with curly brackets that replace the semicolon
+2. In the file ``src/garden.rs``
+3. In the file ``src/garden/mod.rs``
+
+Submodules
+""""""""""
+
+If you want to declare a module in another module, the compiler will look in the following places:
+e.g. ``mod vegetable;``
+
+1. Inline, like before
+2. In ``src/garden/vegetable.rs``
+3. In ``src/garden/vegetable/mod.rs
+
+Once a module is declared, it can be accessed from anywhere in the crate like so:
+``crate::garden::vegetable::Potato``
+You can make accesses easier by simply using ``use crate::garden::vegetable::Potato`` and then
+just use ``Potato`` in your code.
+
+Defining Modules
+^^^^^^^^^^^^^^^^
+
+Items inside a module are private by default. Rust lets you control the privacy of items in
+modules.
+
+.. code-block:: rust
+    :caption: Example of modules
+
+    mod front_of_house {
+        mod hosting {
+            fn seat_at_table();
+        }
+
+        // This module is sibling of hosting, a child of front_of_house
+        // and front_of_house is this module's parent
+        mod serving {
+            fn bring_food();
+        }
+    }
+
+This makes a module tree like this:
+
+.. code-block:: 
+    :caption: Module tree
+
+    - crate
+        - front_of_house
+            - hosting
+                - seat_at_table
+            - serving 
+                - bring_food
+
+Crate is a module started from the crate root (``main.rs`` or ``lib.rs``)
+
+Referencing Modules
+"""""""""""""""""""
+
+We can reference modules in our crate either with relative or absolute crate paths.
+Absolute paths start with ``crate`` and relative ones use something like ``self`` / ``super``
+or some other identifier (e.g. nothing also works).
+
+.. note:: 
+    It is generally better to use absolute paths since it allows you to move modules
+    independently of each other.
+
+The ``pub`` keywork
+"""""""""""""""""""
+
+As before, rust defaults to private scope for modules. To make a module public,
+use the ``pub`` keyword.
+
+.. code-block:: rust
+    :caption: Example making module public
+
+    mod front_of_house {
+        pub mod hosting {
+            pub fn add_to_waitlist();
+        }
+    }
+
+.. note:: 
+    Making a module public doesn't make its contents public, it just means it is available
+    to anything that can access the parent module.
+
