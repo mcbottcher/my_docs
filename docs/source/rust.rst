@@ -1216,3 +1216,74 @@ use the ``pub`` keyword.
     Making a module public doesn't make its contents public, it just means it is available
     to anything that can access the parent module.
 
+Relative path with super
+""""""""""""""""""""""""
+
+You can use ``super`` to access scope that is the parent of the current scope.
+This is equivilent to using ``..`` in paths for example.
+e.g. ``super::deliver_order();``
+
+Public Structs and Enums
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can declare a struct public with the ``pub`` keyword. This only makes the struct visible,
+but the fields in the struct are still private by default, so you have to also declare them
+public on a case by case basis. Note that the ``impl`` functions will have to match the
+visibility of what they access.
+
+An enum on the other hand, once declared public with ``pub``, has all of its field public.
+
+The ``use`` keyword
+^^^^^^^^^^^^^^^^^^^
+
+The use keyword can bring paths into scope without having to declare the whole path on every
+function call.
+
+.. code-block:: rust
+    :caption: Example with ``use``
+
+    use crate::front_of_house::hosting;
+
+    // Can access the module with the last name in the use statement
+    hosting::add_to_waitlist();
+
+.. note::
+    This only creates a shortcut for the module scope you are in.
+    Child module scopes will not have access to this name shortening.
+
+We can also specify an alias for the namespace used: e.g. ``use crate::front_of_house::hosting as host;``
+
+If you add the ``pub`` keyword infront of the ``use`` statement, then it means that other code
+that uses this module will be able to use this shortened namespace too. If not defined as ``pub``,
+they will not be able to.
+
+Nested Paths and Globs
+""""""""""""""""""""""
+
+Nested paths and globs give you a way of cleaning up the way you use multiple items from one module.
+
+.. code-block:: rust
+    :caption: Example of Nested Paths and Globs
+
+    use std::cmp::Ordering;
+    use std::io;
+
+    // This can be reduced to
+    use std::{cmp::Ordering, io};
+
+    use std::io;
+    use std::io::Write;
+
+    // This can be reduced to
+    use std::io::{self, Write}
+
+    // Globs are also supported
+    use std::collections::*;
+
+Modules in different files
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A ``mod`` declaration only needs to be perfomed once. The rest of the files in your
+crate can then access the module functions using the name path. The ``mod`` keyword is not like
+the ``include`` keyword in other languages.
+
