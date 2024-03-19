@@ -1287,3 +1287,150 @@ A ``mod`` declaration only needs to be perfomed once. The rest of the files in y
 crate can then access the module functions using the name path. The ``mod`` keyword is not like
 the ``include`` keyword in other languages.
 
+Collections
+-----------
+
+Collections can store multiple values, and are stored on the heap.
+
+Vectors
+^^^^^^^
+
+Vectors can only store values of the same type.
+
+.. code-block:: rust
+    :caption: Basic vector creation
+
+    // have to specify the type since it is an empty vector
+    let v: Vec<i32> = Vec::new();
+
+    // convenience macro for creating a vector and setting its type (inferred from the data)
+    let v = vec![1, 2, 3];
+
+.. code-block:: rust
+    :caption: Writing and reading elements
+
+    let mut v = Vec::new();
+
+    // type inferred here, adds the element 5 to the vector
+    v.push(5);
+    v.push(4);
+    v.push(3);
+    v.push(2);
+
+    // getting a value:
+    let third: &i32 = &v[2];
+    let third: Option<&i32> = v.get(2); // Some(third) or None
+
+.. code-block:: rust
+    :caption: Iterating over values in a vector
+
+    let mut v = vec![110, 32, 65];
+    for i in &v {
+        println!("{i}");
+    }
+
+    // This adds 50 to each vector element
+    // the * is the dereference operator
+    for i in &mut v {
+        *i += 50;
+    } 
+
+String
+^^^^^^
+
+Strings are basically considered as a collection of bytes in rust.
+String is actually created as a wrapper around the ``Vec<T>``.
+
+They are UTF-8 encoded! Which means we can use lots of cool charaters. ``øØæÆÅå``
+
+.. code-block:: rust
+    :caption: Creation of String
+
+    // New emtpy string
+    let mut s = String::new();
+
+    // New initialised string
+    let s = "initial_contents".to_string();
+    let s = String::from("initial_contents");
+
+.. code-block:: rust
+    :caption: Updating String
+
+    let mut s = String::from("foo");
+
+    // append using push_str -> "foobar"
+    s.push_str("bar");
+
+    // concatenation
+    let s2 = String::from(" world!");
+    // Note s is move here so it no longer exists after this
+    let s3 = s + &s2; // results in "foobar world!"
+
+The reason that s will no longer exist after using the ``+`` operator is that this is actually
+implemented by a function call: ``fn add(self, s: &str) -> String {``
+
+.. code-block:: rust
+    :caption: Concatenating multiple Strings
+
+    let s1 = String::from("tic");
+    let s2 = String::from("tac");
+    let s3 = String::from("toe");
+
+    let s = format!("{s1}-{s2}-{s3}");
+
+Indexing of Strings in rust doesn't work. This is because we use UTF-8, which doesn't 
+have fixed size characters. Just avoid it since it causes problems.
+
+.. code-block:: rust
+    :caption: Iterating over a string
+
+    // iterate over charaters
+    for c in "øæå".chars() {
+        println!("{c}");
+    }
+
+    // iterate over bytes, this will print numbers
+    for b in "øæå".bytes() {
+        println!("{b}");
+    }
+
+Remember, a char in rust is not the same a byte!
+
+Hash Maps
+^^^^^^^^^
+
+The type ``HashMap<K, V>`` stores a mapping of keys of type K to values of type V.
+These are known by other names in other languages like dictionary in python.
+
+All the values must have the same type, and all the keys must have the same type.
+
+.. code-block:: rust
+    :caption: Creating HashMaps and accessing values
+
+    use std::collections::HashMap;
+
+    // create empty HashMap
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    let team_name = String::from("Blue");
+    let score = scores.get(&team_name).copied().unwrap_or(0);
+
+.. code-block:: rust
+    :caption: Iterating over HashMaps
+
+    for (key, value) in &scores {
+        println!("{key}: {value}");
+    }
+
+Ownership
+"""""""""
+
+For values implementing the copy trait (e.g. ``i32``), the values will be copied into the
+hashmap. For owned values like ``String``, the ownership will be transfered to the hashmap.
+This applies to both keys and values.
+
+Updating a HashMap
+""""""""""""""""""
