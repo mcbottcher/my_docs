@@ -1434,3 +1434,33 @@ This applies to both keys and values.
 
 Updating a HashMap
 """"""""""""""""""
+
+The number of key-value pairs is growable, but a unique key can only have one value associated
+with it at a time.
+
+There are several options when updating a hashmap:
+
+- Overwriting a value: if we call the ``.insert()`` function twice on the same key, it will overwrite the value.
+- Adding only if key is not present: ``scores.entry(String::from("Blue")).or_insert(50);`` -> inserts 50 if key
+  "Blue" doesn't already exist.
+- Updating based on old value:
+
+.. code-block:: rust
+    :caption: Example updating based on old value
+
+    use std::collections::HashMap;
+
+    let text = "hello world wonderful world";
+
+    let mut map = HashMap::new();
+
+    for word in text.split_whitespace() {
+        let count = map.entry(word).or_insert(0);
+        // or_insert() returns a &mut to the value
+        *count += 1;
+    }
+
+.. note:: 
+    Rust has available several backend hashing algorithms. Some are slower than others (improved security against DoS)
+    and some are faster. It is possible to change these hash backends.
+
