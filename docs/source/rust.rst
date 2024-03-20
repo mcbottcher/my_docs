@@ -1464,3 +1464,57 @@ There are several options when updating a hashmap:
     Rust has available several backend hashing algorithms. Some are slower than others (improved security against DoS)
     and some are faster. It is possible to change these hash backends.
 
+Error Handling
+--------------
+
+Rust has two types of errors, recoverable and unrecoverable.
+For recoverable errors, the ``Result<T, E>`` is used. For unrecoverable, the ``panic!`` macro
+stops execution.
+
+When a rust program panics, it unwinds by going back up the call stack to cleanup.
+If you don't want this e.g. you want a tiny binary, you can set ``panic = 'abort'``
+under ``[profile.release]`` in your cargo project.
+
+In order to get backtraces, we should run our program with debug symbols enabled, i.e.
+running cargo without the ``--release`` flag.
+
+Recoverable Errors
+^^^^^^^^^^^^^^^^^^
+
+For recoverable errors we use the ``Result<T, E>`` type.
+
+.. code-block:: rust
+    :caption: Matching on different errors
+
+    use std::fs:File;
+    use std::io::ErrorKind;
+
+    fn main() {
+        let greeting_file_result = File::open("hello.txt");
+
+        let greeting_file = match greeting_file_result {
+            Ok(file) => file,
+            Err(error) => match error.kind() {
+                ErrorKind::NotFound => {
+                    match File::create("hello.txt") {
+                        Ok(fc) => fc,
+                        Err(e) => panic!("Problem creating file"),
+                    }
+                }
+                other_error => {
+                    panic!("Another Error");
+                }
+            }
+        }
+    }
+
+As shown we can use a ``match`` to handle errors.
+We can use other functions too such as ``unwrap_or_else`` to handle ``Result<T, E>`` types.
+
+Using the ``unwrap()`` method will return the value on Ok, and panic if there is an error.
+
+The ``expect()`` method does the same as ``unwrap`` but allows you to specify an error message.
+
+Propogating errors
+^^^^^^^^^^^^^^^^^^
+
