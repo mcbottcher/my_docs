@@ -1518,3 +1518,26 @@ The ``expect()`` method does the same as ``unwrap`` but allows you to specify an
 Propogating errors
 ^^^^^^^^^^^^^^^^^^
 
+Propogating error is when you pass an error back up the call stack to be handled else-where.
+You can use a ``match`` block as before, or some shorthand.
+
+.. code-block:: rust
+    :caption: Shortcut for error propogation
+
+    use::fs::File;
+    use std::io::{self, Read};
+
+    fn read_username_from_file () -> Result<String, io::Error> {
+        let mut username_file = File::open("hello.txt")?;
+        let mut username = String::new();
+        username_file.read_to_string(&mut username)?;
+        Ok(username)
+    }
+
+The ``?`` operator is placed after a ``Result`` value. If it is ``Ok``, we continue
+execution. If there is an ``Err``, that error will be returned. Using the ``?`` will
+convert the error to the error type specified in the function signature.
+The ``?`` can only be used on expressions which return something that matches the 
+return signatature of the function.
+
+
