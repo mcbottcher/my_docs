@@ -86,4 +86,52 @@ If you want to edit a service file, and see the changes instantly, use:
     
     systemd daemon-reload
 
+----
+
+Example adding a custom service
+-------------------------------
+
+Here we give an example of how you would setup a service that runs a WSGI server
+
+.. code-block::
+    :caption: Example service file
+
+    # Location: /etc/systemd/system/start-wsgi-server.service
+
+    [Unit]
+    Description = Start WSGI server
+    After = network.target
+
+    [Service]
+    User = user
+    RemainAfterExit = yes
+    WorkingDirectory = /home/user/
+    ExecStart = /home/user/start-wsgi-server
+
+    [Install]
+    WantedBy = multi-user.target
+
+.. code-block:: shell
+    :caption: Example service script
+
+    #!/bin/bash
+    # Location: $HOME/start-wsgi-server
+
+    set -euox pipefail
+
+    cd "$HOME/server"
+
+    source .venv/bin/activate
+
+    gunicorn -b 0.0.0.0:4000 flask_server:app --access-logfile flask_log.txt --daemon
+
+You would also have to change some file permissions and enable the service:
+
+.. code-block:: shell
+    :caption: Example setting up service
+
+    chmod 644 /etc/systemd/system/start-wsgi-server.service
+    systemctl enable start-wsgi-server.service
+
+
 
