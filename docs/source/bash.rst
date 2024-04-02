@@ -413,3 +413,25 @@ Printing colour requires the use of escape characters. You can achieve this usin
 
 .. note::
     The yellow colour given in the example looks quite nice for giving example shell commands
+
+Environment File
+----------------
+
+You can make an environment file, containing for example environment varibales and include this
+in your bash script.
+
+.. code-block:: bash
+    :caption: Example environment file
+
+    # my_values.env
+
+    COLOR="black"
+
+.. code-block:: bash
+    :caption: Example using environment file
+
+    #!/bin/bash
+
+    source ./my_values.env
+    echo $COLOR
+

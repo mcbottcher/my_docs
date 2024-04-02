@@ -174,6 +174,16 @@ In this example, the setup will run first, then the teardown yields to the test.
 Once the test is complete, due to the ``yield`` statement, the rest of the teardown
 is run.
 
+Choosing fixtures at run-time
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can select which fixtures to run during runtime with pytest.
+
+.. code-block:: python
+  :caption: Example dynamically running fixture
+
+  return request.getfixturevalue(argname=fixture_name)
+
 ----
 
 conftest.py
@@ -235,7 +245,7 @@ Markers
     assert 11*num == output
 
 - Execute a test, but don't consider its result: :python:`@pytest.mark.xfail`
-- Don't execute a test: :python:`@pytest.mark.skip`
+- Don't execute a test: :python:`@pytest.mark.skip`. Add :python:`(reason="<reson>")` to give a skip reason.
 
 .. note::
   You can view a list of markers by using ``pytest --markers``
@@ -360,6 +370,55 @@ To avoid using the same config, use a *pytest.ini* file to root the pytest insta
 This can cause an issue with your code trying to find some libraries in higher directory levels.
 One thing that might help, is to run ``python -m pytest ...`` instead of ``pytest`` directly. They
 are mostly the same except the first one adds more paths than just ``pytest`` by itself.
+
+----
+
+Output Parsing
+--------------
+
+Use the ``junitparser`` package to parse output results files produced by pytest with the
+``--junit-xml=path`` option.
+
+e.g. ``from junitparser import JUnitXml``
+
+----
+
+Command line arguments
+----------------------
+
+You can pass in arguments to pytest in the pytest call.
+
+.. code-block:: python
+  :caption: Example passing in command line args to pytest
+
+  # included in conftest.py
+
+  def pytest_addoption(parser):
+
+      parser.addoption(
+          "--access_token",
+          action="store",
+          default="",
+          help="token for downloading docker image",
+      )
+
+      parser.addoption(
+          "--use_local_image",
+          action="store_true",
+          default=False,
+          help="Flag for using local docker image",
+      )
+
+The above example shows how you can make a simple flag or a argument with a value.
+
+You can view the argument by using the ``request`` fixture: ``request.config.getoption("--access_token")``
+
+.. note:: 
+  It is also possible to add options from the ``pytest.ini`` file:
+  ``addopts = --ignore=./dummy_tests`` in the ``[pytest]`` section.
+
+
+----
 
 Sources
 -------
