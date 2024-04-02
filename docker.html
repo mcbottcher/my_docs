@@ -55,6 +55,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#docker-volumes">Docker Volumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#docker-compose">Docker Compose</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-dockerfile">Example Dockerfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exporting-an-image-to-file">Exporting an image to file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multi-architecture-targets">Multi-architecture Targets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#building-with-qemu">Building with QEMU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building-with-native-machines">Building with Native machines</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#sources">Sources</a></li>
 </ul>
 </li>
@@ -380,6 +386,142 @@ use a specific user other than root.</p>
 <p>To run the <code class="docutils literal notranslate"><span class="pre">CMD</span></code> from an entrypoint script, you should include <code class="docutils literal notranslate"><span class="pre">exec</span> <span class="pre">&quot;$&#64;&quot;</span></code> in the entrypoint
 script.</p>
 </div>
+</section>
+<hr class="docutils" />
+<section id="exporting-an-image-to-file">
+<h2>Exporting an image to file<a class="headerlink" href="#exporting-an-image-to-file" title="Permalink to this heading"></a></h2>
+<p>When you build an image/images, you can choose from a number of
+<a class="reference external" href="https://docs.docker.com/build/exporters/">Export options</a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">docker</span></code> option exports the build result to the local file system.
+It is possible to then load this image file into your local docker image registry.
+This could be on the same machine, or you could send this file to another machine and load it there.
+In this way, it is possible to build on one machine and export the image to be executed on another machine
+(as long as the platform that is built matches the platform where it is run).</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Example outputting to file</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>buildx<span class="w"> </span>build<span class="w"> </span>--platform<span class="o">=</span><span class="s2">&quot;linux/arm64/v8&quot;</span><span class="w"> </span>-t<span class="w"> </span>my_image:latest<span class="w"> </span>--output<span class="w"> </span><span class="nv">type</span><span class="o">=</span>docker,dest<span class="o">=</span>my_image.tar
+</pre></div>
+</div>
+</div>
+<p>You can then load the image using:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>load<span class="w"> </span>-i<span class="w"> </span>my_image.tar
+</pre></div>
+</div>
+<p>This will show as <code class="docutils literal notranslate"><span class="pre">my_image:latest</span></code>, since this is what we used with the <code class="docutils literal notranslate"><span class="pre">-t</span></code> option in the build command.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When tested, it was not possible to do this for multi-arch builds,
+e.g. <code class="docutils literal notranslate"><span class="pre">--platform=&quot;linux/arm64/v8,linux/amd64&quot;</span></code>. For mutli-arch builds you will have to run the build
+commands separately.</p>
+</div>
+</section>
+<hr class="docutils" />
+<section id="multi-architecture-targets">
+<h2>Multi-architecture Targets<a class="headerlink" href="#multi-architecture-targets" title="Permalink to this heading"></a></h2>
+<p>This section will give some info on how you can build docker images for multiple architecture target platforms.</p>
+<p>You can find some general documentation <a class="reference external" href="https://docs.docker.com/build/building/multi-platform/">here</a>.</p>
+<p>In the examples given below, we are going to be building an image for two target architectures,
+<em>arm64</em> and <em>amd64</em>. This will be done from a host machine using amd64.</p>
+<section id="building-with-qemu">
+<h3>Building with QEMU<a class="headerlink" href="#building-with-qemu" title="Permalink to this heading"></a></h3>
+<p>Since we are using an amd64 machine, we can easily build images targeting amd64.
+To build arm64 images on this machine, one technique is to use the QEMU feature of the docker builder,
+to emulate an arm64 machine and build an image for that.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For building the multiarch images, we will be using docker buildx</p>
+</div>
+<p>First you will want to create a builder instance which is capable of building images for multiple architectures:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>buildx<span class="w"> </span>create<span class="w"> </span>--bootstrap<span class="w"> </span>--name<span class="w"> </span>qemu_builder<span class="w"> </span>--platform<span class="o">=</span><span class="s2">&quot;linux/arm64,linux/amd64&quot;</span>
+</pre></div>
+</div>
+<p>You can confirm this has been made by running:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>buildx<span class="w"> </span>ls
+</pre></div>
+</div>
+<p>You can then build using:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>--builder<span class="w"> </span>qemu_builder<span class="w"> </span>--platform<span class="o">=</span><span class="s2">&quot;linux/amd64,linux/arm64&quot;</span><span class="w"> </span>-t<span class="w"> </span>&lt;tag&gt;<span class="w"> </span>.
+</pre></div>
+</div>
+<p>For reference, a test build I did took <strong>863 seconds</strong>.</p>
+</section>
+<section id="building-with-native-machines">
+<h3>Building with Native machines<a class="headerlink" href="#building-with-native-machines" title="Permalink to this heading"></a></h3>
+<p>Using <a class="reference external" href="https://docs.docker.com/engine/context/working-with-contexts/">Docker Contexts</a>
+it is possible to build on a remote docker builder.</p>
+<p>This means we can build our amd64 image locally, and the arm64 image on another machine,
+using the same docker build command. If this other machine uses arm64 architecture e.g.
+RaspberryPi 5, then the build will not need to use QEMU and will be much faster since it is
+building for its native architecture.</p>
+<p>To achieve this you will have to setup two context nodes, one on you local machine and one on the remote machine:</p>
+<ol class="arabic simple">
+<li><p><strong>Local machine (amd64):</strong></p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">context</span> <span class="n">create</span> <span class="n">node</span><span class="o">-</span><span class="n">amd64</span>
+
+<span class="n">docker</span> <span class="n">context</span> <span class="n">ls</span>
+
+<span class="n">NAME</span>         <span class="n">DESCRIPTION</span>                               <span class="n">DOCKER</span> <span class="n">ENDPOINT</span>               <span class="n">ERROR</span>
+<span class="n">default</span> <span class="o">*</span>    <span class="n">Current</span> <span class="n">DOCKER_HOST</span> <span class="n">based</span> <span class="n">configuration</span>   <span class="n">unix</span><span class="p">:</span><span class="o">///</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="o">.</span><span class="n">sock</span>
+<span class="n">node</span><span class="o">-</span><span class="n">amd64</span>   <span class="n">Current</span> <span class="n">DOCKER_HOST</span> <span class="n">based</span> <span class="n">configuration</span>   <span class="n">unix</span><span class="p">:</span><span class="o">///</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="o">.</span><span class="n">sock</span>
+</pre></div>
+</div>
+<p>As shown a new docker context using the host machines configuration has been created.</p>
+<ol class="arabic simple" start="2">
+<li><p><strong>Remote Machine (RPi5 - arm64):</strong> You will want to make sure that your remote machine has an ssh
+client and docker installed. <a class="reference external" href="https://thenewstack.io/connect-to-remote-docker-machines-with-docker-context/">This Guide</a>
+can help with setting up the remote host ssh.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">context</span> <span class="n">create</span> <span class="n">node</span><span class="o">-</span><span class="n">arm64</span> <span class="o">--</span><span class="n">docker</span> <span class="s2">&quot;host=ssh://$TARGET_HOST&quot;</span>
+
+<span class="n">docker</span> <span class="n">context</span> <span class="n">ls</span>
+
+<span class="n">NAME</span>         <span class="n">DESCRIPTION</span>                               <span class="n">DOCKER</span> <span class="n">ENDPOINT</span>               <span class="n">ERROR</span>
+<span class="n">default</span> <span class="o">*</span>    <span class="n">Current</span> <span class="n">DOCKER_HOST</span> <span class="n">based</span> <span class="n">configuration</span>   <span class="n">unix</span><span class="p">:</span><span class="o">///</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="o">.</span><span class="n">sock</span>
+<span class="n">node</span><span class="o">-</span><span class="n">amd64</span>   <span class="n">Current</span> <span class="n">DOCKER_HOST</span> <span class="n">based</span> <span class="n">configuration</span>   <span class="n">unix</span><span class="p">:</span><span class="o">///</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="o">.</span><span class="n">sock</span>
+<span class="n">node</span><span class="o">-</span><span class="n">arm64</span>                                             <span class="n">ssh</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">user_name</span><span class="o">&gt;@&lt;</span><span class="n">remote_host_ip_address</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">TARGET_HOST</span></code> contains something like: <code class="docutils literal notranslate"><span class="pre">&lt;user_name&gt;&#64;&lt;remote_host_ip_address&gt;</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The setup for the remote machine is still run on the main docker machine</p>
+</div>
+<p>Now you have your two contexts setup, you can incorporate them both into the same builder.
+See <a class="reference external" href="https://docs.docker.com/build/building/multi-platform/#multiple-native-nodes">this link</a>
+for documentation on how to do this.</p>
+<p>In our case, this will look something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">buildx</span> <span class="n">create</span> <span class="o">--</span><span class="n">use</span> <span class="o">--</span><span class="n">name</span> <span class="n">mybuilder</span> <span class="o">--</span><span class="n">platform</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm64</span> <span class="n">node</span><span class="o">-</span><span class="n">arm64</span>
+<span class="n">docker</span> <span class="n">buildx</span> <span class="n">create</span> <span class="o">--</span><span class="n">append</span> <span class="o">--</span><span class="n">name</span> <span class="n">mybuilder</span> <span class="o">--</span><span class="n">platform</span> <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span> <span class="n">node</span><span class="o">-</span><span class="n">amd64</span>
+</pre></div>
+</div>
+<p>You can check that the builder like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">buildx</span> <span class="n">ls</span>
+
+<span class="n">NAME</span><span class="o">/</span><span class="n">NODE</span>       <span class="n">DRIVER</span><span class="o">/</span><span class="n">ENDPOINT</span>             <span class="n">STATUS</span>  <span class="n">BUILDKIT</span> <span class="n">PLATFORMS</span>
+<span class="n">mybuilder</span> <span class="o">*</span>     <span class="n">docker</span><span class="o">-</span><span class="n">container</span>
+<span class="n">mybuilder0</span>    <span class="n">node</span><span class="o">-</span><span class="n">arm64</span>                  <span class="n">running</span> <span class="n">v0</span><span class="mf">.13.1</span>  <span class="n">linux</span><span class="o">/</span><span class="n">arm64</span><span class="o">*</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v7</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v6</span>
+<span class="n">mybuilder1</span>    <span class="n">node</span><span class="o">-</span><span class="n">amd64</span>                  <span class="n">running</span> <span class="n">v0</span><span class="mf">.13.1</span>  <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="o">*</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="o">/</span><span class="n">v2</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">riscv64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">ppc64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">ppc64le</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">s390x</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="mi">386</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">mips64le</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">mips64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v7</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v6</span>
+<span class="n">qemu_builder</span>    <span class="n">docker</span><span class="o">-</span><span class="n">container</span>
+<span class="n">qemu_builder0</span> <span class="n">unix</span><span class="p">:</span><span class="o">///</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="o">.</span><span class="n">sock</span> <span class="n">running</span> <span class="n">v0</span><span class="mf">.13.1</span>  <span class="n">linux</span><span class="o">/</span><span class="n">arm64</span><span class="o">*</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="o">*</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="o">/</span><span class="n">v2</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">riscv64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">ppc64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">ppc64le</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">s390x</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="mi">386</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">mips64le</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">mips64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v7</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v6</span>
+<span class="n">default</span>         <span class="n">docker</span>
+<span class="n">default</span>       <span class="n">default</span>                     <span class="n">running</span> <span class="n">v0</span><span class="mf">.12.5</span>  <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="o">/</span><span class="n">v2</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="mi">386</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">riscv64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">ppc64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">ppc64le</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">s390x</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">mips64le</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">mips64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v7</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v6</span>
+<span class="n">node</span><span class="o">-</span><span class="n">amd64</span>      <span class="n">docker</span>
+<span class="n">node</span><span class="o">-</span><span class="n">amd64</span>    <span class="n">node</span><span class="o">-</span><span class="n">amd64</span>                  <span class="n">running</span> <span class="n">v0</span><span class="mf">.12.5</span>  <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="o">/</span><span class="n">v2</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="o">/</span><span class="n">v3</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="mi">386</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">riscv64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">ppc64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">ppc64le</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">s390x</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">mips64le</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">mips64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v7</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v6</span>
+<span class="n">node</span><span class="o">-</span><span class="n">arm64</span>      <span class="n">docker</span>
+<span class="n">node</span><span class="o">-</span><span class="n">arm64</span>    <span class="n">node</span><span class="o">-</span><span class="n">arm64</span>                  <span class="n">running</span> <span class="n">v0</span><span class="mf">.12.5</span>  <span class="n">linux</span><span class="o">/</span><span class="n">arm64</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v7</span><span class="p">,</span> <span class="n">linux</span><span class="o">/</span><span class="n">arm</span><span class="o">/</span><span class="n">v6</span>
+</pre></div>
+</div>
+<p>Then to build your image, all you have to is run the build command and specify the new builder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">--</span><span class="n">builder</span> <span class="n">mybuilder</span> <span class="o">--</span><span class="n">platform</span><span class="o">=</span><span class="s2">&quot;linux/amd64,linux/arm64&quot;</span> <span class="o">-</span><span class="n">t</span> <span class="o">&lt;</span><span class="n">tag</span><span class="o">&gt;</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>For the same reference images as the QEMU builder, this took <strong>295 seconds</strong> (vs 863 seconds from the QEMU builder).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You will have to setup a push to registry if you want to keep the images, otherwise they are just kept in the cache.</p>
+</div>
+</section>
 </section>
 <hr class="docutils" />
 <section id="sources">

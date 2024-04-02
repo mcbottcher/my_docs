@@ -286,6 +286,168 @@ use a specific user other than root.
 
 ----
 
+Exporting an image to file
+--------------------------
+
+When you build an image/images, you can choose from a number of 
+`Export options <https://docs.docker.com/build/exporters/>`_.
+
+The ``docker`` option exports the build result to the local file system.
+It is possible to then load this image file into your local docker image registry.
+This could be on the same machine, or you could send this file to another machine and load it there.
+In this way, it is possible to build on one machine and export the image to be executed on another machine
+(as long as the platform that is built matches the platform where it is run).
+
+.. code-block:: shell
+    :caption: Example outputting to file
+
+    docker buildx build --platform="linux/arm64/v8" -t my_image:latest --output type=docker,dest=my_image.tar
+
+You can then load the image using:
+
+.. code-block:: shell
+
+    docker load -i my_image.tar
+
+This will show as ``my_image:latest``, since this is what we used with the ``-t`` option in the build command.
+
+.. note:: 
+    When tested, it was not possible to do this for multi-arch builds,
+    e.g. ``--platform="linux/arm64/v8,linux/amd64"``. For mutli-arch builds you will have to run the build 
+    commands separately.
+
+----
+
+Multi-architecture Targets
+--------------------------
+
+This section will give some info on how you can build docker images for multiple architecture target platforms.
+
+You can find some general documentation `here <https://docs.docker.com/build/building/multi-platform/>`_.
+
+In the examples given below, we are going to be building an image for two target architectures,
+*arm64* and *amd64*. This will be done from a host machine using amd64.
+
+Building with QEMU
+^^^^^^^^^^^^^^^^^^
+
+Since we are using an amd64 machine, we can easily build images targeting amd64.
+To build arm64 images on this machine, one technique is to use the QEMU feature of the docker builder,
+to emulate an arm64 machine and build an image for that.
+
+.. note:: 
+    For building the multiarch images, we will be using docker buildx
+
+First you will want to create a builder instance which is capable of building images for multiple architectures:
+
+.. code-block:: shell
+
+    docker buildx create --bootstrap --name qemu_builder --platform="linux/arm64,linux/amd64"
+
+You can confirm this has been made by running:
+
+.. code-block:: shell
+
+    docker buildx ls
+
+You can then build using:
+
+.. code-block:: shell
+
+    docker build --builder qemu_builder --platform="linux/amd64,linux/arm64" -t <tag> .
+
+For reference, a test build I did took **863 seconds**.
+
+Building with Native machines
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Using `Docker Contexts <https://docs.docker.com/engine/context/working-with-contexts/>`_ 
+it is possible to build on a remote docker builder.
+
+This means we can build our amd64 image locally, and the arm64 image on another machine, 
+using the same docker build command. If this other machine uses arm64 architecture e.g. 
+RaspberryPi 5, then the build will not need to use QEMU and will be much faster since it is 
+building for its native architecture.
+
+To achieve this you will have to setup two context nodes, one on you local machine and one on the remote machine:
+
+1. **Local machine (amd64):**
+
+.. code-block::
+
+    docker context create node-amd64
+    
+    docker context ls
+
+    NAME         DESCRIPTION                               DOCKER ENDPOINT               ERROR
+    default *    Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   
+    node-amd64   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock
+
+As shown a new docker context using the host machines configuration has been created.
+
+2. **Remote Machine (RPi5 - arm64):** You will want to make sure that your remote machine has an ssh
+   client and docker installed. `This Guide <https://thenewstack.io/connect-to-remote-docker-machines-with-docker-context/>`_
+   can help with setting up the remote host ssh.
+
+.. code-block:: 
+
+    docker context create node-arm64 --docker "host=ssh://$TARGET_HOST"
+
+    docker context ls
+
+    NAME         DESCRIPTION                               DOCKER ENDPOINT               ERROR
+    default *    Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   
+    node-amd64   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   
+    node-arm64                                             ssh://<user_name>@<remote_host_ip_address> 
+
+Where ``TARGET_HOST`` contains something like: ``<user_name>@<remote_host_ip_address>``.
+
+.. note:: 
+    The setup for the remote machine is still run on the main docker machine
+
+Now you have your two contexts setup, you can incorporate them both into the same builder. 
+See `this link <https://docs.docker.com/build/building/multi-platform/#multiple-native-nodes>`_ 
+for documentation on how to do this.
+
+In our case, this will look something like this:
+
+.. code-block:: 
+
+    docker buildx create --use --name mybuilder --platform linux/arm64 node-arm64
+    docker buildx create --append --name mybuilder --platform linux/amd64 node-amd64
+
+You can check that the builder like so:
+
+.. code-block:: 
+
+    docker buildx ls
+    
+    NAME/NODE       DRIVER/ENDPOINT             STATUS  BUILDKIT PLATFORMS
+    mybuilder *     docker-container                             
+    mybuilder0    node-arm64                  running v0.13.1  linux/arm64*, linux/arm/v7, linux/arm/v6
+    mybuilder1    node-amd64                  running v0.13.1  linux/amd64*, linux/amd64/v2, linux/amd64/v3, linux/arm64, linux/riscv64, linux/ppc64, linux/ppc64le, linux/s390x, linux/386, linux/mips64le, linux/mips64, linux/arm/v7, linux/arm/v6
+    qemu_builder    docker-container                             
+    qemu_builder0 unix:///var/run/docker.sock running v0.13.1  linux/arm64*, linux/amd64*, linux/amd64/v2, linux/amd64/v3, linux/riscv64, linux/ppc64, linux/ppc64le, linux/s390x, linux/386, linux/mips64le, linux/mips64, linux/arm/v7, linux/arm/v6
+    default         docker                                       
+    default       default                     running v0.12.5  linux/amd64, linux/amd64/v2, linux/amd64/v3, linux/386, linux/arm64, linux/riscv64, linux/ppc64, linux/ppc64le, linux/s390x, linux/mips64le, linux/mips64, linux/arm/v7, linux/arm/v6
+    node-amd64      docker                                       
+    node-amd64    node-amd64                  running v0.12.5  linux/amd64, linux/amd64/v2, linux/amd64/v3, linux/386, linux/arm64, linux/riscv64, linux/ppc64, linux/ppc64le, linux/s390x, linux/mips64le, linux/mips64, linux/arm/v7, linux/arm/v6
+    node-arm64      docker                                       
+    node-arm64    node-arm64                  running v0.12.5  linux/arm64, linux/arm/v7, linux/arm/v6
+
+Then to build your image, all you have to is run the build command and specify the new builder:
+
+.. code-block:: 
+
+    docker build --builder mybuilder --platform="linux/amd64,linux/arm64" -t <tag> .
+
+For the same reference images as the QEMU builder, this took **295 seconds** (vs 863 seconds from the QEMU builder).
+
+.. note:: 
+    You will have to setup a push to registry if you want to keep the images, otherwise they are just kept in the cache.
+
+----
+
 Sources
 -------
 
