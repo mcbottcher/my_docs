@@ -64,7 +64,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#range-length-looping">Range Length Looping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#zip">Zip</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#timing-code">Timing code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#text-attributes">Text Attributes</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#handling-signals">Handling Signals</a></li>
 </ul>
@@ -100,6 +103,18 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#dis-disassembler">dis - Disassembler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#argument-parsing-with-argparse">Argument Parsing with <code class="docutils literal notranslate"><span class="pre">argparse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#http-server-and-client">http Server and Client</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#client">Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#server">Server</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-gunicorn">Using Gunicorn</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#match">match</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#docker-package">Docker package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-sheilds-for-github">Generating sheilds for Github</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
@@ -330,6 +345,65 @@ to the console for example.</p>
 <p class="admonition-title">Note</p>
 <p>You can use the logging level <cite>exception</cite> if you want to print a stack trace with your log message</p>
 </div>
+<p>One way you can change the formatting behaviour of your logger is to make your own custom
+logging formatter and use that (in the <code class="docutils literal notranslate"><span class="pre">setFormatter</span></code> function)</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example using custom logging formatter</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CustomFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
+
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">pre_pend_newline</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+      <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+      <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+  <span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_pre_pend_newline</span> <span class="o">=</span> <span class="n">pre_pend_newline</span>
+      <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+      <span class="n">multiline_formatted_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_mutliline_formatted_output</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_pend_newline</span><span class="p">:</span>
+          <span class="n">multiline_formatted_output</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">multiline_formatted_output</span>
+
+      <span class="k">return</span> <span class="n">multiline_formatted_output</span>
+
+  <span class="k">def</span> <span class="nf">_get_mutliline_formatted_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+      <span class="c1"># Some logs are given as a list</span>
+      <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+          <span class="n">split_msg</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+          <span class="n">formatted_msgs</span> <span class="o">=</span> <span class="p">[]</span>
+          <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">split_msg</span><span class="p">:</span>
+              <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span>
+              <span class="n">formatted_msgs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="p">))</span>
+          <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">formatted_msgs</span><span class="p">)</span>
+
+      <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="text-attributes">
+<h3>Text Attributes<a class="headerlink" href="#text-attributes" title="Permalink to this heading"></a></h3>
+<p>You can add text attributes to your log messages to make them more colourful/stand out</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example using text attributes</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TextAttribute</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enum of Text Attributes which can be applied to prints</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">YELLOW</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[33;20m&quot;</span>
+    <span class="n">RED</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[31;20m&quot;</span>
+    <span class="n">BOLD_RED</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[31;1m&quot;</span>
+    <span class="n">CYAN</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[36;20m&quot;</span>
+    <span class="n">BOLD_PURPLE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[35;1m&quot;</span>
+    <span class="n">BOLD_ONLY</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[1m&quot;</span>
+    <span class="c1"># Inverted doesn&#39;t seem to be supported in the github actions output console</span>
+    <span class="n">INVERTED</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[7m&quot;</span>
+    <span class="n">RESET</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">[0m&quot;</span>
+</pre></div>
+</div>
+</div>
+</section>
 </section>
 <section id="exceptions">
 <h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this heading"></a></h2>
@@ -373,8 +447,8 @@ to the console for example.</p>
 <ul class="simple">
 <li><p>It is also possible to catch an exception, run some code, then re-raise the exception:</p></li>
 </ul>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">Example re-raising an exception</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Example re-raising an exception</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
   <span class="k">raise</span> <span class="n">MyException</span>
 <span class="k">except</span><span class="p">:</span>
@@ -392,8 +466,8 @@ Keyboard interrupts like CTRL+C. You can specify to catch these with <code class
 <section id="handling-signals">
 <h3>Handling Signals<a class="headerlink" href="#handling-signals" title="Permalink to this heading"></a></h3>
 <p>You can set functions for handling specified signals in python:</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">Example setting a Signal Handler</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Example setting a Signal Handler</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="kn">import</span> <span class="nn">signal</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -537,8 +611,8 @@ arguments and return value, which can be done using <code class="docutils litera
 <p>You can dump an object’s value to a file so it can be stored in non-volatile memory.
 Maybe you want to save some things but don’t have enough RAM to store everything at once</p>
 <p>Objects need to be written in a binary format:</p>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">Example storing an object to memory and retreiving it</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Example storing an object to memory and retreiving it</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
 
 <span class="n">my_var</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
@@ -575,8 +649,8 @@ source code for example.</p>
 <section id="named-tuple">
 <h2>Named Tuple<a class="headerlink" href="#named-tuple" title="Permalink to this heading"></a></h2>
 <p>A named tuple allows you to use a tuple but read the elements in that tuple by name.</p>
-<div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">Example using named tuple</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Example using named tuple</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 
 <span class="n">Color</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;Color&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">])</span>
@@ -607,8 +681,8 @@ PATH search so it is easier to specify imports etc.</p>
 <h3>Making a package<a class="headerlink" href="#making-a-package" title="Permalink to this heading"></a></h3>
 <p>A more recent way to package a project is to use a <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.
 You will want your directory structure to look something like this:</p>
-<div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">Example folder structure</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Example folder structure</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
 ├── &lt;package_name&gt;
 │   ├── __init__.py
@@ -621,8 +695,8 @@ You will want your directory structure to look something like this:</p>
 </div>
 </div>
 <p>In your pyproject.toml you’ll want something like this:</p>
-<div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">Example pyproject.toml</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Example pyproject.toml using setup tools</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
 <div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[build-system]</span>
 <span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;setuptools&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;setuptools-scm&quot;</span><span class="p">]</span>
 <span class="n">build-backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;setuptools.build_meta&quot;</span>
@@ -635,17 +709,41 @@ You will want your directory structure to look something like this:</p>
 </pre></div>
 </div>
 </div>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">Example using poetry</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[tool.poetry]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot; &lt;package name&gt; &quot;</span>
+<span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot; &lt;package version&gt; &quot;</span>
+<span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot; &lt;description&gt; &quot;</span>
+<span class="n">license</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;CLOSED&quot;</span>
+<span class="n">authors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot; &lt;authors&gt; &quot;</span><span class="p">]</span>
+<span class="n">readme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;README.md&quot;</span>
+<span class="n">packages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&lt;path_to_package&gt;&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+
+<span class="k">[tool.poetry.dependencies]</span>
+<span class="n">python</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&gt;=3.8&quot;</span>
+<span class="n">pydantic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;==2.6.3&quot;</span>
+<span class="n">PyYAML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;==6.0.1&quot;</span>
+
+<span class="k">[build-system]</span>
+<span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;poetry-core&quot;</span><span class="p">]</span>
+<span class="n">build-backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;poetry.core.masonry.api&quot;</span>
+</pre></div>
+</div>
+</div>
 <p>Inside your <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> file, you’ll want to include the types that you want immediately accessable in
 your package. This basically runs when you first import your package into your current project.</p>
-<div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">Example __init__.py</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">Example __init__.py</span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">.module_one</span> <span class="kn">import</span> <span class="n">ObjectOne</span>
 <span class="kn">from</span> <span class="nn">.module_two</span> <span class="kn">import</span> <span class="n">ObjectTwo</span>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">Example module</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">Example module</span><a class="headerlink" href="#id14" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">.libraries.library_one</span> <span class="kn">import</span> <span class="n">ObjectLib</span>
 
 <span class="k">class</span> <span class="nc">ObjectOne</span><span class="p">:</span>
@@ -670,8 +768,8 @@ manage execution time.</p>
 for the interpreter to do other tasks while this is happening.</p>
 <p>Mutliprocessing in python is different and this is where a new interpreter and memory space is spawned for
 each new process you make.</p>
-<div class="literal-block-wrapper docutils container" id="id12">
-<div class="code-block-caption"><span class="caption-text">Example of a multi-threaded program</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">Example of a multi-threaded program</span><a class="headerlink" href="#id15" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
@@ -706,8 +804,8 @@ need to consider how to deal with exceptions happening inside a thread you have 
 </div>
 <p>Obviously, mutliple threads accessing the same resource at a time could cause issues.
 Threading provides a mutex lock to allow resources to be used only by one thread at a time</p>
-<div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">Example using mutex lock</span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id16">
+<div class="code-block-caption"><span class="caption-text">Example using mutex lock</span><a class="headerlink" href="#id16" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">threading</span>
 
 <span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
@@ -740,8 +838,8 @@ Threading provides a mutex lock to allow resources to be used only by one thread
 </ol>
 <section id="decorate-functions">
 <h3>Decorate functions<a class="headerlink" href="#decorate-functions" title="Permalink to this heading"></a></h3>
-<div class="literal-block-wrapper docutils container" id="id14">
-<div class="code-block-caption"><span class="caption-text">Example using a custom decorator function</span><a class="headerlink" href="#id14" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-text">Example using a custom decorator function</span><a class="headerlink" href="#id17" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
 
   <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="n">kwargs</span><span class="p">):</span>
@@ -776,8 +874,8 @@ where <code class="docutils literal notranslate"><span class="pre">func</span></
 <section id="decorate-classes">
 <h3>Decorate classes<a class="headerlink" href="#decorate-classes" title="Permalink to this heading"></a></h3>
 <p>It is also possible use classes to decorate a function too.</p>
-<div class="literal-block-wrapper docutils container" id="id15">
-<div class="code-block-caption"><span class="caption-text">Example using a Class decorator. <a class="reference external" href="https://www.freecodecamp.org/news/python-decorators-explained-with-examples/">Source</a></span><a class="headerlink" href="#id15" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id18">
+<div class="code-block-caption"><span class="caption-text">Example using a Class decorator. <a class="reference external" href="https://www.freecodecamp.org/news/python-decorators-explained-with-examples/">Source</a></span><a class="headerlink" href="#id18" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LimitQuery</span><span class="p">:</span>
 
   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
@@ -812,8 +910,8 @@ where <code class="docutils literal notranslate"><span class="pre">func</span></
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id16">
-<div class="code-block-caption"><span class="caption-text">Output</span><a class="headerlink" href="#id16" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id19">
+<div class="code-block-caption"><span class="caption-text">Output</span><a class="headerlink" href="#id19" title="Permalink to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$35968.25
 $35896.55
 $34368.14
@@ -831,8 +929,8 @@ No queries left. All 5 queries used.
 <p>Context managers let you use an object within a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement.
 When it is in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement, it will call the <code class="docutils literal notranslate"><span class="pre">__enter__</span></code> method. At the end it will call
 the <code class="docutils literal notranslate"><span class="pre">__exit__</span></code> method.</p>
-<div class="literal-block-wrapper docutils container" id="id17">
-<div class="code-block-caption"><span class="caption-text">Example using context manager</span><a class="headerlink" href="#id17" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id20">
+<div class="code-block-caption"><span class="caption-text">Example using context manager</span><a class="headerlink" href="#id20" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
 
   <span class="c1"># called when object is created</span>
@@ -873,6 +971,19 @@ the <code class="docutils literal notranslate"><span class="pre">__exit__</span>
 </pre></div>
 </div>
 </div>
+<p>You can also using a package like <code class="docutils literal notranslate"><span class="pre">contextlib</span></code> to create a context manager:</p>
+<div class="literal-block-wrapper docutils container" id="id21">
+<div class="code-block-caption"><span class="caption-text">Example using contextlib</span><a class="headerlink" href="#id21" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">contextlib</span>
+
+<span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">switch_logging</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_switch_to_test_logging</span><span class="p">(</span><span class="n">test_name</span><span class="o">=</span><span class="n">test_name</span><span class="p">)</span>
+    <span class="k">yield</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_switch_back_logging</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
 <section id="exception-handling">
 <h3>Exception Handling<a class="headerlink" href="#exception-handling" title="Permalink to this heading"></a></h3>
 <p>You can handle exceptions that occur within the context in the <code class="docutils literal notranslate"><span class="pre">__exit__</span></code> method.
@@ -900,8 +1011,8 @@ This section will look a bit into using pydantic with yaml/json file inputs.</p>
 or json config file should contain. Pydantic uses this schema to validate an input from a yaml or
 json file. It can also output a schema file which you can use for type completion and error checking
 on a yaml or json file.</p>
-<div class="literal-block-wrapper docutils container" id="id18">
-<div class="code-block-caption"><span class="caption-text">Example generating schema</span><a class="headerlink" href="#id18" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id22">
+<div class="code-block-caption"><span class="caption-text">Example generating schema</span><a class="headerlink" href="#id22" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydantic</span>
 <span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">import</span> <span class="nn">json</span>
@@ -927,8 +1038,8 @@ put in an <code class="docutils literal notranslate"><span class="pre">age</span
 <p>The schema can be applied in Vscode to yaml files by installing the yaml extension, then going
 to <code class="docutils literal notranslate"><span class="pre">Prefernce</span> <span class="pre">&gt;</span> <span class="pre">Settings</span></code>. Here you can modify the <code class="docutils literal notranslate"><span class="pre">settings.json</span></code> file (either for the User or
 the workspace) with something like this:</p>
-<div class="literal-block-wrapper docutils container" id="id19">
-<div class="code-block-caption"><span class="caption-text">Example for applying a schema to all yaml files called <code class="docutils literal notranslate"><span class="pre">my_configs.yml</span></code></span><a class="headerlink" href="#id19" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id23">
+<div class="code-block-caption"><span class="caption-text">Example for applying a schema to all yaml files called <code class="docutils literal notranslate"><span class="pre">my_configs.yml</span></code></span><a class="headerlink" href="#id23" title="Permalink to this code"></a></div>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;yaml.schemas&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;./schemas/my_schema.json&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_configs.yml&quot;</span>
 <span class="p">},</span>
@@ -939,8 +1050,8 @@ the workspace) with something like this:</p>
 <section id="validation">
 <h3>Validation<a class="headerlink" href="#validation" title="Permalink to this heading"></a></h3>
 <p>Validation can be performed in a few ways:</p>
-<div class="literal-block-wrapper docutils container" id="id20">
-<div class="code-block-caption"><span class="caption-text">Two examples of validation</span><a class="headerlink" href="#id20" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id24">
+<div class="code-block-caption"><span class="caption-text">Two examples of validation</span><a class="headerlink" href="#id24" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydantic</span>
 <span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
@@ -976,8 +1087,8 @@ For example, <code class="docutils literal notranslate"><span class="pre">ipaddr
 <p>For more complex types, e.g. 3rd party for example, some extra steps have to be performed for
 successful schema production and parsing.</p>
 <p>Here we have an example using <code class="docutils literal notranslate"><span class="pre">semver.Version</span></code></p>
-<div class="literal-block-wrapper docutils container" id="id21">
-<div class="code-block-caption"><span class="caption-text">Example using <code class="docutils literal notranslate"><span class="pre">semver.Verison</span></code></span><a class="headerlink" href="#id21" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id25">
+<div class="code-block-caption"><span class="caption-text">Example using <code class="docutils literal notranslate"><span class="pre">semver.Verison</span></code></span><a class="headerlink" href="#id25" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydantic</span>
 <span class="kn">from</span> <span class="nn">pydantic.dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">import</span> <span class="nn">semver</span>
@@ -1028,6 +1139,40 @@ a <code class="docutils literal notranslate"><span class="pre">semver.Version</s
 1. It means intellisense will see <code class="docutils literal notranslate"><span class="pre">version</span></code> as a <code class="docutils literal notranslate"><span class="pre">semver.Version</span></code> so you can tab complete with it.
 2. It will make the schema produced use the <code class="docutils literal notranslate"><span class="pre">SchemaVersion</span></code>, so you have a way to produce the third
 party type that yaml will allow.</p>
+<p>Another thing pydantic does is to use Enum value in the schema instead of names. This can be annoying
+if you are for example using IntEnum, since you would have to use numbers which loses human readablility.</p>
+<div class="literal-block-wrapper docutils container" id="id26">
+<div class="code-block-caption"><span class="caption-text">Example using enum values</span><a class="headerlink" href="#id26" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">HandleAsNames</span><span class="p">(</span><span class="n">handled_type</span><span class="p">:</span> <span class="n">Enum</span><span class="p">):</span>
+  <span class="c1"># Define a function to dynamically create an Enum</span>
+  <span class="k">def</span> <span class="nf">create_enum</span><span class="p">(</span><span class="n">enum_name</span><span class="p">,</span> <span class="n">enum_members</span><span class="p">):</span>
+      <span class="k">return</span> <span class="n">Enum</span><span class="p">(</span>
+          <span class="n">enum_name</span><span class="p">,</span>
+          <span class="p">{</span>
+              <span class="n">member_name</span><span class="p">:</span> <span class="n">member_value</span><span class="o">.</span><span class="n">name</span>
+              <span class="k">for</span> <span class="n">member_name</span><span class="p">,</span> <span class="n">member_value</span> <span class="ow">in</span> <span class="n">enum_members</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+          <span class="p">},</span>
+      <span class="p">)</span>
+
+  <span class="c1"># This basically creates a new Enum type for pydantic to use when it is generating its schema.</span>
+  <span class="c1"># This new enum will use the names of the original enum as its values, so the user can select</span>
+  <span class="c1"># options based on the original enum&#39;s names. (pydantic only allows selecting enums based on value).</span>
+  <span class="k">return</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">GetPydanticSchema</span><span class="p">(</span>
+      <span class="k">lambda</span> <span class="n">_s</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="n">h</span><span class="p">(</span>
+          <span class="n">create_enum</span><span class="p">(</span><span class="s2">&quot;SchemaType&quot;</span> <span class="o">+</span> <span class="n">handled_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">handled_type</span><span class="o">.</span><span class="n">__members__</span><span class="p">)</span>
+      <span class="p">)</span>
+  <span class="p">)</span>
+
+<span class="nd">@pydantic</span><span class="o">.</span><span class="n">dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="k">class</span> <span class="nc">LoggerConfig</span><span class="p">:</span>
+    <span class="n">level</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">LogLevel</span><span class="p">,</span> <span class="n">HandleAsNames</span><span class="p">(</span><span class="n">handled_type</span><span class="o">=</span><span class="n">LogLevel</span><span class="p">)]</span> <span class="o">=</span> <span class="n">LogLevel</span><span class="o">.</span><span class="n">WARNING</span>
+
+    <span class="nd">@pydantic</span><span class="o">.</span><span class="n">field_validator</span><span class="p">(</span><span class="s2">&quot;level&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">validate_level</span><span class="p">(</span><span class="n">level</span><span class="p">:</span> <span class="n">Enum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LogLevel</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="n">LogLevel</span><span class="p">[</span><span class="n">level</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
 </section>
 </section>
 <hr class="docutils" />
@@ -1036,18 +1181,270 @@ party type that yaml will allow.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">dis</span></code> module allows you to view the compiled byte code for CPython. This can be useful for a
 number of things, including maybe evaluating the performance of your code.</p>
 <p>You can use the <code class="docutils literal notranslate"><span class="pre">dis</span></code> module both in your python script and as a command line tool.</p>
-<div class="literal-block-wrapper docutils container" id="id22">
-<div class="code-block-caption"><span class="caption-text">Example of using <code class="docutils literal notranslate"><span class="pre">dis</span></code> from the command line</span><a class="headerlink" href="#id22" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id27">
+<div class="code-block-caption"><span class="caption-text">Example of using <code class="docutils literal notranslate"><span class="pre">dis</span></code> from the command line</span><a class="headerlink" href="#id27" title="Permalink to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">dis</span> <span class="o">&lt;</span><span class="n">python_file</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id23">
-<div class="code-block-caption"><span class="caption-text">Example disassembling a function in a script</span><a class="headerlink" href="#id23" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id28">
+<div class="code-block-caption"><span class="caption-text">Example disassembling a function in a script</span><a class="headerlink" href="#id28" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+</section>
+<hr class="docutils" />
+<section id="argument-parsing-with-argparse">
+<h2>Argument Parsing with <code class="docutils literal notranslate"><span class="pre">argparse</span></code><a class="headerlink" href="#argument-parsing-with-argparse" title="Permalink to this heading"></a></h2>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">argparse</span></code> package to manage passing arguments to your python script.</p>
+<div class="literal-block-wrapper docutils container" id="id29">
+<div class="code-block-caption"><span class="caption-text">Example using argparse</span><a class="headerlink" href="#id29" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+    <span class="s2">&quot;--age&quot;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The age of the person.&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+    <span class="s2">&quot;--name&quot;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The name of the person&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">default</span><span class="o">=</span><span class="s2">&quot;Bob&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># example of passing a flag</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+  <span class="s2">&quot;--european&quot;</span><span class="p">,</span>
+  <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+  <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Flag if set indicates the person is European.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+<span class="n">age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">age</span>
+<span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span>
+<span class="n">is_european</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">european</span>
+</pre></div>
+</div>
+</div>
+<p>With this, if you run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">&lt;you_script&gt;</span> <span class="pre">--help</span></code>, <code class="docutils literal notranslate"><span class="pre">argparse</span></code> will show you the command line
+argument options specified in your script.</p>
+</section>
+<hr class="docutils" />
+<section id="http-server-and-client">
+<h2>http Server and Client<a class="headerlink" href="#http-server-and-client" title="Permalink to this heading"></a></h2>
+<section id="client">
+<h3>Client<a class="headerlink" href="#client" title="Permalink to this heading"></a></h3>
+<p>You can use the python <code class="docutils literal notranslate"><span class="pre">requests</span></code> package to make http requests to a server.</p>
+<div class="literal-block-wrapper docutils container" id="id30">
+<div class="code-block-caption"><span class="caption-text">Example making a GET request</span><a class="headerlink" href="#id30" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="c1"># Server is at IP address 10.0.0.20 and we are using port 4000</span>
+<span class="n">SERVER_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;http://10.0.0.20:4000/people&quot;</span>
+
+<span class="k">def</span> <span class="nf">get_people_info</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">SERVER_BASE_URL</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>It is also possible to use web endpoints:</p>
+<div class="literal-block-wrapper docutils container" id="id31">
+<div class="code-block-caption"><span class="caption-text">Example accessing Github API</span><a class="headerlink" href="#id31" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">GITHUB_API_VERSION</span> <span class="o">=</span> <span class="s2">&quot;2022-11-28&quot;</span>
+
+<span class="n">ORG_RUNNERS_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://api.github.com/orgs/&lt;org_name&gt;/actions/runners&quot;</span>
+
+<span class="k">def</span> <span class="nf">_construct_api_headers</span><span class="p">(</span><span class="n">org_access_token</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.github+json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">org_access_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;X-GitHub-Api-Version&quot;</span><span class="p">:</span> <span class="n">GITHUB_API_VERSION</span><span class="p">,</span>
+    <span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">set_custom_labels_for_runner</span><span class="p">(</span>
+        <span class="n">org_access_token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">runner_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ORG_RUNNERS_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">runner_id</span><span class="si">}</span><span class="s2">/labels&quot;</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="n">_construct_api_headers</span><span class="p">(</span><span class="n">org_access_token</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_organizational_runners_info</span><span class="p">(</span>
+        <span class="n">org_access_token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">query_per_page</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">query_page</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="n">_construct_api_headers</span><span class="p">(</span><span class="n">org_access_token</span><span class="p">)</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="n">query_per_page</span><span class="p">,</span>
+        <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="n">query_page</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ORG_RUNNERS_BASE_URL</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can use the package <code class="docutils literal notranslate"><span class="pre">http</span></code> to get <code class="docutils literal notranslate"><span class="pre">HTTPStatus</span></code> enums</p>
+</div>
+</section>
+<section id="server">
+<h3>Server<a class="headerlink" href="#server" title="Permalink to this heading"></a></h3>
+<p>A server application can be implemented with flask.</p>
+<div class="literal-block-wrapper docutils container" id="id32">
+<div class="code-block-caption"><span class="caption-text">Example flask app</span><a class="headerlink" href="#id32" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">from</span> <span class="nn">flasgger</span> <span class="kn">import</span> <span class="n">Swagger</span>
+<span class="kn">from</span> <span class="nn">http</span> <span class="kn">import</span> <span class="n">HTTPStatus</span>
+
+<span class="kn">import</span> <span class="nn">custom_services</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">Swagger</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/people&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">peopl_info_get</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">custom_services</span><span class="o">.</span><span class="n">get_people_info</span><span class="p">(),</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/people/&lt;int:person_id&gt;/name&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">person_name_get</span><span class="p">(</span><span class="n">person_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">custom_services</span><span class="o">.</span><span class="n">get_person_name</span><span class="p">(</span><span class="n">person_id</span><span class="o">=</span><span class="n">person_id</span><span class="p">),</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error_message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">INTERNAL_SERVER_ERROR</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/people/&lt;int:person_id&gt;/name&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">person_name_post</span><span class="p">(</span><span class="n">person_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error_message&quot;</span><span class="p">:</span> <span class="s2">&quot;name not in string format&quot;</span><span class="p">},</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">BAD_REQUEST</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">custom_services</span><span class="o">.</span><span class="n">add_name_to_person</span><span class="p">(</span><span class="n">person_id</span><span class="o">=</span><span class="n">person_id</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span><span class="o">.</span><span class="n">phrase</span><span class="p">,</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error_message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">INTERNAL_SERVER_ERROR</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/people/&lt;int:person_id&gt;/name/&lt;string:name&gt;&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">person_name_delete</span><span class="p">(</span><span class="n">person_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">custom_services</span><span class="o">.</span><span class="n">delete_name_from_person</span><span class="p">(</span><span class="n">person_id</span><span class="o">=</span><span class="n">person_id</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span><span class="o">.</span><span class="n">phrase</span><span class="p">,</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error_message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">INTERNAL_SERVER_ERROR</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>With a server implemented in a flask app, it can be run in development mode
+with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">flask_server.py</span></code>.</p>
+<p>To run in deployed mode, one should use a dedicated WSGI server. See the flask
+documentation: <a class="reference external" href="https://flask.palletsprojects.com/en/2.3.x/deploying/">Flask docs</a></p>
+<section id="using-gunicorn">
+<h4>Using Gunicorn<a class="headerlink" href="#using-gunicorn" title="Permalink to this heading"></a></h4>
+<p>One of the WSGI servers in Gunicorn. Simply intstall with pip, and then run
+your flask app.</p>
+<p>For example: <code class="docutils literal notranslate"><span class="pre">gunicorn</span> <span class="pre">-b</span> <span class="pre">0.0.0.0:4000</span> <span class="pre">flask_server:app</span></code></p>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="match">
+<h2>match<a class="headerlink" href="#match" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">match</span></code> was introduced in python 3.10 and is a solution for switch type statements.</p>
+<div class="literal-block-wrapper docutils container" id="id33">
+<div class="code-block-caption"><span class="caption-text">Example of match statement</span><a class="headerlink" href="#id33" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pytest_exit_code</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="k">match</span> <span class="n">pytest_exit_code</span><span class="p">:</span>
+    <span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All tests were collected and passed successfully&quot;</span><span class="p">)</span>
+    <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tests were collected and run but some of the tests failed&quot;</span><span class="p">)</span>
+    <span class="k">case</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test execution was interrupted by the user&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">case</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Internal error happened while executing tests&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">case</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pytest command line usage error&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">case</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No tests were collected&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unhandled exit code: </span><span class="si">{</span><span class="n">container_command_exit_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="docker-package">
+<h2>Docker package<a class="headerlink" href="#docker-package" title="Permalink to this heading"></a></h2>
+<p>There is a docker python package that lets you interact with docker from python.</p>
+<div class="literal-block-wrapper docutils container" id="id34">
+<div class="code-block-caption"><span class="caption-text">Docker package example</span><a class="headerlink" href="#id34" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">docker</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">docker</span><span class="o">.</span><span class="n">from_env</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+
+<span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">(</span>
+    <span class="n">username</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">access_token</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">registry</span>
+<span class="p">)</span>
+
+<span class="n">pull_stream</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">pull</span><span class="p">(</span>
+    <span class="n">repository</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">image_name</span><span class="p">,</span>
+    <span class="n">tag</span><span class="o">=</span><span class="n">inputs</span><span class="o">.</span><span class="n">image_tag</span><span class="p">,</span>
+    <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pull_stream</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">volumes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inputs</span><span class="o">.</span><span class="n">path_to_artifacts</span><span class="si">}</span><span class="s2">:/home/user/artifacts/&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">dtf_container</span><span class="p">:</span> <span class="n">Container</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">containers</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">image</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inputs</span><span class="o">.</span><span class="n">image_name</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">inputs</span><span class="o">.</span><span class="n">image_tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">detach</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">stderr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">privileged</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">volumes</span><span class="o">=</span><span class="n">volumes</span><span class="p">,</span>
+    <span class="n">command</span><span class="o">=</span><span class="n">_build_command</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">log_stream</span> <span class="o">=</span> <span class="n">dtf_container</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">log_stream</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+<span class="n">exit_status</span> <span class="o">=</span> <span class="n">dtf_container</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="n">container_command_exit_code</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">exit_status</span><span class="p">[</span><span class="s2">&quot;StatusCode&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="generating-sheilds-for-github">
+<h2>Generating sheilds for Github<a class="headerlink" href="#generating-sheilds-for-github" title="Permalink to this heading"></a></h2>
+<p>You can generate shields/badges for github and other platforms by generating an svg
+file.</p>
+<p>You can construct a URL using the base of <code class="docutils literal notranslate"><span class="pre">&quot;https://img.shields.io/badge&quot;</span></code> to generate
+an svg sheild.</p>
 </section>
 </section>
 

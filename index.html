@@ -138,6 +138,7 @@ Check out my <a class="reference external" href="https://www.linkedin.com/in/mik
 <li class="toctree-l2"><a class="reference internal" href="docker.html#dockerfiles">Dockerfiles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docker.html#docker-volumes">Docker Volumes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docker.html#docker-compose">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker.html#example-dockerfile">Example Dockerfile</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docker.html#sources">Sources</a></li>
 </ul>
 </li>
@@ -147,6 +148,7 @@ Check out my <a class="reference external" href="https://www.linkedin.com/in/mik
 <li class="toctree-l2"><a class="reference internal" href="pytest.html#test-classes">Test Classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pytest.html#fixtures">Fixtures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pytest.html#using-fixtures-for-setup-and-teardown">Using fixtures for setup and teardown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pytest.html#choosing-fixtures-at-run-time">Choosing fixtures at run-time</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="pytest.html#conftest-py">conftest.py</a></li>
@@ -156,6 +158,8 @@ Check out my <a class="reference external" href="https://www.linkedin.com/in/mik
 <li class="toctree-l2"><a class="reference internal" href="pytest.html#pytest-hooks">PyTest Hooks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pytest.html#options">Options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pytest.html#running-multiple-instances-of-pytest-on-the-same-code">Running multiple instances of pytest on the same code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pytest.html#output-parsing">Output Parsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pytest.html#command-line-arguments">Command line arguments</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pytest.html#sources">Sources</a></li>
 </ul>
 </li>
@@ -212,6 +216,7 @@ Check out my <a class="reference external" href="https://www.linkedin.com/in/mik
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="systemd.html#systemd-management">SystemD Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemd.html#example-adding-a-custom-service">Example adding a custom service</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python.html">🐍 Python</a><ul>
@@ -225,7 +230,10 @@ Check out my <a class="reference external" href="https://www.linkedin.com/in/mik
 <li class="toctree-l2"><a class="reference internal" href="python.html#range-length-looping">Range Length Looping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python.html#zip">Zip</a></li>
 <li class="toctree-l2"><a class="reference internal" href="python.html#timing-code">Timing code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#logging">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#logging">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python.html#text-attributes">Text Attributes</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="python.html#exceptions">Exceptions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="python.html#handling-signals">Handling Signals</a></li>
 </ul>
@@ -261,6 +269,18 @@ Check out my <a class="reference external" href="https://www.linkedin.com/in/mik
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="python.html#dis-disassembler">dis - Disassembler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#argument-parsing-with-argparse">Argument Parsing with <code class="docutils literal notranslate"><span class="pre">argparse</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#http-server-and-client">http Server and Client</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python.html#client">Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python.html#server">Server</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="python.html#using-gunicorn">Using Gunicorn</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#match">match</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#docker-package">Docker package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python.html#generating-sheilds-for-github">Generating sheilds for Github</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="linux_commands.html">Linux Commands</a></li>
@@ -313,6 +333,7 @@ Check out my <a class="reference external" href="https://www.linkedin.com/in/mik
 <li class="toctree-l2"><a class="reference internal" href="bash.html#exec-command">exec command</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bash.html#bash-eval-statement">Bash eval statement</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bash.html#print-colour-to-the-console">Print Colour to the console</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bash.html#environment-file">Environment File</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="git.html">Git</a><ul>

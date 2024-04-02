@@ -151,6 +151,9 @@ There are 3 types of volumes:
 2. Anonymous Volumes: :bash:`docker run -v <container_dir>`. This will put the volume somewhere on your host fs that you have't specified (``/var/lib/docker/volumes/``)
 3. Named Volume: :bash:`docker run -v name:<container_id>`. You can reference the host volume with a name that you specify
 
+.. note:: 
+    When specifying a volume, you should use the absolute path as to not run into issues.
+
 ----
 
 Docker Compose
@@ -207,6 +210,81 @@ Docker Compose uses a yaml file to configure the containers that are run.
 - ``working_dir``: The current working directory of the service container
 - ``environment``: Defines the environment variables
 - ``command``: This is the command to run the service
+
+----
+
+Example Dockerfile
+------------------
+
+.. code-block:: dockerfile
+    :caption: Example Dockerfile
+
+    FROM ubuntu:22.04 AS base_image
+
+    ARG USER=runner
+
+    ARG TARGETPLATFORM
+    ENV TARGETPLATFORM=$TARGETPLATFORM
+
+    # Use bash instead of sh
+    SHELL ["/bin/bash", "-c"]
+
+    RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
+        apt-get -y install --no-install-recommends \
+        python3-dev \
+        python3-pip \
+        python3-venv \
+        sudo
+
+    # Configure non-root user
+    RUN adduser --disabled-password --gecos "" "$USER"  && \
+        echo "$USER ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/${USER}" && \
+        chmod 0440 "/etc/sudoers.d/${USER}" && \
+        usermod -aG sudo ${USER} && \
+        usermod -aG dialout ${USER}
+
+    WORKDIR "/home/${USER}"
+
+    USER ${USER}
+
+    RUN python3 -m venv .venv
+
+    RUN source .venv/bin/activate && python -m pip install --upgrade setuptools wheel
+    RUN source .venv/bin/activate && python -m pip install fabric
+
+    ##### Production Image
+
+    FROM base_image AS production_image
+
+    COPY --chown=${USER}:${USER} ./python-packages python-packages
+
+    RUN source .venv/bin/activate && python -m pip install python-packages/my-package
+
+    RUN rm -rf python-packages
+
+    ##### Development Image
+
+    FROM base_image AS dev_image
+
+    COPY --chown=${USER}:${USER} ./dev_entrypoint.sh dev_entrypoint.sh
+
+    CMD ["/bin/bash"]
+
+    ENTRYPOINT [ "./dev_entrypoint.sh" ]
+
+This example has a few notable things.
+
+First, here we can build two images, production_image and dev_image. You can specify which to build
+in the docker build ``--target`` argument. This way a Dockerfile can contain multiple image targets.
+
+Also note that when copying in files from the local machine, we can specify that the files
+use a specific user other than root.
+
+.. note:: 
+    To run the ``CMD`` from an entrypoint script, you should include ``exec "$@"`` in the entrypoint
+    script.
+
+----
 
 Sources
 -------

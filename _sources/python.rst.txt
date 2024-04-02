@@ -194,6 +194,66 @@ to the console for example.
 .. note::
   You can use the logging level `exception` if you want to print a stack trace with your log message
 
+One way you can change the formatting behaviour of your logger is to make your own custom
+logging formatter and use that (in the ``setFormatter`` function)
+
+.. code-block:: python
+  :caption: Example using custom logging formatter
+
+  class CustomFormatter(logging.Formatter):
+
+    def __init__(
+        self,
+        pre_pend_newline: bool = True,
+        *args,
+        **kwargs,
+    ):
+        self._pre_pend_newline = pre_pend_newline
+        super().__init__(*args, **kwargs)
+
+    def format(self, record: logging.LogRecord) -> str:
+        multiline_formatted_output = self._get_mutliline_formatted_output(record)
+        if self._pre_pend_newline:
+            multiline_formatted_output = "\n" + multiline_formatted_output
+
+        return multiline_formatted_output
+
+    def _get_mutliline_formatted_output(self, record: logging.LogRecord) -> str:
+        # Some logs are given as a list
+        if isinstance(record.msg, str):
+            split_msg = record.msg.splitlines()
+            formatted_msgs = []
+            for msg in split_msg:
+                record.msg = msg
+                formatted_msgs.append(super().format(record))
+            return "\n".join(formatted_msgs)
+
+        return super().format(record)
+
+Text Attributes
+^^^^^^^^^^^^^^^
+
+You can add text attributes to your log messages to make them more colourful/stand out
+
+.. code-block:: python
+  :caption: Example using text attributes
+
+  class TextAttribute(Enum):
+      """
+      Enum of Text Attributes which can be applied to prints
+      """
+
+      YELLOW = "\x1b[33;20m"
+      RED = "\x1b[31;20m"
+      BOLD_RED = "\x1b[31;1m"
+      CYAN = "\x1b[36;20m"
+      BOLD_PURPLE = "\x1b[35;1m"
+      BOLD_ONLY = "\x1b[1m"
+      # Inverted doesn't seem to be supported in the github actions output console
+      INVERTED = "\x1b[7m"
+      RESET = "\x1b[0m"
+
+
 Exceptions
 ----------
 
@@ -504,7 +564,7 @@ You will want your directory structure to look something like this:
 In your pyproject.toml you'll want something like this:
 
 .. code-block:: toml
-  :caption: Example pyproject.toml
+  :caption: Example pyproject.toml using setup tools
 
   [build-system]
   requires = ["setuptools", "setuptools-scm"]
@@ -515,6 +575,29 @@ In your pyproject.toml you'll want something like this:
   version = " <package version> "
   description = " <description> "
   license = { text = "CLOSED" }
+
+.. code-block:: toml
+  :caption: Example using poetry
+
+  [tool.poetry]
+  name = " <package name> "
+  version = " <package version> "
+  description = " <description> "
+  license = "CLOSED"
+  authors = [" <authors> "]
+  readme = "README.md"
+  packages = [
+      { include = "<path_to_package>"}
+  ]
+
+  [tool.poetry.dependencies]
+  python = ">=3.8"
+  pydantic = "==2.6.3"
+  PyYAML = "==6.0.1"
+
+  [build-system]
+  requires = ["poetry-core"]
+  build-backend = "poetry.core.masonry.api"
 
 
 Inside your ``__init__.py`` file, you'll want to include the types that you want immediately accessable in
@@ -755,6 +838,19 @@ the ``__exit__`` method.
 
   # myobject still exists here (not out of scope)
 
+You can also using a package like ``contextlib`` to create a context manager:
+
+.. code-block:: python
+  :caption: Example using contextlib
+
+  import contextlib
+
+  @contextlib.contextmanager
+  def switch_logging(self, test_name: str):
+      self._switch_to_test_logging(test_name=test_name)
+      yield
+      self._switch_back_logging()
+
 Exception Handling
 ^^^^^^^^^^^^^^^^^^
 
@@ -923,6 +1019,40 @@ The annotation on the ``version`` field has two jobs:
 2. It will make the schema produced use the ``SchemaVersion``, so you have a way to produce the third
 party type that yaml will allow.
 
+Another thing pydantic does is to use Enum value in the schema instead of names. This can be annoying
+if you are for example using IntEnum, since you would have to use numbers which loses human readablility.
+
+.. code-block:: python
+  :caption: Example using enum values
+
+  def HandleAsNames(handled_type: Enum):
+    # Define a function to dynamically create an Enum
+    def create_enum(enum_name, enum_members):
+        return Enum(
+            enum_name,
+            {
+                member_name: member_value.name
+                for member_name, member_value in enum_members.items()
+            },
+        )
+
+    # This basically creates a new Enum type for pydantic to use when it is generating its schema.
+    # This new enum will use the names of the original enum as its values, so the user can select
+    # options based on the original enum's names. (pydantic only allows selecting enums based on value).
+    return pydantic.GetPydanticSchema(
+        lambda _s, h: h(
+            create_enum("SchemaType" + handled_type.__name__, handled_type.__members__)
+        )
+    )
+
+  @pydantic.dataclasses.dataclass
+  class LoggerConfig:
+      level: Annotated[LogLevel, HandleAsNames(handled_type=LogLevel)] = LogLevel.WARNING
+
+      @pydantic.field_validator("level")
+      def validate_level(level: Enum) -> LogLevel:  # type: ignore
+          return LogLevel[level.value]
+
 ----
 
 dis - Disassembler
@@ -942,3 +1072,267 @@ You can use the ``dis`` module both in your python script and as a command line 
   :caption: Example disassembling a function in a script
 
   dis.dis(myfunc)
+
+----
+
+Argument Parsing with ``argparse``
+----------------------------------
+
+You can use the ``argparse`` package to manage passing arguments to your python script.
+
+.. code-block:: python
+  :caption: Example using argparse
+
+  import argparse
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument(
+      "--age",
+      type=int,
+      help="The age of the person.",
+      required=True
+  )
+  parser.add_argument(
+      "--name",
+      type=str,
+      help="The name of the person",
+      required=False,
+      default="Bob",
+  )
+
+  # example of passing a flag
+  parser.add_argument( 
+    "--european",
+    action="store_true",
+    help="Flag if set indicates the person is European.",
+  )
+  args = parser.parse_args()
+
+  age: int = args.age
+  name: str = args.name
+  is_european: bool = args.european
+
+With this, if you run ``python <you_script> --help``, ``argparse`` will show you the command line
+argument options specified in your script.
+
+----
+
+http Server and Client
+----------------------
+
+Client
+^^^^^^
+
+You can use the python ``requests`` package to make http requests to a server.
+
+.. code-block:: python
+  :caption: Example making a GET request
+
+  import requests
+
+  # Server is at IP address 10.0.0.20 and we are using port 4000
+  SERVER_BASE_URL = "http://10.0.0.20:4000/people"
+
+  def get_people_info() -> requests.Response:
+      url = f"{SERVER_BASE_URL}"
+      return requests.get(url=url)
+
+It is also possible to use web endpoints:
+
+.. code-block:: python
+  :caption: Example accessing Github API
+
+  GITHUB_API_VERSION = "2022-11-28"
+
+  ORG_RUNNERS_BASE_URL = "https://api.github.com/orgs/<org_name>/actions/runners"
+
+  def _construct_api_headers(org_access_token: str) -> dict:
+      return {
+          "Accept": "application/vnd.github+json",
+          "Authorization": f"Bearer {org_access_token}",
+          "X-GitHub-Api-Version": GITHUB_API_VERSION,
+      }
+
+  def set_custom_labels_for_runner(
+          org_access_token: str, runner_id: int, labels: list[str]
+  ) -> requests.Response:
+      url = f"{ORG_RUNNERS_BASE_URL}/{runner_id}/labels"
+      headers = _construct_api_headers(org_access_token)
+      data = {"labels": labels}
+
+      return requests.post(url, headers=headers, json=data)
+
+  def get_organizational_runners_info(
+          org_access_token: str,
+          query_per_page: int,
+          query_page: int
+      ) -> requests.Response:
+      headers = _construct_api_headers(org_access_token)
+      params = {
+          "per_page": query_per_page,
+          "page": query_page,
+      }
+
+      return requests.get(ORG_RUNNERS_BASE_URL, headers=headers, params=params)
+
+.. note:: 
+  You can use the package ``http`` to get ``HTTPStatus`` enums
+
+Server
+^^^^^^
+
+A server application can be implemented with flask.
+
+.. code-block:: python
+  :caption: Example flask app
+
+  from flask import Flask, request
+  from flasgger import Swagger
+  from http import HTTPStatus
+
+  import custom_services
+
+  app = Flask(__name__)
+  Swagger(app)
+
+  @app.get("/people")
+  def peopl_info_get():
+      return custom_services.get_people_info(), HTTPStatus.OK
+
+  @app.get("/people/<int:person_id>/name")
+  def person_name_get(person_id: int):
+      try:
+          return custom_services.get_person_name(person_id=person_id), HTTPStatus.OK
+      except Exception as e:
+          return {"error_message": f"{type(e).__name__}: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
+
+  @app.post("/people/<int:person_id>/name")
+  def person_name_post(person_id: int):
+      name = request.json["name"]
+      if not isinstance(name, str):
+          return {"error_message": "name not in string format"}, HTTPStatus.BAD_REQUEST
+
+      try:
+          custom_services.add_name_to_person(person_id=person_id, name=name)
+          return HTTPStatus.OK.phrase, HTTPStatus.OK
+      except Exception as e:
+          return {"error_message": f"{type(e).__name__}: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
+
+  @app.delete("/people/<int:person_id>/name/<string:name>")
+  def person_name_delete(person_id: int, name: str):
+      try:
+          custom_services.delete_name_from_person(person_id=person_id, name=name)
+          return HTTPStatus.OK.phrase, HTTPStatus.OK
+      except Exception as e:
+          return {"error_message": f"{type(e).__name__}: {e}"}, HTTPStatus.INTERNAL_SERVER_ERROR
+
+  if __name__ == "__main__":
+      app.run(host="0.0.0.0", port=4000)
+
+With a server implemented in a flask app, it can be run in development mode
+with ``python flask_server.py``.
+
+To run in deployed mode, one should use a dedicated WSGI server. See the flask
+documentation: `Flask docs <https://flask.palletsprojects.com/en/2.3.x/deploying/>`_
+
+Using Gunicorn
+""""""""""""""
+
+One of the WSGI servers in Gunicorn. Simply intstall with pip, and then run
+your flask app.
+
+For example: ``gunicorn -b 0.0.0.0:4000 flask_server:app``
+
+----
+
+match
+-----
+
+``match`` was introduced in python 3.10 and is a solution for switch type statements.
+
+.. code-block:: python
+  :caption: Example of match statement
+
+  pytest_exit_code = 2
+
+  match pytest_exit_code:
+      case 0:
+          print("All tests were collected and passed successfully")
+      case 1:
+          print("Tests were collected and run but some of the tests failed")
+      case 2:
+          print("Test execution was interrupted by the user")
+          exit(1)
+      case 3:
+          print("Internal error happened while executing tests")
+          exit(1)
+      case 4:
+          print("pytest command line usage error")
+          exit(1)
+      case 5:
+          print("No tests were collected")
+          exit(1)
+      case _:
+          print(f"Unhandled exit code: {container_command_exit_code}")
+          exit(1)
+
+----
+
+Docker package
+--------------
+
+There is a docker python package that lets you interact with docker from python.
+
+.. code-block:: python
+  :caption: Docker package example
+
+  import docker
+
+  client = docker.from_env()  # type: ignore
+
+  client.login(
+      username=inputs.user, password=inputs.access_token, registry=inputs.registry
+  )
+
+  pull_stream = client.api.pull(
+      repository=inputs.image_name,
+      tag=inputs.image_tag,
+      stream=True,
+  )
+
+  for event in pull_stream:
+      print(f"{event.decode('utf-8')}", end="")
+
+  volumes = [
+      f"{inputs.path_to_artifacts}:/home/user/artifacts/",
+  ]
+
+  dtf_container: Container = client.containers.run(
+      image=f"{inputs.image_name}:{inputs.image_tag}",
+      detach=True,
+      stderr=True,
+      remove=True,
+      privileged=True,
+      volumes=volumes,
+      command=_build_command(inputs=inputs),
+  )
+
+  log_stream = dtf_container.logs(stream=True)
+
+  for event in log_stream:
+      print(f"{event.decode('utf-8')}", end="")
+
+  exit_status = dtf_container.wait()
+  container_command_exit_code = int(exit_status["StatusCode"])
+
+----
+
+Generating sheilds for Github
+-----------------------------
+
+You can generate shields/badges for github and other platforms by generating an svg
+file.
+
+You can construct a URL using the base of ``"https://img.shields.io/badge"`` to generate
+an svg sheild.
+

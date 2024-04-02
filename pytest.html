@@ -55,6 +55,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#test-classes">Test Classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fixtures">Fixtures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#using-fixtures-for-setup-and-teardown">Using fixtures for setup and teardown</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choosing-fixtures-at-run-time">Choosing fixtures at run-time</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#conftest-py">conftest.py</a></li>
@@ -64,6 +65,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#pytest-hooks">PyTest Hooks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#options">Options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-multiple-instances-of-pytest-on-the-same-code">Running multiple instances of pytest on the same code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-parsing">Output Parsing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-arguments">Command line arguments</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sources">Sources</a></li>
 </ul>
 </li>
@@ -249,6 +252,16 @@ an <code class="docutils literal notranslate"><span class="pre">assert</span></c
 Once the test is complete, due to the <code class="docutils literal notranslate"><span class="pre">yield</span></code> statement, the rest of the teardown
 is run.</p>
 </section>
+<section id="choosing-fixtures-at-run-time">
+<h3>Choosing fixtures at run-time<a class="headerlink" href="#choosing-fixtures-at-run-time" title="Permalink to this heading"></a></h3>
+<p>You can select which fixtures to run during runtime with pytest.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Example dynamically running fixture</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">getfixturevalue</span><span class="p">(</span><span class="n">argname</span><span class="o">=</span><span class="n">fixture_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
 </section>
 <hr class="docutils" />
 <section id="conftest-py">
@@ -302,7 +315,7 @@ mark name errors. Or add something like this to your pytest.ini</p>
 </div>
 <ul class="simple">
 <li><p>Execute a test, but don’t consider its result: <code class="code highlight python docutils literal highlight-python"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">xfail</span></code></p></li>
-<li><p>Don’t execute a test: <code class="code highlight python docutils literal highlight-python"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span></code></p></li>
+<li><p>Don’t execute a test: <code class="code highlight python docutils literal highlight-python"><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">skip</span></code>. Add <code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="s2">&quot;&lt;reson&gt;&quot;</span><span class="p">)</span></code> to give a skip reason.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -352,8 +365,8 @@ names which point to a different stage in the pytest process.</p>
 <ul class="simple">
 <li><p>Customise the way tests are run and perform actions before and after a test is run</p></li>
 </ul>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">Example in conftest.py</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example in conftest.py</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytest</span>
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">hookimpl</span>
@@ -383,8 +396,8 @@ These are the names you should use to target a specific part of the PyTest proce
 <p class="admonition-title">Note</p>
 <p>Hooks should start with <code class="docutils literal notranslate"><span class="pre">pytest_*</span></code> otherwise it won’t be recognised as a hook.</p>
 </div>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">Example modifing list of tests to be run after they have been collected</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example modifing list of tests to be run after they have been collected</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">hookimpl</span>
 <span class="k">def</span> <span class="nf">pytest_collection_modifyitems</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
   <span class="c1"># modify the collected items after they have been collected...</span>
@@ -426,6 +439,48 @@ on the same repo.</p>
 One thing that might help, is to run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pytest</span> <span class="pre">...</span></code> instead of <code class="docutils literal notranslate"><span class="pre">pytest</span></code> directly. They
 are mostly the same except the first one adds more paths than just <code class="docutils literal notranslate"><span class="pre">pytest</span></code> by itself.</p>
 </section>
+<hr class="docutils" />
+<section id="output-parsing">
+<h2>Output Parsing<a class="headerlink" href="#output-parsing" title="Permalink to this heading"></a></h2>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">junitparser</span></code> package to parse output results files produced by pytest with the
+<code class="docutils literal notranslate"><span class="pre">--junit-xml=path</span></code> option.</p>
+<p>e.g. <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">junitparser</span> <span class="pre">import</span> <span class="pre">JUnitXml</span></code></p>
+</section>
+<hr class="docutils" />
+<section id="command-line-arguments">
+<h2>Command line arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this heading"></a></h2>
+<p>You can pass in arguments to pytest in the pytest call.</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Example passing in command line args to pytest</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># included in conftest.py</span>
+
+<span class="k">def</span> <span class="nf">pytest_addoption</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">addoption</span><span class="p">(</span>
+        <span class="s2">&quot;--access_token&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;token for downloading docker image&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">addoption</span><span class="p">(</span>
+        <span class="s2">&quot;--use_local_image&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Flag for using local docker image&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The above example shows how you can make a simple flag or a argument with a value.</p>
+<p>You can view the argument by using the <code class="docutils literal notranslate"><span class="pre">request</span></code> fixture: <code class="docutils literal notranslate"><span class="pre">request.config.getoption(&quot;--access_token&quot;)</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is also possible to add options from the <code class="docutils literal notranslate"><span class="pre">pytest.ini</span></code> file:
+<code class="docutils literal notranslate"><span class="pre">addopts</span> <span class="pre">=</span> <span class="pre">--ignore=./dummy_tests</span></code> in the <code class="docutils literal notranslate"><span class="pre">[pytest]</span></code> section.</p>
+</div>
+</section>
+<hr class="docutils" />
 <section id="sources">
 <h2>Sources<a class="headerlink" href="#sources" title="Permalink to this heading"></a></h2>
 <ul class="simple">

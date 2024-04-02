@@ -77,6 +77,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#exec-command">exec command</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bash-eval-statement">Bash eval statement</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#print-colour-to-the-console">Print Colour to the console</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-file">Environment File</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="git.html">Git</a></li>
@@ -565,6 +566,28 @@ Calling this replaces the process of the current shell with a process of the com
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The yellow colour given in the example looks quite nice for giving example shell commands</p>
+</div>
+</section>
+<section id="environment-file">
+<h2>Environment File<a class="headerlink" href="#environment-file" title="Permalink to this heading"></a></h2>
+<p>You can make an environment file, containing for example environment varibales and include this
+in your bash script.</p>
+<div class="literal-block-wrapper docutils container" id="id19">
+<div class="code-block-caption"><span class="caption-text">Example environment file</span><a class="headerlink" href="#id19" title="Permalink to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_values.env</span>
+
+<span class="nv">COLOR</span><span class="o">=</span><span class="s2">&quot;black&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id20">
+<div class="code-block-caption"><span class="caption-text">Example using environment file</span><a class="headerlink" href="#id20" title="Permalink to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nb">source</span><span class="w"> </span>./my_values.env
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$COLOR</span>
+</pre></div>
+</div>
 </div>
 </section>
 </section>

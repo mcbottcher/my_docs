@@ -60,6 +60,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#systemd-management">SystemD Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-adding-a-custom-service">Example adding a custom service</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python.html">🐍 Python</a></li>
@@ -176,6 +177,53 @@ To view targets available, use:</p>
 <p>If you want to edit a service file, and see the changes instantly, use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">systemd</span> <span class="n">daemon</span><span class="o">-</span><span class="n">reload</span>
 </pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="example-adding-a-custom-service">
+<h2>Example adding a custom service<a class="headerlink" href="#example-adding-a-custom-service" title="Permalink to this heading"></a></h2>
+<p>Here we give an example of how you would setup a service that runs a WSGI server</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Example service file</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Location: /etc/systemd/system/start-wsgi-server.service</span>
+
+<span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
+<span class="n">Description</span> <span class="o">=</span> <span class="n">Start</span> <span class="n">WSGI</span> <span class="n">server</span>
+<span class="n">After</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">target</span>
+
+<span class="p">[</span><span class="n">Service</span><span class="p">]</span>
+<span class="n">User</span> <span class="o">=</span> <span class="n">user</span>
+<span class="n">RemainAfterExit</span> <span class="o">=</span> <span class="n">yes</span>
+<span class="n">WorkingDirectory</span> <span class="o">=</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span>
+<span class="n">ExecStart</span> <span class="o">=</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">start</span><span class="o">-</span><span class="n">wsgi</span><span class="o">-</span><span class="n">server</span>
+
+<span class="p">[</span><span class="n">Install</span><span class="p">]</span>
+<span class="n">WantedBy</span> <span class="o">=</span> <span class="n">multi</span><span class="o">-</span><span class="n">user</span><span class="o">.</span><span class="n">target</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Example service script</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># Location: $HOME/start-wsgi-server</span>
+
+<span class="nb">set</span><span class="w"> </span>-euox<span class="w"> </span>pipefail
+
+<span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/server&quot;</span>
+
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+
+gunicorn<span class="w"> </span>-b<span class="w"> </span><span class="m">0</span>.0.0.0:4000<span class="w"> </span>flask_server:app<span class="w"> </span>--access-logfile<span class="w"> </span>flask_log.txt<span class="w"> </span>--daemon
+</pre></div>
+</div>
+</div>
+<p>You would also have to change some file permissions and enable the service:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example setting up service</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>/etc/systemd/system/start-wsgi-server.service
+systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>start-wsgi-server.service
+</pre></div>
+</div>
 </div>
 </section>
 </section>
