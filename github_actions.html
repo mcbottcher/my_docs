@@ -80,6 +80,16 @@
 <li class="toctree-l2"><a class="reference internal" href="#example-commenting-on-pr">Example Commenting on PR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#github-actions-security">GitHub Actions Security</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#triggering-actions-in-another-repo">Triggering Actions in another Repo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calling-reusable-workflow">Calling Reusable Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#job-flow-control">Job flow control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workflow-inputs">Workflow inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#if-else">If-Else</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-github-actions-step-output">Setting Github Actions step output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-to-github-actions-output-from-python">Writing to Github Actions Output from python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging-in-github-actions">Debugging in Github Actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#evaluation-of-inputs">Evaluation of inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#matrix-jobs">Matrix Jobs:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#format-for-json-inputs">Format for Json inputs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sources">Sources</a></li>
 </ul>
 </li>
@@ -237,6 +247,8 @@ you can save them as artifacts.</p>
 <span class="w">      </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output-log-file</span>
 <span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output.log</span>
+<span class="w">        </span><span class="nt">if-no-files-found</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">error</span>
+<span class="w">        </span><span class="nt">retention-days</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -248,6 +260,7 @@ you can save them as artifacts.</p>
 <span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/download-artifact@v3</span>
 <span class="w">      </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">output-log-file</span>
+<span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.workspace }}/output-log-file</span>
 </pre></div>
 </div>
 </section>
@@ -267,6 +280,17 @@ change in a python file.</p></li>
 <li><p><cite>workflow_dispatch</cite>: Allows you to run the workflow manually from GitHub actions tab</p></li>
 <li><p><cite>repository_dispatch</cite>: Allows you to trigger a workflow using a webhook.</p></li>
 <li><p><cite>schedule</cite>: Can set it to run at specified times, e.g. using the <cite>cron</cite> tag</p></li>
+</ul>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Example Cron job</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">4</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&quot;</span><span class="w"> </span><span class="c1"># run at 4am (UTC) every day</span>
+</pre></div>
+</div>
+</div>
+<ul class="simple">
+<li><p><cite>workflow_call</cite>: Uses Github’s reusable workflow model, workflow is called from another workflow.</p></li>
 </ul>
 </section>
 </section>
@@ -605,8 +629,8 @@ repository or environment level.</p>
 <hr class="docutils" />
 <section id="example-commenting-on-pr">
 <h2>Example Commenting on PR<a class="headerlink" href="#example-commenting-on-pr" title="Permalink to this heading"></a></h2>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">Adding PR to your workflow Events</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Adding PR to your workflow Events</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">on</span><span class="p">:</span>
 <span class="nt">pull_request</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">opened</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">synchronize</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">reopened</span><span class="p p-Indicator">]</span>
@@ -615,8 +639,8 @@ repository or environment level.</p>
 </div>
 <p>In the example, we see that this pull_request event is triggered when the PR is opened
 and re-opened. Synchronize triggers the event when the PR is updated with a push.</p>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">Example step</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Example step</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update PR</span>
 <span class="w">  </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.event_name == &#39;pull_request&#39; }}</span>
 <span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/github-script@v6</span>
@@ -655,8 +679,8 @@ However it is also possible to have your action within your repo with other thin
 <p>For example, an action file in <code class="docutils literal notranslate"><span class="pre">actions/my_action/action.yml</span></code></p>
 <p>To call an action from another repo, you have to alter your repo settings to allow calls from
 other repositories to access actions.</p>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">Example workflow calling action in another repo</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example workflow calling action in another repo</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">runs</span><span class="o">-</span><span class="n">on</span><span class="p">:</span> <span class="n">ubuntu</span><span class="o">-</span><span class="n">latest</span>
 <span class="n">steps</span><span class="p">:</span>
   <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Test-action&quot;</span>
@@ -664,8 +688,8 @@ other repositories to access actions.</p>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">Example action.yml</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example action.yml</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>using: &quot;composite&quot;
 steps:
     - run: |
@@ -679,6 +703,204 @@ steps:
 <p>As seen in the example, you need to use the <code class="docutils literal notranslate"><span class="pre">github.action_path</span></code> to reference files
 in relation to the actions file.</p>
 </div>
+<p>Doing it this way even allows you to call actions in the same repository you are in.
+The other method you can use, is to first checkout the repository containing the action
+you want to run, and then call the action locally:</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Example calling action locally</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span><span class="w"> </span><span class="c1"># need to checkout repo first in this case</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./.github/&lt;action_name&gt;</span>
+</pre></div>
+</div>
+</div>
+<p>In this case the action version is determined by the reference you use to checkout the
+repository containing the action.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In theory you can have an action.yml anywhere in your repo, not just in the .github/actions.
+It makes more sense as a public action repo to have the action in the repo root.</p>
+</div>
+</section>
+<hr class="docutils" />
+<section id="calling-reusable-workflow">
+<h2>Calling Reusable Workflow<a class="headerlink" href="#calling-reusable-workflow" title="Permalink to this heading"></a></h2>
+<p>You can call a workflow both in the same repo or in another repo.</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Example calling reusable workflow</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;org&gt;/&lt;repo_name&gt;/.github/workflows/my_workflow.yml@main</span>
+<span class="c1"># OR</span>
+<span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./.github/workflows/my_workflow.yml</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="job-flow-control">
+<h2>Job flow control<a class="headerlink" href="#job-flow-control" title="Permalink to this heading"></a></h2>
+<p>Here is an example of some job control flow. You can use the <code class="docutils literal notranslate"><span class="pre">needs</span></code> keyword to
+achieve this.</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Example of job flow control</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">jobs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">job1</span><span class="p">:</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+
+<span class="w">    </span><span class="nt">job2</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">job1</span>
+<span class="w">        </span><span class="c1"># note not in ${{ }}</span>
+<span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">            </span><span class="no">always() &amp;&amp;</span>
+<span class="w">            </span><span class="no">( needs.job1.result != &#39;skipped&#39; )</span>
+</pre></div>
+</div>
+</div>
+<p>The use of <code class="docutils literal notranslate"><span class="pre">always</span></code> means that this job will still be evaluated even if the previous
+dependent job is failed or cancelled or skipped.</p>
+</section>
+<hr class="docutils" />
+<section id="workflow-inputs">
+<h2>Workflow inputs<a class="headerlink" href="#workflow-inputs" title="Permalink to this heading"></a></h2>
+<p>Undefined workflow inputs are treated as empty strings.</p>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Example with undefined workflow input</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">on</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">workflow_dispatch</span><span class="p">:</span>
+
+<span class="w">    </span><span class="nt">workflow_call</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">my_input</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+<span class="w">            </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean</span>
+
+<span class="c1"># Later on if you call inputs.my_input, if called from workflow_call it will be the input boolean,</span>
+<span class="c1"># if from workflow_dispatch (i.e. undefined), it will be an empty string &#39;&#39;</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="if-else">
+<h2>If-Else<a class="headerlink" href="#if-else" title="Permalink to this heading"></a></h2>
+<p>Github actions has a shorthand for doing <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">else</span></code> type statements.</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Example if else</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">${{ inputs.use_local_image == &#39;true&#39; &amp;&amp; &#39;--use_local_image&#39; || &#39;&#39; }} \</span>
+<span class="l l-Scalar l-Scalar-Plain">${{ inputs.image_tag &amp;&amp; format(&#39;--image_tag=&quot;{0}&quot;&#39;, inputs.image_tag) || &#39;&#39; }} \</span>
+</pre></div>
+</div>
+</div>
+<p>If the expression is evaluated to True, then the statement after the <code class="docutils literal notranslate"><span class="pre">&amp;&amp;</span></code> will be used.
+If the expression is evaluated to False, then the statement after the <code class="docutils literal notranslate"><span class="pre">||</span></code> will be used.</p>
+</section>
+<hr class="docutils" />
+<section id="setting-github-actions-step-output">
+<h2>Setting Github Actions step output<a class="headerlink" href="#setting-github-actions-step-output" title="Permalink to this heading"></a></h2>
+<p>To do this you simply write to the <code class="docutils literal notranslate"><span class="pre">GITHUB_OUTPUT</span></code> environment file.
+To access the output from a step, you need to assign the step an <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Example setting Github Actions Step output</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">outputs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">number-of-days</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Number</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">days</span><span class="nv"> </span><span class="s">since</span><span class="nv"> </span><span class="s">unix</span><span class="nv"> </span><span class="s">epoch</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">UTC&quot;</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ steps.get-days.outputs.days }}</span>
+
+<span class="nt">runs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">using</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;composite&quot;</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get-days</span>
+<span class="w">          </span><span class="c1"># -u gives UTC, +%s gives value in seconds, / 86400 converts seconds to days</span>
+<span class="w">          </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;days=$(( $(date -u +%s) / 86400 ))&quot; &gt;&gt; $GITHUB_OUTPUT</span>
+<span class="w">          </span><span class="nt">shell</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bash</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="writing-to-github-actions-output-from-python">
+<h2>Writing to Github Actions Output from python<a class="headerlink" href="#writing-to-github-actions-output-from-python" title="Permalink to this heading"></a></h2>
+<p>Wrtiting to the Github Output like this will be the variable will be available
+in the step.output for the action step calling the python script.</p>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">Example writing to github actions output</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;GITHUB_OUTPUT&quot;</span><span class="p">],</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">var</span><span class="p">:</span>
+    <span class="n">var</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;run_job_config=</span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">run_job_config</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">json.dumps</span></code> from a dictionary is a good way to get data in a nice format for using in Github Actions.</p>
+</div>
+</section>
+<hr class="docutils" />
+<section id="debugging-in-github-actions">
+<h2>Debugging in Github Actions<a class="headerlink" href="#debugging-in-github-actions" title="Permalink to this heading"></a></h2>
+<p>Sometimes it is nice to view a context in github actions for debugging. It is not possible to
+simply echo. This method can be used for any json based github actions data.</p>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">Example debugging in Github Actions</span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Debug</span><span class="nv"> </span><span class="s">Job</span><span class="nv"> </span><span class="s">Output&quot;</span>
+<span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">echo &quot;OUTPUTS:&quot;</span>
+<span class="w">    </span><span class="no">python -c &#39;import json; json_string=${{ toJson(steps.process-request.outputs.temporary_labels) }}; \</span>
+<span class="w">      </span><span class="no">print(f&quot;temporary_labels = {json.dumps(json.loads(json_string), indent=2)}&quot;)&#39;</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="evaluation-of-inputs">
+<h2>Evaluation of inputs<a class="headerlink" href="#evaluation-of-inputs" title="Permalink to this heading"></a></h2>
+<p>Actions inputs are always strings!</p>
+<p>If an input has a default of <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> , then you can do something like what follows in an <strong>Action…</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">python my_script.py ${{ inputs.marks &amp;&amp; format(&#39;--marks=&quot;{0}&quot;&#39;, inputs.marks) || &#39;&#39; }} \</span>
+</pre></div>
+</div>
+<p>In a workflow, if you have an input as a boolean type, you can do the following in a step <code class="docutils literal notranslate"><span class="pre">if</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inputs.use_test_image</span>
+<span class="c1"># if using a ! you should use ${{ }} since ! is something in yaml syntax</span>
+</pre></div>
+</div>
+<p>you can also do this in a workflow step:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">python my_script.py ${{ inputs.use_test_image &amp;&amp; &#39;--image_name=test_image&#39; || &#39;&#39; }} \</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="matrix-jobs">
+<h2>Matrix Jobs:<a class="headerlink" href="#matrix-jobs" title="Permalink to this heading"></a></h2>
+<p>Matrix jobs allow you to run a dynamic number of jobs in parallel.</p>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">Example setting up a matrix job</span><a class="headerlink" href="#id14" title="Permalink to this code"></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">test-session</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">setup-test-session</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">set-temp-labels</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">always() &amp;&amp;</span>
+<span class="w">        </span><span class="no">((needs.setup-test-session.result == &#39;success&#39;)  &amp;&amp;</span>
+<span class="w">        </span><span class="no">((needs.set-temp-labels.result == &#39;success&#39;) ||</span>
+<span class="w">        </span><span class="no">(needs.set-temp-labels.result == &#39;skipped&#39;)))</span>
+<span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">        </span><span class="nt">matrix</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">test-run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ fromJson(needs.setup-test-session.outputs.run_job_config) }}</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">self-hosted</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;${{</span><span class="nv"> </span><span class="s">matrix.test-run.runner_label</span><span class="nv"> </span><span class="s">}}&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="format-for-json-inputs">
+<h2>Format for Json inputs<a class="headerlink" href="#format-for-json-inputs" title="Permalink to this heading"></a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">with</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{&quot;&lt;runner_name&gt;&quot;:</span><span class="nv"> </span><span class="s">[&quot;&lt;label1&gt;&quot;]}&#39;</span>
+</pre></div>
+</div>
+<p>This is how you can do json as an input. Note the use of ‘ and “.
+This is because you should pass json as a string within github actions, and use
+the <code class="docutils literal notranslate"><span class="pre">toJson</span></code> and <code class="docutils literal notranslate"><span class="pre">fromJson</span></code> to do the conversions between strings and json.</p>
+<p>From the Github UI, use: <code class="docutils literal notranslate"><span class="pre">{&quot;&lt;runner_name&gt;&quot;:</span> <span class="pre">[&quot;&lt;label1&gt;&quot;]}</span></code> without external ‘ or “</p>
 </section>
 <hr class="docutils" />
 <section id="sources">

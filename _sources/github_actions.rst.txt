@@ -100,6 +100,8 @@ you can save them as artifacts.
           with:
             name: output-log-file
             path: output.log
+            if-no-files-found: error
+            retention-days: 1
 
 - Downloading an artifact
 
@@ -111,6 +113,7 @@ you can save them as artifacts.
           uses: actions/download-artifact@v3
           with:
             name: output-log-file
+            path: ${{ github.workspace }}/output-log-file
 
 Workflow Triggers - Events
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -128,6 +131,15 @@ Workflow Triggers - Events
 - `repository_dispatch`: Allows you to trigger a workflow using a webhook.
 
 - `schedule`: Can set it to run at specified times, e.g. using the `cron` tag
+
+.. code-block:: yaml
+    :caption: Example Cron job
+
+    on:
+      schedule:
+        - cron: "0 4 * * *" # run at 4am (UTC) every day
+
+- `workflow_call`: Uses Github's reusable workflow model, workflow is called from another workflow.
 
 ----
 
@@ -507,6 +519,226 @@ other repositories to access actions.
 .. note::
     As seen in the example, you need to use the ``github.action_path`` to reference files
     in relation to the actions file. 
+
+Doing it this way even allows you to call actions in the same repository you are in.
+The other method you can use, is to first checkout the repository containing the action
+you want to run, and then call the action locally:
+
+.. code-block:: yaml
+    :caption: Example calling action locally
+
+    - uses: actions/checkout@v4 # need to checkout repo first in this case
+    - uses: ./.github/<action_name>
+
+In this case the action version is determined by the reference you use to checkout the 
+repository containing the action.
+
+.. note:: 
+    In theory you can have an action.yml anywhere in your repo, not just in the .github/actions.
+    It makes more sense as a public action repo to have the action in the repo root.
+
+----
+
+Calling Reusable Workflow
+-------------------------
+
+You can call a workflow both in the same repo or in another repo.
+
+.. code-block:: yaml
+    :caption: Example calling reusable workflow
+
+    uses: <org>/<repo_name>/.github/workflows/my_workflow.yml@main
+    # OR
+    uses: ./.github/workflows/my_workflow.yml
+
+----
+
+Job flow control
+----------------
+
+Here is an example of some job control flow. You can use the ``needs`` keyword to 
+achieve this.
+
+.. code-block:: yaml
+    :caption: Example of job flow control
+
+    jobs:
+        job1:
+            ...
+        
+        job2:
+            needs: job1
+            # note not in ${{ }}
+            if: |
+                always() &&
+                ( needs.job1.result != 'skipped' )
+
+The use of ``always`` means that this job will still be evaluated even if the previous
+dependent job is failed or cancelled or skipped.
+
+----
+
+Workflow inputs
+---------------
+
+Undefined workflow inputs are treated as empty strings.
+
+.. code-block:: yaml
+    :caption: Example with undefined workflow input
+
+    on:
+        workflow_dispatch:
+        
+        workflow_call:
+            my_input:
+                description: ''
+                required: true
+                type: boolean
+
+    # Later on if you call inputs.my_input, if called from workflow_call it will be the input boolean,
+    # if from workflow_dispatch (i.e. undefined), it will be an empty string ''
+
+----
+
+If-Else
+-------
+
+Github actions has a shorthand for doing ``if else`` type statements.
+
+.. code-block:: yaml
+    :caption: Example if else
+
+    ${{ inputs.use_local_image == 'true' && '--use_local_image' || '' }} \
+    ${{ inputs.image_tag && format('--image_tag="{0}"', inputs.image_tag) || '' }} \
+
+If the expression is evaluated to True, then the statement after the ``&&`` will be used.
+If the expression is evaluated to False, then the statement after the ``||`` will be used.
+
+----
+
+Setting Github Actions step output
+----------------------------------
+
+To do this you simply write to the ``GITHUB_OUTPUT`` environment file.
+To access the output from a step, you need to assign the step an ``id``.
+
+.. code-block:: yaml
+    :caption: Example setting Github Actions Step output
+
+    outputs:
+        number-of-days:
+            description: "Number of days since unix epoch - UTC"
+            value: ${{ steps.get-days.outputs.days }}
+    
+    runs:
+        using: "composite"
+        steps:
+            - id: get-days
+              # -u gives UTC, +%s gives value in seconds, / 86400 converts seconds to days
+              run: echo "days=$(( $(date -u +%s) / 86400 ))" >> $GITHUB_OUTPUT
+              shell: bash
+
+----
+
+Writing to Github Actions Output from python
+--------------------------------------------
+
+Wrtiting to the Github Output like this will be the variable will be available
+in the step.output for the action step calling the python script.
+
+.. code-block:: python
+    :caption: Example writing to github actions output
+
+    with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as var:
+        var.write(f"run_job_config={json.dumps(run_job_config)}\n")
+
+.. note:: 
+    ``json.dumps`` from a dictionary is a good way to get data in a nice format for using in Github Actions.
+
+----
+
+Debugging in Github Actions
+---------------------------
+
+Sometimes it is nice to view a context in github actions for debugging. It is not possible to
+simply echo. This method can be used for any json based github actions data.
+
+.. code-block:: yaml
+    :caption: Example debugging in Github Actions
+
+    - name: "Debug Job Output"
+      run: |
+        echo "OUTPUTS:"
+        python -c 'import json; json_string=${{ toJson(steps.process-request.outputs.temporary_labels) }}; \
+          print(f"temporary_labels = {json.dumps(json.loads(json_string), indent=2)}")'
+
+----
+
+Evaluation of inputs
+--------------------
+
+Actions inputs are always strings!
+
+If an input has a default of ``""`` , then you can do something like what follows in an **Action…**
+
+.. code-block:: yaml
+
+    run: |
+        python my_script.py ${{ inputs.marks && format('--marks="{0}"', inputs.marks) || '' }} \
+
+In a workflow, if you have an input as a boolean type, you can do the following in a step ``if``
+
+.. code-block:: yaml
+
+    - if: inputs.use_test_image
+    # if using a ! you should use ${{ }} since ! is something in yaml syntax
+
+you can also do this in a workflow step:
+
+.. code-block:: yaml
+
+    run: |
+        python my_script.py ${{ inputs.use_test_image && '--image_name=test_image' || '' }} \
+
+----
+
+Matrix Jobs:
+------------
+
+Matrix jobs allow you to run a dynamic number of jobs in parallel.
+
+.. code-block:: yaml
+    :caption: Example setting up a matrix job
+
+    test-session:
+        needs: [setup-test-session, set-temp-labels]
+        if: |
+            always() &&
+            ((needs.setup-test-session.result == 'success')  &&
+            ((needs.set-temp-labels.result == 'success') ||
+            (needs.set-temp-labels.result == 'skipped')))
+        strategy:
+            fail-fast: false
+            matrix:
+                test-run: ${{ fromJson(needs.setup-test-session.outputs.run_job_config) }}
+        runs-on: [self-hosted, "${{ matrix.test-run.runner_label }}"]
+
+
+----
+
+Format for Json inputs
+----------------------
+
+.. code-block:: yaml
+
+    with:
+      labels: '{"<runner_name>": ["<label1>"]}'
+
+This is how you can do json as an input. Note the use of ' and “.
+This is because you should pass json as a string within github actions, and use
+the ``toJson`` and ``fromJson`` to do the conversions between strings and json.
+
+From the Github UI, use: ``{"<runner_name>": ["<label1>"]}`` without external ' or “
 
 ----
 
