@@ -68,6 +68,39 @@ You can also specify a deafult for all hooks specified with ``default_stages: [c
 
 Run a particular hook stage with ``pre-commit run --hook-stage post-commit``
 
+Hooks in another repo
+^^^^^^^^^^^^^^^^^^^^^
+
+It is possible to call hooks located in another repo.
+
+First, in the repo you want the hook to be stored in, you will create a ``.pre-commit-hooks.yaml``
+file:
+
+.. code-block:: yaml
+  :caption: Example .pre-commit-hooks.yaml file
+
+  - id: commit-message-checker
+    name: commit-message-checker
+    entry: hooks/commit-msg
+    language: script
+    always_run: true
+    args: [.git/COMMIT_EDITMSG]
+
+This particular example will call a script located at ``hooks/commit-msg``. In this script you can insert
+the functionality you want your hook to run.
+
+To use the hook from another repo, do something like this in you ``.pre-commit-config.yaml``:
+
+.. code-block:: yaml
+  :caption: Using a hook from another repo
+
+  repos:
+    - repo: <URL_to_repo>
+      rev: v1.0.0
+      hooks:
+        # this should match the id in .pre-commit-hooks.yaml
+        - id: commit-message-checker
+
 Commit Messages
 ---------------
 
