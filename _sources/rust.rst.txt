@@ -1287,6 +1287,98 @@ A ``mod`` declaration only needs to be perfomed once. The rest of the files in y
 crate can then access the module functions using the name path. The ``mod`` keyword is not like
 the ``include`` keyword in other languages.
 
+Release Profiles
+^^^^^^^^^^^^^^^^
+
+These are predefined and customizable profiles for how you want the code compiled. For example,
+you might have one profile which is used for release, and one for debugging (the two main profiles).
+
+You can alter profiles in the Cargo.toml file with the ``[profile.*]`` tag.
+
+.. code-block:: toml
+    :caption: Example of altering dev profile optimisation level
+
+    [profile.dev]
+    opt-level = 0
+
+Optimisation levels go from 0-3, with 3 the most optimised (longest compile time).
+
+Publishing a crate
+^^^^^^^^^^^^^^^^^^
+
+One important thing when publishing code is documenting it. Rust has the ``//`` comments
+already, but also has another type of comment called a documentation comment which can be parsed
+to generate HTML documentation.
+
+Documentation comments use three slashes ``///``.
+They also support markdown notation for formatting the text.
+
+.. code-block:: rust
+    :caption: Example documentation
+
+    /// Adds one to a number
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let answer = my_crate::add_one(2);
+    /// assert_eq!(answer, 3);
+    /// ```
+    pub fn add_one(x: i32) -> i32 {
+        x + 1
+    }
+
+Run ``cargo doc`` to generate documentation HTML from code comments.
+Run ``cargo doc --open`` to open the generated HTML after building in a browser.
+
+Some commonly used sections:
+
+- ``# Panics``
+- ``# Errors``
+- ``# Saftey``
+
+.. note:: 
+    The examples in the "Examples" section actually get run as tests, to make sure
+    the example works correctly with the funcion functionality
+
+We use ``//!`` to comment the item that contains the comment, e.g. the whole file.
+
+Exporting a public API
+^^^^^^^^^^^^^^^^^^^^^^
+
+Sometimes types can be nested deep in your code somewhere. This can make it hard for a user
+to find. You can re-export public types to make them easier to access without so many nested layers.
+
+e.g. ``pub use self::kinds::PrimaryColor;`` can then be used as ``use art::PrimaryColor;``.
+This is kind of like what you can do with ``__init__`` files in python packages.
+
+Publishing
+^^^^^^^^^^
+
+- First you will need an account: ``cargo login``
+- Then add metadata about your crate in Cargo.toml under ``[package]``, e.g. name, license, description.
+- Publish with ``cargo publish``
+
+Cargo Workspaces
+^^^^^^^^^^^^^^^^
+
+As projects get bigger, you might want to split functionality into multiple library crates, but
+keep those in the same project.
+
+Do this by making a new directory with a new ``Cargo.toml`` file in it. Then add a ``[workspace]``
+tag and a list called ``members = []``, which will contain the names of the library/binary crates
+in the workspace.
+
+If one package references another, it can have a ``[dependencies]`` section which has the relative 
+path to the other crate in the workspace you are using.
+
+Use ``cargo run -p <package_name>`` to run a particular package in the workspace.
+
+Installing binaries
+^^^^^^^^^^^^^^^^^^^
+
+You can install binary crates with ``cargo install``, e.g. ``cargo install ripgrep``.
+
 Collections
 -----------
 
@@ -1565,3 +1657,490 @@ Custom Type for Validation
         }
     }
 
+Generic Types, Traits, Lifetimes
+--------------------------------
+
+Generic Types
+^^^^^^^^^^^^^
+
+Generic types allow us to create things which can be used for multiple datatypes
+without code duplication.
+
+Type parameter names in rust are usually short, e.g. ``<T>``
+
+.. code-block:: rust
+    :caption: Example with in function definition
+
+    fn largest<T>(lis: &[T]) -> &T {
+        let mut largest = &list[0];
+    
+        for item in list {
+            if item > largest {
+                largest = item;
+            }
+        }
+
+        largest
+    }
+
+    largest(vec![34, 45, 88, 12]);
+    largest(vec!['y', 'm', 'e']);
+
+Since this function won't work for all types ``T``, you can also specify in the function
+signature limitations for types that the function can be used for e.g. ``fn largest<T: std::cmp::PartialOrd>``.
+
+.. code-block:: rust
+    :caption: Example of structure definition
+
+    // Works when x and y are the same type
+    struct Point<T> {
+        x: T;
+        y: T;
+    }
+
+    // x and y can be different types here
+    struct Point<T, U> {
+        x: T;
+        y: U;
+    }
+
+
+.. code-block:: rust
+    :caption: Example in Method definition
+
+    struct Point<T> {
+        x: T;
+        y: T;
+    }
+
+    impl<T> Point<T> {
+        fn x(&self) -> &T {
+            &self.x
+        }
+    }
+
+Traits
+^^^^^^
+
+A trait defines the functionality a particular type has or can share with other types.
+For example, you could consider the greater than operator. For integer types, it is easy
+to know which is bigger. Comparing two Strings in this way however won't work, unless you
+implement the specific greater than trait to perform this functionality.
+
+Traits allow us to group the methods that a type implements, e.g. comparison operators.
+
+.. code-block:: rust
+    :caption: Example implementing a trait
+
+    // here we declare a trait called Summary
+    // types implementing this trait must implement the summarize method
+    pub trait Summary {
+        fn summarize(&self) -> String;
+    }
+
+    pub struct NewsArticle {
+        pub headline: String,
+        pub author: String,
+    }
+
+    pub struct Person {
+        pub name: String,
+        pub fav_animal: String,
+    }
+
+    impl Summary for NewsArticle {
+        fn summarize(&self) -> String {
+            format!(
+                "{} by {}",
+                self.headline,
+                self.author
+            )
+        }
+    }
+
+    impl Summary for Person {
+        fn summarize(&self) -> String {
+            format!(
+                "{} likes {}",
+                self.name,
+                self.fav_animal
+            )
+        }
+    }
+
+It is also possible to have default implementations for a trait, so the users of the trait
+don't have to implement it if they don't want.
+
+.. code-block:: rust
+    :caption: Example of default Traits
+
+    pub trait Summary {
+        fn summarize(&self) -> String {
+            String::from("Default summary")
+        }
+    }
+
+Traits methods can also call other trait methods in their implementation, if they are default or not.
+
+You can also specify traits in method parameters instead of giving a concrete type:
+
+.. code-block:: rust
+    :caption: Example using trait in function parameters
+
+    pub fn notify(item: &impl Summary) {
+        println!("Breaking news! {}", item.summarize());
+    }
+
+    // same thing, different syntax
+    pub fn notify<T: Summary>(item: &T) {
+        println!("Breaking news! {}", item.summarize());
+    }
+
+    // multiple traits
+    pub fn notify<T: Summary + Display, U: Summary>(item: &T, another_item: &U) {
+        println!("Breaking news! {}", item.summarize());
+        println!("Another item {}", another_item.summarize());
+    }
+
+It is also possible to return a type which implements a trait, but without specifying a concrete
+type.
+
+.. code-block:: rust
+    :caption: Example returning traits
+
+    fn returns_summarizable() -> impl Summary {
+        ...
+    }
+
+This can be handy in the context of closures and iterators. This only works if the 
+function returns only one type, not an option between two types for example.
+
+Lifetimes
+^^^^^^^^^
+
+Lifetimes ensure that references are valid as long as we need them to be.
+Normally, like types, lifetimes are inferred from the code. However, if you want some
+special behaviour, you can annotate the lifetime.
+
+Lifetime annotations use ``'`` syntax. We usually use ``'a`` for the first lifetime 
+annotation. This goes after the ``&`` but before the ``mut`` and type e.g. ``i32``.
+e.g. ``'a mut i32``.
+
+One lifetime annotation doesn't make sense on its own, they are more used to describe
+the lifetime of one paramter compared with another one. i.e. how references relate to
+each other.
+
+.. code-block:: rust
+    :caption: Example of lifetime in function signature.
+
+    // This describes that the returned value's lifetime will be valid as
+    // long as the two inputs are still valid
+    fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+        // return the longest string slice from the two inputs i.e x or y
+        ...
+    }
+
+Static lifetime
+"""""""""""""""
+
+There is one special lifetime called the "static" lifetime. This indicates that the affected 
+reference can be valid for the whole lifetime of the program. All string literals have static
+lifetime.
+
+runner@192.168.0.131
+
+.. code-block:: rust
+    :caption: Example of a static reference
+
+    let s: &'static str = "I have a static lifetime.";
+
+Automated Tests
+---------------
+
+To change a function into a test function, add ``#[test]`` on the line before ``fn``.
+
+.. note:: 
+    Rust has benchmark specific tests available, but currently this is only available on nightly
+    rust and is unstable.
+
+Rust can also run documentation tests, to make sure that your documentation and code
+remain in sync!
+
+Each test is run in a new thread, and when the main test thread sees the test thread has panicked,
+it will stop the thread and mark the test as failed.
+
+Checking results
+^^^^^^^^^^^^^^^^
+
+- ``assert!(<expression>)``: panics if the expression given returns ``false``
+- ``assert_eq!(<thing1>, <thing2>)``: panics if the two things are not equal
+- ``assert_ne!(<thing1>, <thing2>)``: panics if the two things are equal 
+
+.. note:: 
+    The values used must implement the ``PartialEq`` trait, so the values can be compared,
+    and the ``Debug`` trait so the value can be printed on a failure.
+
+You can add a custom error message after the ``assert*`` macros by simply adding a parameters
+after the required ones. These will be passed to the ``format!`` macro to use in the error message.
+
+.. code-block:: rust
+    :caption: Example of custom error message
+
+    #[test]
+    fn test_name() {
+        let result = greeting("Carol");
+        assert!(
+            result.contains("Carol"),
+            "Greeting did not contain name, result was {}",
+            result
+        );
+    }
+
+- ``#[should_panic]``: This specifies that a test function should expect a ``panic``. This is placed after the
+                       ``#[test]`` macro. Add ``expected = `` to specify what should be present in the panic 
+                       message. This is one way to make sure the panic you see is for the right reason.
+                       ``#[should_panic(expected="less than or equal to 100")]``.
+
+- ``Result<T, E>``:
+
+.. code-block:: rust
+    :caption: Example using Result
+
+    #[test]
+    fn it_works() -> Result<(), String> {
+        if 2 + 2 == 4 {
+            Ok(())
+        } else {
+            Err(String::from("two plus two is not 4!"))
+        }
+    }
+
+Test Flow Control
+^^^^^^^^^^^^^^^^^
+
+By default tests will be run in parallel, but you can change this with some command line parameters.
+Check these out using ``cargo test --help``, or ``cargo test -- --help`` for some other options like
+``--test-threads``.
+
+You can specify a name test filter, e.g. ``cargo test is_`` will run all test functions whose names
+start with ``is_``.
+
+Use the ``#[ignore]`` tag so that a test is ignored. Run only the ignored tests with ``cargo test -- --ignored``.
+Or use ``--include-ignored`` to run all tests.
+
+Test Organisation
+^^^^^^^^^^^^^^^^^
+
+Tests are usually split between "Unit tests" and "Intergration tests". Unit tests test one module
+in isolation at a time. They can also test private functions. Intergration tests are totally external
+to your library, and use the library in the same way any other external code would, just with the 
+public APIs.
+
+Unit tests
+""""""""""
+
+These should live in the ``src`` directory of your library.
+The convention is to create a module named ``tests`` in each file to contain the test functions
+and to annotate the module with ``#[cfg(test)]``. This specifies that the code following should 
+only be compiled when running tests.
+
+.. code-block:: rust
+    :caption: Example unit test structure
+
+    #[cfg(test)]
+    mod tests {
+        #[test]
+        fn it_works() {
+            let result = 2 + 2;
+            assert_eq!(result, 4);
+        }
+    }
+
+It is also possible for unit tests to test private functions which is nice. You do this the same as with
+public functions.
+
+Integration Tests
+"""""""""""""""""
+
+These are used to check many parts of your library work together correctly.
+
+To create unit tests, you first create a ``tests`` directory, on the same level as the
+``src`` directory.
+
+.. code-block:: rust
+    :caption: Example intergration test
+
+    // we need to bring the library into our test file
+    use adder;
+
+    #[test]
+    fn it_adds_two() {
+        assert_eq!(4, adder::add_two(2));
+    }
+
+.. note:: 
+    Not ``[cfg(test)]`` is needed since we are already in the ``tests`` directory and Cargo knows
+    what's up
+
+Command Line Program - Notes
+----------------------------
+
+- ``cargo run -- <args>``: The ``--`` indicates the following arguments are for our program and not Cargo.
+- The first argument passed to a rust program is the name of the binary you are running.
+- Relative paths start from the root of the Cargo project for files
+- Use ``process::exit(1)`` to exit with an error code 1
+- Get an environment variable with ``env::var("IGNORE_CASE").is_ok();``
+- Run with an environment variable with ``IGNORE_CASE=1 cargo run ...``
+- ``println!`` can only print to stdout
+- You can use the ``eprintln!`` macro to print to the stderr stream.
+
+Iterators and Closures
+----------------------
+
+Closures
+^^^^^^^^
+
+These are anonymous functions you can save in a variable or pass as arguments to other functions.
+
+.. code-block:: rust
+    :caption: Example using closures
+
+    fn main() {
+    
+        let list = vec![1, 2, 3];
+    
+        // this is only printed once only_borrows is called
+        let only_borrows = || println!("From closure {:?}", list);
+
+        println!("Before closure");
+        only_borrows();
+        println!("After calling closure");
+    }
+
+Iterators
+^^^^^^^^^
+
+An iterator allows you to perform some task on a sequence of items in turn.
+They are lazy, so you can store an iterator in a variable, and it will only do something
+when you call the iterator.
+
+.. code-block:: rust
+    :caption: Example iterator
+
+    let v1 = vec![0, 1, 2];
+    let v1_iter = v1.iter();
+
+    for val in v1_iter {
+        println!("Got {val}");
+    }
+
+Iterators implement a ``next()`` method, which you can also use. In this case the iterator
+needs to mutable since ``next`` causes a state change inside the iterator.
+
+You can call methods on iterators to create other iterators, clike the ``map`` function.
+
+.. code-block:: rust
+    :caption: Example with map function
+
+    let v1 = vec![1, 2, 3];
+    let v1_iter = v1.iter().map(|x| x + 1);
+
+    // when you use v1_iter now all elements will have 1 added to them while running.
+
+Smart Pointers
+--------------
+
+Smart pointers are data structures that act like a pointer but also have additional
+metadata and capabilities.
+In many cases smart pointers own the data they point to.
+
+Box<T>
+^^^^^^
+
+Boxes allow you to store data on the heap.
+
+Boxes can be used for recursive types, since they are known size (the pointer on the stack).
+
+.. code-block:: rust
+    :caption: Example of a recursive type with Box
+
+    enum List {
+        Cons(i32, Box<List>),
+        Nil,
+    }
+
+    use crate::List::{Cons, Nil};
+
+    fn main () {
+        let list = Cons(
+            1,
+            Box::new(Cons(
+                2,
+                Box::new(Cons(
+                    3,
+                    Box::new(Nil)
+                ))
+            ))
+        );
+    }
+
+Deref
+^^^^^
+
+You can customise the behaviour of the dereference operator ``*``.
+
+.. code-block:: rust
+    :caption: Example using deref trait
+
+    use std::ops::Deref;
+
+    struct MyBox<T>(T);
+
+    impl<T> MyBox<T> {
+        fn new(x: T) -> MyBox<T>  {
+            MyBox(x)
+        }
+    }
+
+    impl<T> Deref for MyBox<T> {
+        type Target = T;
+
+        fn deref(&self) -> &Self::Target {
+            // Access first value in tuple struct
+            &self.0
+        }
+    }
+
+Now rust will substitute a call to ``*`` with a call to the deref method.
+
+Drop Trait
+^^^^^^^^^^
+
+This trait allows you to cusomtise what happens when a value goes out of scope.
+
+Variables are dropped in reverse order of their creation.
+
+.. code-block:: rust
+    :caption: Example using drop trait
+
+    impl Drop for CustomSmartPointer {
+        fn drop(&mut self) {
+            println!("Dropping custom smart pointer with data {}", self.data);
+        }
+    }
+
+``Drop`` is included in the prelude.
+
+Rc<T> - Reference Counted Smart Pointer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is used when a value might have multiple owners.
+
+The reference counter does this by keeping track of how many owners
+are using the reference to the value. Once no more owners need the reference,
+the value can be dropped.
+
+.. note::
+    Reference counter should only be used in single threaded scenarios
+
+TBC.
