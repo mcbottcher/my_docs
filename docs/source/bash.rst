@@ -435,3 +435,24 @@ in your bash script.
     source ./my_values.env
     echo $COLOR
 
+bashrc file
+-----------
+
+Your ``~/.bashrc`` file is run when you load a new bash terminal. Here, you can alter the default
+file to provide custom functionality.
+
+Git Branch Label
+^^^^^^^^^^^^^^^^
+
+One customization you can do for example is to include a label on your bash promt telling you which
+git branch you are currently on, if you are in a git directory. You can do this by altering the ``PS1``
+variable:
+
+.. code-block:: bash
+    :caption: Adding git branch label to bash prompt
+
+    # Full prompt
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(git branch --show-current > /dev/null 2>&1 && echo " [$(git branch --show-current)]")\[\033[00m\] \$ '
+
+    # Newly added section
+    # $(git branch --show-current > /dev/null 2>&1 && echo " [$(git branch --show-current)]")\[\033[00m\] \$ 
