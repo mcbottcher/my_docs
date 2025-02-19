@@ -1,25 +1,23 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bash &mdash; MyDocs 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e031e9a9"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
-        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-        <script>mermaid.initialize({"startOnLoad": true})</script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+      <script>mermaid.initialize({"startOnLoad": true})</script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -78,6 +76,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#bash-eval-statement">Bash eval statement</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#print-colour-to-the-console">Print Colour to the console</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#environment-file">Environment File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bashrc-file">bashrc file</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#git-branch-label">Git Branch Label</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="git.html">Git</a></li>
@@ -111,9 +113,9 @@
            <div itemprop="articleBody">
              
   <section id="bash">
-<h1>Bash<a class="headerlink" href="#bash" title="Permalink to this heading"></a></h1>
+<h1>Bash<a class="headerlink" href="#bash" title="Link to this heading"></a></h1>
 <section id="executing-scripts">
-<h2>Executing Scripts<a class="headerlink" href="#executing-scripts" title="Permalink to this heading"></a></h2>
+<h2>Executing Scripts<a class="headerlink" href="#executing-scripts" title="Link to this heading"></a></h2>
 <p>By convention, bash scripts end with the <code class="docutils literal notranslate"><span class="pre">.sh</span></code> file extension.
 You can make a script executable using <code class="docutils literal notranslate"><span class="pre">chmod</span></code> e.g. <code class="code highlight bash docutils literal highlight-bash">chmod<span class="w"> </span>u+x<span class="w"> </span>my_script.sh</code>.
 You can then run the script with <code class="code highlight bash docutils literal highlight-bash">./my_script.sh</code>, <code class="code highlight bash docutils literal highlight-bash">sh<span class="w"> </span>my_script.sh</code>, <code class="code highlight bash docutils literal highlight-bash">bash<span class="w"> </span>my_script.sh</code></p>
@@ -121,15 +123,15 @@ You can then run the script with <code class="code highlight bash docutils liter
 For bash, this is the path to where bash is e.g. <code class="docutils literal notranslate"><span class="pre">#!/bin/bash</span></code></p>
 </section>
 <section id="comments">
-<h2>Comments<a class="headerlink" href="#comments" title="Permalink to this heading"></a></h2>
+<h2>Comments<a class="headerlink" href="#comments" title="Link to this heading"></a></h2>
 <p>Comments can be written using the <code class="docutils literal notranslate"><span class="pre">#</span></code> character</p>
 </section>
 <section id="variables">
-<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this heading"></a></h2>
+<h2>Variables<a class="headerlink" href="#variables" title="Link to this heading"></a></h2>
 <p>Bash has no data types. A variable can store numeric values, characters, or strings.
 You use the <code class="docutils literal notranslate"><span class="pre">$</span></code> operator to access a variable’s value</p>
 <div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">Assigning and accessing variables</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Assigning and accessing variables</span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">my_var</span><span class="o">=</span>hello
 <span class="nb">echo</span><span class="w"> </span><span class="nv">$my_var</span>
 
@@ -146,7 +148,7 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <li><p>You are also able to have global and local variables:</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">Example with global and local vars</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example with global and local vars</span><a class="headerlink" href="#id2" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">VAR</span><span class="o">=</span><span class="s2">&quot;global variable&quot;</span>
 
 <span class="k">function</span><span class="w"> </span>bash<span class="w"> </span><span class="o">{</span>
@@ -170,7 +172,7 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">Example looping through array</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example looping through array</span><a class="headerlink" href="#id3" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="o">((</span><span class="w"> </span><span class="nv">i</span><span class="o">=</span><span class="m">0</span><span class="p">;</span>i&lt;<span class="nv">$ELEMENTS</span><span class="p">;</span>i++<span class="o">))</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
 <span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="si">${</span><span class="nv">ARRAY</span><span class="p">[</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="p">]</span><span class="si">}</span>
 <span class="k">done</span>
@@ -179,7 +181,7 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </div>
 </section>
 <section id="input-and-output">
-<h2>Input and Output<a class="headerlink" href="#input-and-output" title="Permalink to this heading"></a></h2>
+<h2>Input and Output<a class="headerlink" href="#input-and-output" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>User input - use the <code class="docutils literal notranslate"><span class="pre">read</span></code> command: <code class="code highlight bash docutils literal highlight-bash"><span class="nb">read</span><span class="w"> </span>var_to_hold_input</code></p></li>
 <li><p>Read lines of a file:</p></li>
@@ -211,12 +213,12 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </ul>
 </section>
 <section id="conditional-statements">
-<h2>Conditional Statements<a class="headerlink" href="#conditional-statements" title="Permalink to this heading"></a></h2>
+<h2>Conditional Statements<a class="headerlink" href="#conditional-statements" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>If and else statements take the following form:</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">if else example</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">if else example</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>condition<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
 <span class="w">    </span>statement
 <span class="k">elif</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>condition<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
@@ -236,12 +238,12 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </div>
 </section>
 <section id="looping-and-branching">
-<h2>Looping and Branching<a class="headerlink" href="#looping-and-branching" title="Permalink to this heading"></a></h2>
+<h2>Looping and Branching<a class="headerlink" href="#looping-and-branching" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>While loop:</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">Example while loop</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example while loop</span><a class="headerlink" href="#id5" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">i</span><span class="o">=</span><span class="m">1</span>
 <span class="k">while</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="nv">$i</span><span class="w"> </span>-le<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
 <span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$i</span><span class="s2">&quot;</span>
@@ -254,7 +256,7 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <li><p>For loop:</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">Example of a for loop</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example of a for loop</span><a class="headerlink" href="#id6" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">{</span><span class="m">1</span>..5<span class="o">}</span>
 <span class="k">do</span>
 <span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$i</span>
@@ -266,7 +268,7 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <li><p>Until loop: works like a while loop almost</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id7">
-<div class="code-block-caption"><span class="caption-text">Until loop example</span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Until loop example</span><a class="headerlink" href="#id7" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="nv">file</span><span class="o">=</span><span class="s2">&quot;./file&quot;</span>
 <span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">$file</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
@@ -281,7 +283,7 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 <li><p>Case statements:</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id8">
-<div class="code-block-caption"><span class="caption-text">Example case statement</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example case statement</span><a class="headerlink" href="#id8" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="w"> </span>expression<span class="w"> </span><span class="k">in</span>
 <span class="w">    </span>pattern1<span class="o">)</span>
 <span class="w">        </span><span class="c1"># code to execute if expression matches pattern1</span>
@@ -301,10 +303,10 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </div>
 </section>
 <section id="scheduling-with-cron">
-<h2>Scheduling with cron<a class="headerlink" href="#scheduling-with-cron" title="Permalink to this heading"></a></h2>
+<h2>Scheduling with cron<a class="headerlink" href="#scheduling-with-cron" title="Link to this heading"></a></h2>
 <p>Cron is a utility that allows you to schedule jobs.  on Unix-like systems</p>
 <div class="literal-block-wrapper docutils container" id="id9">
-<div class="code-block-caption"><span class="caption-text">Syntax for cron and some examples</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Syntax for cron and some examples</span><a class="headerlink" href="#id9" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># syntax</span>
 <span class="c1"># represents mins, hours, days, months, weekday</span>
 *<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>sh<span class="w"> </span>/path/to/script.sh
@@ -332,7 +334,7 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </ul>
 </section>
 <section id="debugging">
-<h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading"></a></h2>
+<h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Use <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">-x</span></code> at the start of your bash script</dt><dd><ul>
@@ -353,23 +355,23 @@ You use the <code class="docutils literal notranslate"><span class="pre">$</span
 </ul>
 </section>
 <section id="executing-shell-commands-in-bash">
-<h2>Executing Shell Commands in bash<a class="headerlink" href="#executing-shell-commands-in-bash" title="Permalink to this heading"></a></h2>
+<h2>Executing Shell Commands in bash<a class="headerlink" href="#executing-shell-commands-in-bash" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>You can create a new subshell with <code class="docutils literal notranslate"><span class="pre">$(</span> <span class="pre">)</span></code></p></li>
 <li><p>It is then possible to use this output in other commands:</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id10">
-<div class="code-block-caption"><span class="caption-text">Example using subshell</span><a class="headerlink" href="#id10" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example using subshell</span><a class="headerlink" href="#id10" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;My current git branch is </span><span class="k">$(</span>git<span class="w"> </span>branch<span class="w"> </span>--show-current<span class="k">)</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
 </div>
 </section>
 <section id="bash-trap">
-<h2>Bash Trap<a class="headerlink" href="#bash-trap" title="Permalink to this heading"></a></h2>
+<h2>Bash Trap<a class="headerlink" href="#bash-trap" title="Link to this heading"></a></h2>
 <p>Bash can catch signals that you send to it, e.g. <em>ctrl+c</em></p>
 <div class="literal-block-wrapper docutils container" id="id11">
-<div class="code-block-caption"><span class="caption-text">Example catching a signal interrupt</span><a class="headerlink" href="#id11" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example catching a signal interrupt</span><a class="headerlink" href="#id11" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">trap</span><span class="w"> </span>bashtrap<span class="w"> </span>INT
 
 <span class="c1"># bash trap function is executed when CTRL-C is pressed:</span>
@@ -385,7 +387,7 @@ bashtrap<span class="o">()</span>
 </div>
 </section>
 <section id="comparison-operators">
-<h2>Comparison Operators<a class="headerlink" href="#comparison-operators" title="Permalink to this heading"></a></h2>
+<h2>Comparison Operators<a class="headerlink" href="#comparison-operators" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Arithmetic:</dt><dd><ul>
@@ -414,7 +416,7 @@ bashtrap<span class="o">()</span>
 </ul>
 </section>
 <section id="file-testing">
-<h2>File Testing<a class="headerlink" href="#file-testing" title="Permalink to this heading"></a></h2>
+<h2>File Testing<a class="headerlink" href="#file-testing" title="Link to this heading"></a></h2>
 <p>It is possible to test characteristics of files/directories in bash:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">dir_name</span></code>: Check if dir exists</p></li>
@@ -426,7 +428,7 @@ bashtrap<span class="o">()</span>
 <li><p><code class="docutils literal notranslate"><span class="pre">-x</span> <span class="pre">file</span></code>: File is executable</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id12">
-<div class="code-block-caption"><span class="caption-text">Example with file testing</span><a class="headerlink" href="#id12" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example with file testing</span><a class="headerlink" href="#id12" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="nv">file</span><span class="o">=</span><span class="s2">&quot;./file&quot;</span>
 <span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">$file</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
@@ -439,9 +441,9 @@ bashtrap<span class="o">()</span>
 </div>
 </section>
 <section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h2>
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <div class="literal-block-wrapper docutils container" id="id13">
-<div class="code-block-caption"><span class="caption-text">Example function</span><a class="headerlink" href="#id13" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example function</span><a class="headerlink" href="#id13" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span>my_func<span class="w"> </span><span class="o">{</span>
 <span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="m">5</span>
 <span class="o">}</span>
@@ -457,10 +459,10 @@ bashtrap<span class="o">()</span>
 </div>
 </section>
 <section id="select">
-<h2>Select<a class="headerlink" href="#select" title="Permalink to this heading"></a></h2>
+<h2>Select<a class="headerlink" href="#select" title="Link to this heading"></a></h2>
 <p>Use this to promt the user to select from a number of options</p>
 <div class="literal-block-wrapper docutils container" id="id14">
-<div class="code-block-caption"><span class="caption-text">Example using user selection</span><a class="headerlink" href="#id14" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example using user selection</span><a class="headerlink" href="#id14" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">PS3</span><span class="o">=</span><span class="s1">&#39;Choose an option: &#39;</span>
 <span class="k">select</span><span class="w"> </span>word<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;Yes&quot;</span><span class="w"> </span><span class="s2">&quot;No&quot;</span>
 <span class="k">do</span>
@@ -472,18 +474,18 @@ bashtrap<span class="o">()</span>
 </div>
 </section>
 <section id="single-and-double-quotes">
-<h2>Single and Double Quotes<a class="headerlink" href="#single-and-double-quotes" title="Permalink to this heading"></a></h2>
+<h2>Single and Double Quotes<a class="headerlink" href="#single-and-double-quotes" title="Link to this heading"></a></h2>
 <p>Single quotes in bash will suppress special meanings of meta characters.</p>
 <p>Double quotes suppresses the meanings, except from <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">\</span></code>
 In this case you can use escape characters like: <code class="docutils literal notranslate"><span class="pre">\a</span></code> -&gt; alert (bell)</p>
 </section>
 <section id="let-keyword">
-<h2>Let keyword<a class="headerlink" href="#let-keyword" title="Permalink to this heading"></a></h2>
+<h2>Let keyword<a class="headerlink" href="#let-keyword" title="Link to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">let</span></code> is used when evaluating arithmetic expressions on shell variables</p>
 <p><code class="code highlight bash docutils literal highlight-bash"><span class="nb">let</span><span class="w"> </span>my_var++</code></p>
 </section>
 <section id="redirecting-std-streans">
-<h2>Redirecting STD streans<a class="headerlink" href="#redirecting-std-streans" title="Permalink to this heading"></a></h2>
+<h2>Redirecting STD streans<a class="headerlink" href="#redirecting-std-streans" title="Link to this heading"></a></h2>
 <ul>
 <li><p>STDOUT to STDERR:</p>
 <blockquote>
@@ -498,12 +500,12 @@ In this case you can use escape characters like: <code class="docutils literal n
 </ul>
 </section>
 <section id="exec-command">
-<h2>exec command<a class="headerlink" href="#exec-command" title="Permalink to this heading"></a></h2>
+<h2>exec command<a class="headerlink" href="#exec-command" title="Link to this heading"></a></h2>
 <p>Bash includes a built-in command called <code class="docutils literal notranslate"><span class="pre">exec</span></code>.
 Calling this replaces the process of the current shell with a process of the command specified after the <code class="docutils literal notranslate"><span class="pre">exec</span></code> command.</p>
 <p>Because the command is replacing the shell, it will cause a bash script to end after executing.</p>
 <div class="literal-block-wrapper docutils container" id="id15">
-<div class="code-block-caption"><span class="caption-text">Example of return</span><a class="headerlink" href="#id15" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example of return</span><a class="headerlink" href="#id15" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">exec</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Hello&quot;</span>
 <span class="nb">exec</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;World&quot;</span>
 </pre></div>
@@ -512,7 +514,7 @@ Calling this replaces the process of the current shell with a process of the com
 <p>The above example only prints <em>“Hello”</em></p>
 <p>It can also be used for redirecting std streams to log files:</p>
 <div class="literal-block-wrapper docutils container" id="id16">
-<div class="code-block-caption"><span class="caption-text">Example routing stdout to log file</span><a class="headerlink" href="#id16" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example routing stdout to log file</span><a class="headerlink" href="#id16" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">exec</span><span class="w"> </span><span class="m">1</span>&gt;log.txt
 
 <span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Hello&quot;</span>
@@ -527,10 +529,10 @@ Calling this replaces the process of the current shell with a process of the com
 </div>
 </section>
 <section id="bash-eval-statement">
-<h2>Bash eval statement<a class="headerlink" href="#bash-eval-statement" title="Permalink to this heading"></a></h2>
+<h2>Bash eval statement<a class="headerlink" href="#bash-eval-statement" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">eval</span></code> statement allows you to run a command based on a variable.</p>
 <div class="literal-block-wrapper docutils container" id="id17">
-<div class="code-block-caption"><span class="caption-text">Example using eval statement</span><a class="headerlink" href="#id17" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example using eval statement</span><a class="headerlink" href="#id17" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">MY_COMMAND</span><span class="o">=</span><span class="s2">&quot;git br -a&quot;</span>
 
 <span class="nb">eval</span><span class="w"> </span><span class="nv">$MY_COMMAND</span><span class="w"> </span>&gt;<span class="w"> </span>my_file.txt
@@ -541,10 +543,10 @@ Calling this replaces the process of the current shell with a process of the com
 </div>
 </section>
 <section id="print-colour-to-the-console">
-<h2>Print Colour to the console<a class="headerlink" href="#print-colour-to-the-console" title="Permalink to this heading"></a></h2>
+<h2>Print Colour to the console<a class="headerlink" href="#print-colour-to-the-console" title="Link to this heading"></a></h2>
 <p>Printing colour requires the use of escape characters. You can achieve this using <code class="docutils literal notranslate"><span class="pre">printf</span></code> commands, or <code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">-e</span></code>.</p>
 <div class="literal-block-wrapper docutils container" id="id18">
-<div class="code-block-caption"><span class="caption-text">Example printing colour</span><a class="headerlink" href="#id18" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example printing colour</span><a class="headerlink" href="#id18" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Color variables</span>
@@ -569,11 +571,11 @@ Calling this replaces the process of the current shell with a process of the com
 </div>
 </section>
 <section id="environment-file">
-<h2>Environment File<a class="headerlink" href="#environment-file" title="Permalink to this heading"></a></h2>
+<h2>Environment File<a class="headerlink" href="#environment-file" title="Link to this heading"></a></h2>
 <p>You can make an environment file, containing for example environment varibales and include this
 in your bash script.</p>
 <div class="literal-block-wrapper docutils container" id="id19">
-<div class="code-block-caption"><span class="caption-text">Example environment file</span><a class="headerlink" href="#id19" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example environment file</span><a class="headerlink" href="#id19" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># my_values.env</span>
 
 <span class="nv">COLOR</span><span class="o">=</span><span class="s2">&quot;black&quot;</span>
@@ -581,7 +583,7 @@ in your bash script.</p>
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id20">
-<div class="code-block-caption"><span class="caption-text">Example using environment file</span><a class="headerlink" href="#id20" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example using environment file</span><a class="headerlink" href="#id20" title="Link to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 
 <span class="nb">source</span><span class="w"> </span>./my_values.env
@@ -589,6 +591,27 @@ in your bash script.</p>
 </pre></div>
 </div>
 </div>
+</section>
+<section id="bashrc-file">
+<h2>bashrc file<a class="headerlink" href="#bashrc-file" title="Link to this heading"></a></h2>
+<p>Your <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code> file is run when you load a new bash terminal. Here, you can alter the default
+file to provide custom functionality.</p>
+<section id="git-branch-label">
+<h3>Git Branch Label<a class="headerlink" href="#git-branch-label" title="Link to this heading"></a></h3>
+<p>One customization you can do for example is to include a label on your bash promt telling you which
+git branch you are currently on, if you are in a git directory. You can do this by altering the <code class="docutils literal notranslate"><span class="pre">PS1</span></code>
+variable:</p>
+<div class="literal-block-wrapper docutils container" id="id21">
+<div class="code-block-caption"><span class="caption-text">Adding git branch label to bash prompt</span><a class="headerlink" href="#id21" title="Link to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Full prompt</span>
+<span class="nv">PS1</span><span class="o">=</span><span class="s1">&#39;${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(git branch --show-current &gt; /dev/null 2&gt;&amp;1 &amp;&amp; echo &quot; [$(git branch --show-current)]&quot;)\[\033[00m\] \$ &#39;</span>
+
+<span class="c1"># Newly added section</span>
+<span class="c1"># $(git branch --show-current &gt; /dev/null 2&gt;&amp;1 &amp;&amp; echo &quot; [$(git branch --show-current)]&quot;)\[\033[00m\] \$</span>
+</pre></div>
+</div>
+</div>
+</section>
 </section>
 </section>
 

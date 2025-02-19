@@ -1,25 +1,23 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SystemD &mdash; MyDocs 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e031e9a9"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
-        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-        <script>mermaid.initialize({"startOnLoad": true})</script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+      <script>mermaid.initialize({"startOnLoad": true})</script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -98,9 +96,9 @@
            <div itemprop="articleBody">
              
   <section id="systemd">
-<h1>SystemD<a class="headerlink" href="#systemd" title="Permalink to this heading"></a></h1>
+<h1>SystemD<a class="headerlink" href="#systemd" title="Link to this heading"></a></h1>
 <section id="service-files">
-<h2>Service Files<a class="headerlink" href="#service-files" title="Permalink to this heading"></a></h2>
+<h2>Service Files<a class="headerlink" href="#service-files" title="Link to this heading"></a></h2>
 <p>SystemD service files have 3 sections:</p>
 <ol class="arabic simple">
 <li><p>Unit: The information section - description
@@ -116,7 +114,7 @@ target or multi-user target), can also define service alias</p></li>
 view some more info</p>
 </div>
 <section id="unit-section">
-<h3>Unit Section<a class="headerlink" href="#unit-section" title="Permalink to this heading"></a></h3>
+<h3>Unit Section<a class="headerlink" href="#unit-section" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Description: This is the description that gets printed when running the service, so make it sound cool!</p></li>
 <li><p>After: You can specify the service runs after another service e.g.</p></li>
@@ -132,7 +130,7 @@ view some more info</p>
 </ul>
 </section>
 <section id="service-section">
-<h3>Service Section<a class="headerlink" href="#service-section" title="Permalink to this heading"></a></h3>
+<h3>Service Section<a class="headerlink" href="#service-section" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Type: simple,exec, forking, oneshot, dbus, notify, idle</p></li>
 <li><p>ExecStart: Commands (with their arguments) that are executed when the service is started e.g.</p></li>
@@ -151,7 +149,7 @@ view some more info</p>
 </ul>
 </section>
 <section id="install-section">
-<h3>Install Section<a class="headerlink" href="#install-section" title="Permalink to this heading"></a></h3>
+<h3>Install Section<a class="headerlink" href="#install-section" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>WantedBy: Specifies the target that will want this service - multi-user / graphical</p></li>
 <li><p>Alias: another name for starting/stopping a service</p></li>
@@ -160,9 +158,9 @@ view some more info</p>
 </section>
 <hr class="docutils" />
 <section id="systemd-management">
-<h2>SystemD Management<a class="headerlink" href="#systemd-management" title="Permalink to this heading"></a></h2>
+<h2>SystemD Management<a class="headerlink" href="#systemd-management" title="Link to this heading"></a></h2>
 <div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">Some SystemD commands</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Some SystemD commands</span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">systemctl</span> <span class="n">enable</span> <span class="n">name</span><span class="o">.</span><span class="n">service</span>
 <span class="n">systemctl</span> <span class="n">disable</span> <span class="n">name</span><span class="o">.</span><span class="n">service</span>
 <span class="n">systemctl</span> <span class="n">status</span> <span class="n">name</span><span class="o">.</span><span class="n">service</span>
@@ -181,10 +179,10 @@ To view targets available, use:</p>
 </section>
 <hr class="docutils" />
 <section id="example-adding-a-custom-service">
-<h2>Example adding a custom service<a class="headerlink" href="#example-adding-a-custom-service" title="Permalink to this heading"></a></h2>
+<h2>Example adding a custom service<a class="headerlink" href="#example-adding-a-custom-service" title="Link to this heading"></a></h2>
 <p>Here we give an example of how you would setup a service that runs a WSGI server</p>
 <div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">Example service file</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example service file</span><a class="headerlink" href="#id2" title="Link to this code"></a></div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Location: /etc/systemd/system/start-wsgi-server.service</span>
 
 <span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
@@ -203,7 +201,7 @@ To view targets available, use:</p>
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">Example service script</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example service script</span><a class="headerlink" href="#id3" title="Link to this code"></a></div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1"># Location: $HOME/start-wsgi-server</span>
 
@@ -219,7 +217,7 @@ gunicorn<span class="w"> </span>-b<span class="w"> </span><span class="m">0</spa
 </div>
 <p>You would also have to change some file permissions and enable the service:</p>
 <div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">Example setting up service</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example setting up service</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>/etc/systemd/system/start-wsgi-server.service
 systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>start-wsgi-server.service
 </pre></div>

@@ -1,25 +1,23 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Docker &mdash; MyDocs 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=e031e9a9"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
-        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-        <script>mermaid.initialize({"startOnLoad": true})</script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+      <script>mermaid.initialize({"startOnLoad": true})</script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -103,7 +101,7 @@
            <div itemprop="articleBody">
              
   <section id="docker">
-<h1>Docker<a class="headerlink" href="#docker" title="Permalink to this heading"></a></h1>
+<h1>Docker<a class="headerlink" href="#docker" title="Link to this heading"></a></h1>
 <p>Docker is a tool that allows developers to develop their applications in a sandbox
 (container) to run on the host operating system.</p>
 <p>Main components of Docker:</p>
@@ -117,7 +115,7 @@
 </div></blockquote>
 <hr class="docutils" />
 <section id="useful-terms">
-<h2>Useful Terms<a class="headerlink" href="#useful-terms" title="Permalink to this heading"></a></h2>
+<h2>Useful Terms<a class="headerlink" href="#useful-terms" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Images: The blueprint of our application which form the basis of containers</p></li>
 <li><p>Containers: A running version of an image</p></li>
@@ -128,7 +126,7 @@
 </section>
 <hr class="docutils" />
 <section id="commands">
-<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this heading"></a></h2>
+<h2>Commands<a class="headerlink" href="#commands" title="Link to this heading"></a></h2>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">pull</span></code>: This fetches the image from the Docker registry and saves it your system</p>
 <blockquote>
@@ -203,7 +201,7 @@ docker<span class="w"> </span>rm<span class="w"> </span>&lt;id&gt;
 </section>
 <hr class="docutils" />
 <section id="dockerfiles">
-<h2>Dockerfiles<a class="headerlink" href="#dockerfiles" title="Permalink to this heading"></a></h2>
+<h2>Dockerfiles<a class="headerlink" href="#dockerfiles" title="Link to this heading"></a></h2>
 <p>A Dockerfile contains a list of commands that the Docker client calls when creating an image.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">FROM</span></code>: Specifies the base image to use</p></li>
@@ -246,7 +244,7 @@ docker<span class="w"> </span>rm<span class="w"> </span>&lt;id&gt;
 </section>
 <hr class="docutils" />
 <section id="docker-volumes">
-<h2>Docker Volumes<a class="headerlink" href="#docker-volumes" title="Permalink to this heading"></a></h2>
+<h2>Docker Volumes<a class="headerlink" href="#docker-volumes" title="Link to this heading"></a></h2>
 <p>A Docker Volume is a way of including part of your host filesystem into the Docker container.
 This way when you close and delete the container, you have a way of storing the data that you wanted.</p>
 <p>There are 3 types of volumes:</p>
@@ -262,7 +260,7 @@ This way when you close and delete the container, you have a way of storing the 
 </section>
 <hr class="docutils" />
 <section id="docker-compose">
-<h2>Docker Compose<a class="headerlink" href="#docker-compose" title="Permalink to this heading"></a></h2>
+<h2>Docker Compose<a class="headerlink" href="#docker-compose" title="Link to this heading"></a></h2>
 <p>One of the best ways of making docker containers easy to maintain, is to use multiple containers
 for one job, each one implementing one process (micro-service).</p>
 <p>Docker Compose lets you run multiple docker containers at the same time.</p>
@@ -272,7 +270,7 @@ for one job, each one implementing one process (micro-service).</p>
 <li><p><code class="code highlight bash docutils literal highlight-bash">docker<span class="w"> </span>compose<span class="w"> </span>down</code>: Shuts down all the containers together</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">Example of a <em>docker-compose.yaml</em></span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example of a <em>docker-compose.yaml</em></span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3&#39;</span>
 <span class="nt">services</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">app</span><span class="p">:</span>
@@ -318,9 +316,9 @@ for one job, each one implementing one process (micro-service).</p>
 </section>
 <hr class="docutils" />
 <section id="example-dockerfile">
-<h2>Example Dockerfile<a class="headerlink" href="#example-dockerfile" title="Permalink to this heading"></a></h2>
+<h2>Example Dockerfile<a class="headerlink" href="#example-dockerfile" title="Link to this heading"></a></h2>
 <div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">Example Dockerfile</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example Dockerfile</span><a class="headerlink" href="#id2" title="Link to this code"></a></div>
 <div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:22.04</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">base_image</span>
 
 <span class="k">ARG</span><span class="w"> </span><span class="nv">USER</span><span class="o">=</span>runner
@@ -389,7 +387,7 @@ script.</p>
 </section>
 <hr class="docutils" />
 <section id="exporting-an-image-to-file">
-<h2>Exporting an image to file<a class="headerlink" href="#exporting-an-image-to-file" title="Permalink to this heading"></a></h2>
+<h2>Exporting an image to file<a class="headerlink" href="#exporting-an-image-to-file" title="Link to this heading"></a></h2>
 <p>When you build an image/images, you can choose from a number of
 <a class="reference external" href="https://docs.docker.com/build/exporters/">Export options</a>.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">docker</span></code> option exports the build result to the local file system.
@@ -398,7 +396,7 @@ This could be on the same machine, or you could send this file to another machin
 In this way, it is possible to build on one machine and export the image to be executed on another machine
 (as long as the platform that is built matches the platform where it is run).</p>
 <div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">Example outputting to file</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="code-block-caption"><span class="caption-text">Example outputting to file</span><a class="headerlink" href="#id3" title="Link to this code"></a></div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>buildx<span class="w"> </span>build<span class="w"> </span>--platform<span class="o">=</span><span class="s2">&quot;linux/arm64/v8&quot;</span><span class="w"> </span>-t<span class="w"> </span>my_image:latest<span class="w"> </span>--output<span class="w"> </span><span class="nv">type</span><span class="o">=</span>docker,dest<span class="o">=</span>my_image.tar
 </pre></div>
 </div>
@@ -417,13 +415,13 @@ commands separately.</p>
 </section>
 <hr class="docutils" />
 <section id="multi-architecture-targets">
-<h2>Multi-architecture Targets<a class="headerlink" href="#multi-architecture-targets" title="Permalink to this heading"></a></h2>
+<h2>Multi-architecture Targets<a class="headerlink" href="#multi-architecture-targets" title="Link to this heading"></a></h2>
 <p>This section will give some info on how you can build docker images for multiple architecture target platforms.</p>
 <p>You can find some general documentation <a class="reference external" href="https://docs.docker.com/build/building/multi-platform/">here</a>.</p>
 <p>In the examples given below, we are going to be building an image for two target architectures,
 <em>arm64</em> and <em>amd64</em>. This will be done from a host machine using amd64.</p>
 <section id="building-with-qemu">
-<h3>Building with QEMU<a class="headerlink" href="#building-with-qemu" title="Permalink to this heading"></a></h3>
+<h3>Building with QEMU<a class="headerlink" href="#building-with-qemu" title="Link to this heading"></a></h3>
 <p>Since we are using an amd64 machine, we can easily build images targeting amd64.
 To build arm64 images on this machine, one technique is to use the QEMU feature of the docker builder,
 to emulate an arm64 machine and build an image for that.</p>
@@ -446,7 +444,7 @@ to emulate an arm64 machine and build an image for that.</p>
 <p>For reference, a test build I did took <strong>863 seconds</strong>.</p>
 </section>
 <section id="building-with-native-machines">
-<h3>Building with Native machines<a class="headerlink" href="#building-with-native-machines" title="Permalink to this heading"></a></h3>
+<h3>Building with Native machines<a class="headerlink" href="#building-with-native-machines" title="Link to this heading"></a></h3>
 <p>Using <a class="reference external" href="https://docs.docker.com/engine/context/working-with-contexts/">Docker Contexts</a>
 it is possible to build on a remote docker builder.</p>
 <p>This means we can build our amd64 image locally, and the arm64 image on another machine,
@@ -525,7 +523,7 @@ for documentation on how to do this.</p>
 </section>
 <hr class="docutils" />
 <section id="sources">
-<h2>Sources<a class="headerlink" href="#sources" title="Permalink to this heading"></a></h2>
+<h2>Sources<a class="headerlink" href="#sources" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://docker-curriculum.com">https://docker-curriculum.com</a></p></li>
 <li><p><a class="reference external" href="https://www.tutorialspoint.com/docker/index.htm">https://www.tutorialspoint.com/docker/index.htm</a></p></li>
