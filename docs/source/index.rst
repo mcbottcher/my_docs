@@ -32,3 +32,5 @@ Contents
    jinja
    mermaid
    rust
+   claude
+   
