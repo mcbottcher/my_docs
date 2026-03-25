@@ -17,11 +17,11 @@ The build runs inside Docker:
 ./.github/actions/script.sh
 ```
 
-Or manually (requires Sphinx and dependencies installed):
+Or manually using Poetry:
 
 ```bash
-pip install -r docs/requirements.txt
-cd docs && make html
+poetry install
+poetry run make -C docs html
 # Output: docs/build/html/
 ```
 
