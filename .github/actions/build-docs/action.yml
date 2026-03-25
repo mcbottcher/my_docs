@@ -1,0 +1,20 @@
+name: Build Docs
+description: Install dependencies, build HTML docs, and upload artifact
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.x'
+    - name: Install Poetry
+      shell: bash
+      run: pip install poetry
+    - name: Build HTML
+      shell: bash
+      run: ./build_docs.sh --no-browser
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v6
+      with:
+        name: html-docs
+        path: docs/build/html/
