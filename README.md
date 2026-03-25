@@ -2,7 +2,9 @@
 
 **MyDocs** is a place where I can store documentation on knowledge I have aquired over the years to refer back to.
 
-[![Sphinx build](https://github.com/mcbottcher/my_docs/actions/workflows/sphinx.yml/badge.svg)](https://github.com/mcbottcher/my_docs/actions/workflows/sphinx.yml)
+:link: [View the docs](https://mcbottcher.github.io/my_docs/)
+
+[![Deploy Docs](https://github.com/mcbottcher/my_docs/actions/workflows/deploy.yml/badge.svg)](https://github.com/mcbottcher/my_docs/actions/workflows/deploy.yml)
 
 ## Building Docs Locally
 
