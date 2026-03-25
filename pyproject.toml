@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "my-docs"
+version = "0.1.0"
+description = "Personal knowledge base documentation"
+authors = ["mcbottcher"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.8"
+sphinx = "*"
+sphinx-rtd-theme = "*"
+sphinxemoji = "*"
+sphinx-mermaid = "*"
+setuptools = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
