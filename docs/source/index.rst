@@ -34,3 +34,4 @@ Contents
    rust
    claude
    ansible
+   mcp
