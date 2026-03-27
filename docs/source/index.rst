@@ -35,3 +35,4 @@ Contents
    claude
    ansible
    mcp
+   ros2
