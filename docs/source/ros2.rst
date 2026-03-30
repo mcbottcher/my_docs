@@ -84,7 +84,8 @@ Services have a request and response, and involve a server and client(s).
 Parameters
 ----------
 
-A parameter is a configuration value of a node, kind of like a node setting or state.
+A parameter is a configuration value of a node that can be changed during runtime without restarting the node.
+Parameters can be set from the command line and also by other nodes.
 
 .. code-block:: bash
 
@@ -159,6 +160,100 @@ This is useful for saving results from tests and replaying them later.
 .. note::
    It is also possible to record multiple topics at the same time.
 
-----
 
-Continue: `Colcon Tutorial <https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Colcon-Tutorial.html>`_
+Workspaces
+----------
+
+A workspace is a directory containing ROS2 packages.
+
+Before building a workspace, it is good to check you have all the required dependencies:
+
+.. code-block:: bash
+
+   rosdep install -i --from-path src --rosdistro humble -y
+
+To build, use the ``colcon`` tool (replaces ``catkin``):
+
+.. code-block:: bash
+
+   colcon build
+
+Useful arguments for ``colcon build``:
+
+- ``--packages-up-to``: builds the package you want, plus all its dependencies, but not the whole workspace (saves time)
+- ``--symlink-install``: saves you from having to rebuild every time you tweak Python scripts
+- ``--event-handlers console_direct+``: shows console output while building (can otherwise be found in the log directory)
+- ``--executor sequential``: processes the packages one by one instead of using parallelism
+
+Sourcing overlays means your terminal can find extra ROS2 packages that you have locally on your machine,
+not in the main installation. To source, open the terminal and run:
+
+.. code-block:: bash
+
+   source install/local_setup.bash
+
+.. warning::
+   Do not source in the same terminal session that you build a package with, as this causes issues.
+
+.. note::
+   If you are cloning a package that you intend to use, make sure you checkout the package to the ROS2
+   version you are using on your machine, e.g. ``humble``.
+
+
+Packages
+--------
+
+A package is an organisational unit for your ROS2 code, allowing others to install and use your code.
+Packages can be CMake or Python based.
+
+A single workspace can contain multiple packages of both types. You cannot have nested packages.
+It is best practice to keep packages in your workspace in a ``src/`` folder.
+
+Create a new package with:
+
+.. code-block:: bash
+
+   ros2 pkg create --build-type ament_python --license Apache-2.0 <package_name>
+
+In C++ code, use the ``rclcpp`` library to interact with ROS2:
+
+.. code-block:: cpp
+
+   #include "rclcpp/rclcpp.hpp"
+
+For Python code, use the ``rclpy`` package.
+
+
+Interfacing Between Packages
+-----------------------------
+
+Two nodes interfacing with each other need some shared information, such as the names of the topics they share.
+Instead of hardcoding these into each package, it is good practice to keep this information in a shared place.
+
+One way to do this is to create a new interface package and add ``.msg`` and ``.srv`` files there, which can
+be used by other packages.
+
+It is also possible to define the interface in the package it is used, and another package can use that package
+as a dependency to access the interface specification.
+
+
+Debug
+-----
+
+Use ``ros2 doctor`` to run checks on your overall ROS2 environment:
+
+.. code-block:: bash
+
+   ros2 doctor
+
+
+Plugins
+-------
+
+ROS2 plugins allow you to swap out a piece of functionality at runtime without recompiling the code that uses it.
+You define a base class interface that all plugins must follow, then any number of plugin implementations can be
+loaded interchangeably. The ``pluginlib`` library handles the loading behind the scenes, and you choose which
+plugin to use via a config file or parameter.
+
+A plugin is essentially a shared library that gets loaded at runtime, so you can choose which plugin you want
+without recompiling.
