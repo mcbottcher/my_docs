@@ -36,3 +36,4 @@ Contents
    ansible
    mcp
    ros2
+   prompt_engineering
