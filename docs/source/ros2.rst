@@ -96,6 +96,9 @@ You can set, get, dump, and load parameters. Loading can be done from a paramete
 
 You can also load parameters on node startup using :bash:`--ros-args --params-file`.
 
+Often a node needs to respond to changes to its own parameters or another node's parameters. The
+``ParameterEventHandler`` class makes it easy to listen for parameter changes so that your code can respond to them.
+
 
 Actions
 -------
@@ -112,6 +115,19 @@ The client or server can each decide to abort the goal if they choose.
 .. code-block:: bash
 
    ros2 action send_goal <action_name> <action_type> <values>
+
+Action interfaces are defined in ``.action`` files:
+
+.. code-block:: text
+
+   # Request
+   ---
+   # Result
+   ---
+   # Feedback
+
+Feedback messages are sent periodically during processing to report the status and progress of the action.
+Actions are built using the ``rosidl`` code generation pipeline.
 
 
 Logs
@@ -140,7 +156,16 @@ system at once:
 
    ros2 launch <package_name> <launch_file>
 
-Launch files can be written in Python, XML, and YAML.
+Launch files can be written in Python, XML, and YAML. They can start and stop different nodes as well as
+trigger and act on various events.
+
+You can use **substitutions** in launch files — variables or parameters that are only evaluated when the
+launch file is run.
+
+In Python launch files you can register functions to run on events such as ``OnProcessStart``,
+``OnProcessIO``, ``OnExecutionComplete``, ``OnProcessExit``, and ``OnShutdown``.
+
+Launch files can also be nested: your main launch file can include and call other launch files.
 
 
 Recording and Playing Back Data
@@ -171,6 +196,10 @@ Before building a workspace, it is good to check you have all the required depen
 .. code-block:: bash
 
    rosdep install -i --from-path src --rosdistro humble -y
+
+``rosdep`` is a dependency management utility for identifying and installing dependencies needed to build
+or install a package. It reads dependencies from your ``package.xml`` file. Different dependency types
+exist for different purposes, such as build-only or test-only dependencies.
 
 To build, use the ``colcon`` tool (replaces ``catkin``):
 
@@ -235,6 +264,45 @@ be used by other packages.
 
 It is also possible to define the interface in the package it is used, and another package can use that package
 as a dependency to access the interface specification.
+
+
+Composable Nodes
+----------------
+
+A Composable Node is a ROS2 node that is also compiled as a shared library (``.so`` file), so that multiple
+nodes can be loaded into the same process instead of each running in their own separate process. This reduces
+inter-process communication overhead. You can connect composable nodes via a launch file.
+
+
+Testing
+-------
+
+Run tests using the ``colcon test`` verb:
+
+.. code-block:: bash
+
+   colcon test --ctest-args tests [package_selection_args]
+
+   # View results
+   colcon test-result --all --verbose
+
+ROS2 uses ``gtest`` for C++ and ``pytest`` for Python. There are two main types of tests:
+
+- **Unit tests** — test a function or class in isolation; no ROS2 running needed.
+- **Integration tests** — spin up actual nodes and verify they communicate correctly (topics published,
+  data correct, services respond, etc.). ROS2 provides ``rclpy`` helpers to write these in Python.
+
+Integration tests can include a launch file to bring up the nodes you want to test together.
+
+
+RViz
+----
+
+RViz (ROS Visualization) is a 3D visualization tool that lets you see what your robot sees and knows in
+real time. It subscribes to topics and displays them visually — it does not control your robot or run any
+logic.
+
+Use URDF files to describe how your robot looks. RViz also supports custom viewers for your robot.
 
 
 Debug
