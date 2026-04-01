@@ -2,7 +2,7 @@
 name: commit
 description: Stage all changes and commit using conventional commits style (type: short description)
 disable-model-invocation: true
-allowed-tools: Bash, Read, Glob, Grep
+allowed-tools: Bash, Read, Glob, Grep, AskUserQuestion
 ---
 
 Stage and commit the current changes using this project's conventional commit style.
@@ -27,5 +27,8 @@ type: short description
 1. Run `git status` and `git diff` to understand what changed
 2. Run `git add` for the relevant files (prefer specific files over `git add -A`)
 3. Propose a commit message following the format above
-4. Ask the user to confirm before committing
-5. Run `git commit -m "<message>"`
+4. Use `AskUserQuestion` to confirm with the proposed message as the question,
+   offering `Yes, commit` and `No, cancel` as options. The user can also use
+   "Other" to provide a custom commit message.
+5. If confirmed (or a custom message provided), run `git commit -m "<message>"`.
+   If cancelled, do nothing.
