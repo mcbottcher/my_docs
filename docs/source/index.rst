@@ -37,3 +37,4 @@ Contents
    mcp
    ros2
    prompt_engineering
+   udev
