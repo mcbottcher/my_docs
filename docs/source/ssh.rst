@@ -17,16 +17,16 @@ Authentication
 --------------
 
 Clients can be authenticated either using passwords or ssh keys.
-ssh keys are more secure so are preffered.
+ssh keys are more secure so are preferred.
 
-To authenitcate using ssh keys, a user must have an SSH key pair (public and private)
+To authenticate using ssh keys, a user must have an SSH key pair (public and private)
 on their local computer. On the remote server, the public key can be copied to: ``~/.ssh/authorized_keys``.
-This file contains a list of public keys, one per line, authoirsed to login to the account.
+This file contains a list of public keys, one per line, authorised to login to the account.
 
 When a client connects to a host, it first tells it which public key to use.
-The client checks it has it in its list, and uses the key to encrypt a random sting.
+The client checks it has it in its list, and uses the key to encrypt a random string.
 The server can decrypt this using its private key, and generate a hash (MD5) of the decrypted
-sting and a session id. The client can check this hash is the correct value, to authenticate
+string and a session id. The client can check this hash is the correct value, to authenticate
 the connection.
 
 Forwarding Credentials
@@ -140,9 +140,9 @@ Client Side Configurations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can create a configuration file on your host machine that will hold the config options
-for connections. This can be located in ``~/..sh/config``
+for connections. This can be located in ``~/.ssh/config``
 
-.. code-block::
+.. code-block:: text
     :caption: Basic config file example
 
     Host <remote_alias>
@@ -154,7 +154,7 @@ This example allows you to log into a specific port without needing to specify i
 .. note::
     Check the ``$ man ssh_config`` page to see the configuration options available
 
-.. code-block::
+.. code-block:: text
     :caption: Another Basic config file example
 
     Host testhost
@@ -164,9 +164,9 @@ This example allows you to log into a specific port without needing to specify i
 
 Here you can use ``ssh testhost`` to use the config defined in the config file.
 
-You can also use wildcards to apply to more than one host, these can be overriden later on:
+You can also use wildcards to apply to more than one host, these can be overridden later on:
 
-.. code-block::
+.. code-block:: text
     :caption: Example using Wildcard to set ForwardX11 for all hosts
 
     Host *
@@ -176,21 +176,21 @@ You can also use wildcards to apply to more than one host, these can be override
         HostName <your_domain>
         ForwardX11 yes
         Port <4444>
-        User <demo>   
+        User <demo>
 
 You can avoid ssh sessions timing out by making the host send a packet to the client at configurable
 times.
 
-.. code-block::
+.. code-block:: text
     :caption: Configure *~/.ssh/config* file to send alive packet every 120s
 
     Host *
         ServerAliveInterval 120
 
-If you have mutiple connections to the same client, you can multiplex your ssh connections on the same
-TCP connection instead of creating new TCP connecions for each instance.
+If you have multiple connections to the same client, you can multiplex your ssh connections on the same
+TCP connection instead of creating new TCP connections for each instance.
 
-.. code-block::
+.. code-block:: text
     :caption: Configure *~/.ssh/config* file use TCP multiplexing
 
     Host *
@@ -210,18 +210,18 @@ You can configure the way your server responds to requests.
 
     Restart the ssh service for the changes to take place: :bash:`$ sudo service ssh restart`
 
-    .. code-block::
+    .. code-block:: text
         :caption: Configure the */etc/ssh/sshd_config* file
 
         PasswordAuthentication no
 
 - Changing the port the daemon runs on:
 
-    Changing the default port can help limit the number of authentication request you get from attackers.
+    Changing the default port can help limit the number of authentication requests you get from attackers.
 
-    Again restart the ssh server to make the change take affect
+    Again restart the ssh server to make the change take effect.
 
-    .. code-block::
+    .. code-block:: text
         :caption: Configure the */etc/ssh/sshd_config* file
 
         #Port 22
@@ -231,14 +231,14 @@ You can configure the way your server responds to requests.
 
     Edit the */etc/ssh/sshd_config* file.
 
-    .. code-block::
+    .. code-block:: text
         :caption: Allow users explicitly
 
         AllowUsers <user2> <user1>
 
     Or you can allow a group of users
-    
-    .. code-block::
+
+    .. code-block:: text
         :caption: Allow ssh group
 
         AllowGroups <sshmembers>
@@ -254,29 +254,29 @@ You can configure the way your server responds to requests.
 
 - Disable root login:
 
-    If you have setup an ssh user with ``sudo`` privilidges, you can disable access to the root user.
+    If you have setup an ssh user with ``sudo`` privileges, you can disable access to the root user.
 
-    .. code-block::
+    .. code-block:: text
         :caption: Edit the */etc/ssh/sshd_config* file
 
         PermitRootLogin no
 
-- Allowing root access for specific commands
+- Allowing root access for specific commands:
 
-    You might want to disable root access in general but only let certain commands run with root privilidges
+    You might want to disable root access in general but only let certain commands run with root privileges.
 
     This can be achieved by adding specific commands to the root user's ``authorized_keys`` file.
 
     It is recommended to use a new key for each automatic process.
 
-    .. code-block::
+    .. code-block:: text
         :caption: Setting a ssh key for a specific command in */root/.ssh/authorized_keys*
 
         command="</path/to/command arg1 arg2>" ssh-rsa ...
 
-    Then edit the *etc/ssh/sshd_config* file
+    Then edit the */etc/ssh/sshd_config* file:
 
-    .. code-block::
+    .. code-block:: text
         :caption: Allow SSH key logins to use root only when the command has been specified for the key
 
         PermitRootLogin forced-commands-only
@@ -290,7 +290,7 @@ You can configure the way your server responds to requests.
 
     To enable this on the server, edit the */etc/ssh/sshd_config* file:
 
-    .. code-block::
+    .. code-block:: text
         :caption: Enable X Windows Forwarding
 
         X11Forwarding yes
@@ -407,10 +407,10 @@ Multiple SSH Users - GitHub
 
 Checkout `this <https://gist.github.com/rahularity/86da20fe3858e6b311de068201d279e3>`_ tutorial.
 
-1. Create seperate ssh keys.
+1. Create separate ssh keys.
 2. Make a config file in *.ssh/config*
 
-.. code-block::
+.. code-block:: text
     :caption: Example config (*.ssh/config*) file
 
     #account1
@@ -427,8 +427,8 @@ Checkout `this <https://gist.github.com/rahularity/86da20fe3858e6b311de068201d27
 
 3. When you clone the repo, make sure to clone it as a specific user:
 
-.. code-block::
-    
+.. code-block:: bash
+
     git clone git@github.com<user_to_clone_with>:<repo_owner>/<repo_name>.git
 
 ----
