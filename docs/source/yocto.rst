@@ -279,7 +279,7 @@ The name of the patch file doesn't matter too much. The file it targets is named
 There are some conventions though of the naming of patch files that you can look up.
 
 .. code-block:: bash
-   :caption: Example creating a diff file 
+   :caption: Example creating a diff file
 
    git diff --no-index socfpga_common.h.orig socfpga_common.h > 0001-add-uboot-bootcmd.patch
 
@@ -349,7 +349,7 @@ Include and Require
 
 You can include some more info in your *.bb* files. You can either use include - which includes
 the file in your *.bb file* - or require - which will check the file
-exists first before processing the *.bb* file. If the file doesn't 
+exists first before processing the *.bb* file. If the file doesn't
 exist require will throw an error.
 
 .. code-block::
@@ -425,7 +425,7 @@ software for your target.
 
 :bash:`. /opt/poky/4.1.3/environment-setup-cortexa9t2hf-neon-poky-linux-gnueabi`
 
-Recipe Naming 
+Recipe Naming
 -------------
 
 Recipes are built using their name. They can optionally include a version number

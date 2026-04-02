@@ -30,7 +30,7 @@ In this yaml file, you can use pre-defined pre-commits from different repos.
         - id: black
 
 Some other hooks to consider could be: pylint, isort, mirrors-prettier ...
- 
+
 The *https://github.com/pre-commit/pre-commit-hooks* repo also has a lot of
 options for pre-commits you can run. You can choose them based on the ``id`` tag.
 
@@ -122,7 +122,7 @@ Some types:
   - ``refactor``: resturcture of code, no functional change
   - ``style``: code styling, e.g. black formatter changes
   - ``docs``: updates to documentation e.g. READMEs
-  - ``ci``: changes to CI 
+  - ``ci``: changes to CI
   - ``test``: adding/correcting tests
 
 .. code-block::

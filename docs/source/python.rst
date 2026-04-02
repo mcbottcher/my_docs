@@ -14,7 +14,7 @@ Lambda
 
   func = lambda a : a + 10
   print(func(1)) # Will output 11
- 
+
 - Can also be used inside another function
 
 .. code-block:: python
@@ -41,7 +41,7 @@ Map
 
   def func(a):
     return a+10
-    
+
   # prints [11, 12, 13]
   print(list(map(func, [1,2,3])))
 
@@ -57,10 +57,10 @@ Filter
 - :python:`filter(func, iter)`: Added each element of iterable to new iterable if func returns true
 
 .. code-block:: python
-    
+
   def func(a):
     return a != 0
-    
+
   # prints [1, 2]
   print(list(filter(func, [0, 1, 2])))
 
@@ -309,7 +309,7 @@ Exceptions
     raise
 
 .. warning::
-  When you don't specify a specific exception in the ``except`` block, it will also catch 
+  When you don't specify a specific exception in the ``except`` block, it will also catch
   Keyboard interrupts like CTRL+C. You can specify to catch these with ``KeyboardInterrupt``
 
 Handling Signals
@@ -400,7 +400,7 @@ Generator
 - Can also use generator comprehensions
 
 .. code-block:: python
-  
+
   gen = (i for i in range(10) if i%2)
 
   for i in gen:
@@ -531,7 +531,7 @@ Python Packages
 A python module is simply a single ``.py`` file.
 They can be imported with the ``import`` statement.
 
-A package is a set of python modules with related functionality. These modules are 
+A package is a set of python modules with related functionality. These modules are
 organised in a directory hierachry. It organises modules in a single namespace.
 
 Packages can be imported with a package manager like ``pip``.
@@ -617,7 +617,7 @@ your package. This basically runs when you first import your package into your c
   class ObjectOne:
     ...
 
-Once you have setup your project, you can run ``python -m pip install .`` in the same dir as your 
+Once you have setup your project, you can run ``python -m pip install .`` in the same dir as your
 ``pyproject.toml`` file. It seems this is a better result than ``pip install .``. It might also be
 smart to do this in your project's virtual environment. You can also use the ``-e`` flag to keep the
 package editable so you can use it and edit it at the same time.
@@ -652,7 +652,7 @@ each new process you make.
   def func_2():
       for _ in range(10):
           print("World")
-          time.sleep(1) 
+          time.sleep(1)
 
   t1 = threading.Thread(target=func_1)
   t2 = threading.Thread(target=func_2)
@@ -720,7 +720,7 @@ Decorate functions
 
     return wrapper
 
-  
+
   @my_decorator
   def my_func(my_arg):
 
@@ -764,7 +764,7 @@ It is also possible use classes to decorate a function too.
   @LimitQuery
   def get_coin_price(limit):
       '''View the Bitcoin Price Index (BPI)'''
-      
+
       url = requests.get('https://api.coindesk.com/v1/bpi/currentprice.json')
 
       if url.status_code == 200:
@@ -881,7 +881,7 @@ Schemas
 ^^^^^^^
 
 One cool thing pydantic can do is create schemas. This is basically a description of what a yaml
-or json config file should contain. Pydantic uses this schema to validate an input from a yaml or 
+or json config file should contain. Pydantic uses this schema to validate an input from a yaml or
 json file. It can also output a schema file which you can use for type completion and error checking
 on a yaml or json file.
 
@@ -896,7 +896,7 @@ on a yaml or json file.
   class Person:
     name: str
     # age must be an int and less than 99
-    age: int = pydantic.Field(lt=99) 
+    age: int = pydantic.Field(lt=99)
 
   schema = pydantic.TypeAdapter(Person)
 
@@ -927,7 +927,7 @@ Validation
 Validation can be performed in a few ways:
 
 .. code-block:: python
-  :caption: Two examples of validation 
+  :caption: Two examples of validation
 
   import pydantic
   from pydantic.dataclasses import dataclass
@@ -1101,7 +1101,7 @@ You can use the ``argparse`` package to manage passing arguments to your python 
   )
 
   # example of passing a flag
-  parser.add_argument( 
+  parser.add_argument(
     "--european",
     action="store_true",
     help="Flag if set indicates the person is European.",
@@ -1175,7 +1175,7 @@ It is also possible to use web endpoints:
 
       return requests.get(ORG_RUNNERS_BASE_URL, headers=headers, params=params)
 
-.. note:: 
+.. note::
   You can use the package ``http`` to get ``HTTPStatus`` enums
 
 Server
@@ -1335,4 +1335,3 @@ file.
 
 You can construct a URL using the base of ``"https://img.shields.io/badge"`` to generate
 an svg sheild.
-

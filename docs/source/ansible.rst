@@ -15,7 +15,7 @@ Getting Started
 ---------------
 
 To get started you will need one machine with ansible installed, and one which will act as the
-managed node. To setup the managed node, you need to install an ssh client on it and add the 
+managed node. To setup the managed node, you need to install an ssh client on it and add the
 control machine's public ssh key to the autorized keys file.
 
 You can then produce an ansible inventory file:
@@ -43,7 +43,7 @@ This is a way for ansible to automate repeating tasks. This is done using struct
 in yaml as an ordered set of steps to run.
 
 .. code-block::yaml
-    :caption: Example of a playbook 
+    :caption: Example of a playbook
 
     - name: Intro to Ansible Playbooks
       hosts: all

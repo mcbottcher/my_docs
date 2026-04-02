@@ -10,10 +10,10 @@ Usage
 - In Github markdown, you can use mermaid like you would a code block:
 
 .. code-block::
-    :caption: Example of Github Markdown 
+    :caption: Example of Github Markdown
 
     ```mermaid
-    
+
     .. code goes here
 
     ```
@@ -36,7 +36,7 @@ Pie chart
 ^^^^^^^^^
 
 .. code-block::
-    :caption: Example making a Pie Chart 
+    :caption: Example making a Pie Chart
 
     pie title Pets adopted by volunteers
         "Dogs" : 386

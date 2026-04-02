@@ -42,7 +42,7 @@ Workflow YAML file
 - :yaml:`name:`: The name of the workflow that appears in the "Actions" tab in GitHub
 - :yaml:`run-name:`: The name of the workflow run that will appear on GitHub
 
-    This can be customised by incrementing a number or showing the username of the person that 
+    This can be customised by incrementing a number or showing the username of the person that
     triggered the action e.g. :yaml:`run-name: ${{ github.actor }} workflow run`
 - :yaml:`on:`: Specifies the trigger(s) for the workflow
 - :yaml:`jobs:`: Groups together jobs that run in the workflow
@@ -121,7 +121,7 @@ Workflow Triggers - Events
 - `pull_reqest`
 
     - You can specify a branch/branches with `branches:`
-    
+
     - You can specify which particular file changes will trigger this with
       `paths:`. You can use expressions here like `"*,py"` to trigger on a
       change in a python file.
@@ -218,7 +218,7 @@ See `Metadata Syntax for GitHub Actions <https://docs.github.com/en/actions/crea
 - author
 - description
 - inputs : see above section
-- outputs : see above section 
+- outputs : see above section
 - runs : Specifies how the action is executed
     - runs composite actions:
 
@@ -272,7 +272,7 @@ If you want a script to run, you have to make sure it has it's permission set to
 This executable status is included when you commit the file to GitHub.
 
 .. code-block:: bash
-    
+
     sudo chmod +x <your_script.sh>
 
 .. warning::
@@ -518,7 +518,7 @@ other repositories to access actions.
 
 .. note::
     As seen in the example, you need to use the ``github.action_path`` to reference files
-    in relation to the actions file. 
+    in relation to the actions file.
 
 Doing it this way even allows you to call actions in the same repository you are in.
 The other method you can use, is to first checkout the repository containing the action
@@ -530,10 +530,10 @@ you want to run, and then call the action locally:
     - uses: actions/checkout@v4 # need to checkout repo first in this case
     - uses: ./.github/<action_name>
 
-In this case the action version is determined by the reference you use to checkout the 
+In this case the action version is determined by the reference you use to checkout the
 repository containing the action.
 
-.. note:: 
+.. note::
     In theory you can have an action.yml anywhere in your repo, not just in the .github/actions.
     It makes more sense as a public action repo to have the action in the repo root.
 
@@ -556,7 +556,7 @@ You can call a workflow both in the same repo or in another repo.
 Job flow control
 ----------------
 
-Here is an example of some job control flow. You can use the ``needs`` keyword to 
+Here is an example of some job control flow. You can use the ``needs`` keyword to
 achieve this.
 
 .. code-block:: yaml
@@ -565,7 +565,7 @@ achieve this.
     jobs:
         job1:
             ...
-        
+
         job2:
             needs: job1
             # note not in ${{ }}
@@ -588,7 +588,7 @@ Undefined workflow inputs are treated as empty strings.
 
     on:
         workflow_dispatch:
-        
+
         workflow_call:
             my_input:
                 description: ''
@@ -629,7 +629,7 @@ To access the output from a step, you need to assign the step an ``id``.
         number-of-days:
             description: "Number of days since unix epoch - UTC"
             value: ${{ steps.get-days.outputs.days }}
-    
+
     runs:
         using: "composite"
         steps:
@@ -652,7 +652,7 @@ in the step.output for the action step calling the python script.
     with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as var:
         var.write(f"run_job_config={json.dumps(run_job_config)}\n")
 
-.. note:: 
+.. note::
     ``json.dumps`` from a dictionary is a good way to get data in a nice format for using in Github Actions.
 
 ----

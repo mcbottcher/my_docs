@@ -47,7 +47,7 @@ Commands
     :bash:`docker run <image_name>`
 
     - This will exit immediately since no command is specified for the container to run:
-        
+
         :bash:`docker run busybox echo "hello from busybox container"`
 
     - Run with an interactive environment:
@@ -151,7 +151,7 @@ There are 3 types of volumes:
 2. Anonymous Volumes: :bash:`docker run -v <container_dir>`. This will put the volume somewhere on your host fs that you have't specified (``/var/lib/docker/volumes/``)
 3. Named Volume: :bash:`docker run -v name:<container_id>`. You can reference the host volume with a name that you specify
 
-.. note:: 
+.. note::
     When specifying a volume, you should use the absolute path as to not run into issues.
 
 ----
@@ -187,7 +187,7 @@ Docker Compose uses a yaml file to configure the containers that are run.
             environment:
             MYSQL_HOST: localhost
             MYSQL_USER: root
-            MYSQL_PASSWORD: 
+            MYSQL_PASSWORD:
             MYSQL_DB: test
         mongo:
             image: mongo
@@ -280,7 +280,7 @@ in the docker build ``--target`` argument. This way a Dockerfile can contain mul
 Also note that when copying in files from the local machine, we can specify that the files
 use a specific user other than root.
 
-.. note:: 
+.. note::
     To run the ``CMD`` from an entrypoint script, you should include ``exec "$@"`` in the entrypoint
     script.
 
@@ -289,7 +289,7 @@ use a specific user other than root.
 Exporting an image to file
 --------------------------
 
-When you build an image/images, you can choose from a number of 
+When you build an image/images, you can choose from a number of
 `Export options <https://docs.docker.com/build/exporters/>`_.
 
 The ``docker`` option exports the build result to the local file system.
@@ -311,9 +311,9 @@ You can then load the image using:
 
 This will show as ``my_image:latest``, since this is what we used with the ``-t`` option in the build command.
 
-.. note:: 
+.. note::
     When tested, it was not possible to do this for multi-arch builds,
-    e.g. ``--platform="linux/arm64/v8,linux/amd64"``. For mutli-arch builds you will have to run the build 
+    e.g. ``--platform="linux/arm64/v8,linux/amd64"``. For mutli-arch builds you will have to run the build
     commands separately.
 
 ----
@@ -335,7 +335,7 @@ Since we are using an amd64 machine, we can easily build images targeting amd64.
 To build arm64 images on this machine, one technique is to use the QEMU feature of the docker builder,
 to emulate an arm64 machine and build an image for that.
 
-.. note:: 
+.. note::
     For building the multiarch images, we will be using docker buildx
 
 First you will want to create a builder instance which is capable of building images for multiple architectures:
@@ -361,12 +361,12 @@ For reference, a test build I did took **863 seconds**.
 Building with Native machines
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Using `Docker Contexts <https://docs.docker.com/engine/context/working-with-contexts/>`_ 
+Using `Docker Contexts <https://docs.docker.com/engine/context/working-with-contexts/>`_
 it is possible to build on a remote docker builder.
 
-This means we can build our amd64 image locally, and the arm64 image on another machine, 
-using the same docker build command. If this other machine uses arm64 architecture e.g. 
-RaspberryPi 5, then the build will not need to use QEMU and will be much faster since it is 
+This means we can build our amd64 image locally, and the arm64 image on another machine,
+using the same docker build command. If this other machine uses arm64 architecture e.g.
+RaspberryPi 5, then the build will not need to use QEMU and will be much faster since it is
 building for its native architecture.
 
 To achieve this you will have to setup two context nodes, one on you local machine and one on the remote machine:
@@ -376,11 +376,11 @@ To achieve this you will have to setup two context nodes, one on you local machi
 .. code-block::
 
     docker context create node-amd64
-    
+
     docker context ls
 
     NAME         DESCRIPTION                               DOCKER ENDPOINT               ERROR
-    default *    Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   
+    default *    Current DOCKER_HOST based configuration   unix:///var/run/docker.sock
     node-amd64   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock
 
 As shown a new docker context using the host machines configuration has been created.
@@ -389,61 +389,61 @@ As shown a new docker context using the host machines configuration has been cre
    client and docker installed. `This Guide <https://thenewstack.io/connect-to-remote-docker-machines-with-docker-context/>`_
    can help with setting up the remote host ssh.
 
-.. code-block:: 
+.. code-block::
 
     docker context create node-arm64 --docker "host=ssh://$TARGET_HOST"
 
     docker context ls
 
     NAME         DESCRIPTION                               DOCKER ENDPOINT               ERROR
-    default *    Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   
-    node-amd64   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   
-    node-arm64                                             ssh://<user_name>@<remote_host_ip_address> 
+    default *    Current DOCKER_HOST based configuration   unix:///var/run/docker.sock
+    node-amd64   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock
+    node-arm64                                             ssh://<user_name>@<remote_host_ip_address>
 
 Where ``TARGET_HOST`` contains something like: ``<user_name>@<remote_host_ip_address>``.
 
-.. note:: 
+.. note::
     The setup for the remote machine is still run on the main docker machine
 
-Now you have your two contexts setup, you can incorporate them both into the same builder. 
-See `this link <https://docs.docker.com/build/building/multi-platform/#multiple-native-nodes>`_ 
+Now you have your two contexts setup, you can incorporate them both into the same builder.
+See `this link <https://docs.docker.com/build/building/multi-platform/#multiple-native-nodes>`_
 for documentation on how to do this.
 
 In our case, this will look something like this:
 
-.. code-block:: 
+.. code-block::
 
     docker buildx create --use --name mybuilder --platform linux/arm64 node-arm64
     docker buildx create --append --name mybuilder --platform linux/amd64 node-amd64
 
 You can check that the builder like so:
 
-.. code-block:: 
+.. code-block::
 
     docker buildx ls
-    
+
     NAME/NODE       DRIVER/ENDPOINT             STATUS  BUILDKIT PLATFORMS
-    mybuilder *     docker-container                             
+    mybuilder *     docker-container
     mybuilder0    node-arm64                  running v0.13.1  linux/arm64*, linux/arm/v7, linux/arm/v6
     mybuilder1    node-amd64                  running v0.13.1  linux/amd64*, linux/amd64/v2, linux/amd64/v3, linux/arm64, linux/riscv64, linux/ppc64, linux/ppc64le, linux/s390x, linux/386, linux/mips64le, linux/mips64, linux/arm/v7, linux/arm/v6
-    qemu_builder    docker-container                             
+    qemu_builder    docker-container
     qemu_builder0 unix:///var/run/docker.sock running v0.13.1  linux/arm64*, linux/amd64*, linux/amd64/v2, linux/amd64/v3, linux/riscv64, linux/ppc64, linux/ppc64le, linux/s390x, linux/386, linux/mips64le, linux/mips64, linux/arm/v7, linux/arm/v6
-    default         docker                                       
+    default         docker
     default       default                     running v0.12.5  linux/amd64, linux/amd64/v2, linux/amd64/v3, linux/386, linux/arm64, linux/riscv64, linux/ppc64, linux/ppc64le, linux/s390x, linux/mips64le, linux/mips64, linux/arm/v7, linux/arm/v6
-    node-amd64      docker                                       
+    node-amd64      docker
     node-amd64    node-amd64                  running v0.12.5  linux/amd64, linux/amd64/v2, linux/amd64/v3, linux/386, linux/arm64, linux/riscv64, linux/ppc64, linux/ppc64le, linux/s390x, linux/mips64le, linux/mips64, linux/arm/v7, linux/arm/v6
-    node-arm64      docker                                       
+    node-arm64      docker
     node-arm64    node-arm64                  running v0.12.5  linux/arm64, linux/arm/v7, linux/arm/v6
 
 Then to build your image, all you have to is run the build command and specify the new builder:
 
-.. code-block:: 
+.. code-block::
 
     docker build --builder mybuilder --platform="linux/amd64,linux/arm64" -t <tag> .
 
 For the same reference images as the QEMU builder, this took **295 seconds** (vs 863 seconds from the QEMU builder).
 
-.. note:: 
+.. note::
     You will have to setup a push to registry if you want to keep the images, otherwise they are just kept in the cache.
 
 ----

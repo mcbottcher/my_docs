@@ -53,12 +53,12 @@ We don't always want to specify all the tests to run/don't want all tests to run
 
 Can run a subset of tests in two ways:
 
-1. String matching of test name: 
+1. String matching of test name:
    :bash:`pytest -k great -v` will only run tests with 'great' in their name
 
 2. Test Markers:
    :python:`@pytest.mark.<markername>`
-   :bash:`pytest -m <markername> -v` 
+   :bash:`pytest -m <markername> -v`
 
 ----
 
@@ -119,7 +119,7 @@ decorator to use the fixture in a test function.
 
 .. note::
   You can view a list of builtin fixtures by using ``pytest --fixtures``. These are ones
-  you don't have to specify but can just use the name of the fixture e.g. ``tmp_path`` 
+  you don't have to specify but can just use the name of the fixture e.g. ``tmp_path``
 
 
 Using fixtures for setup and teardown
@@ -149,7 +149,7 @@ an ``assert``.
   @pytest.usefixtures('test_teardown')
   def test_example(test_setup):
     assert test_setup == 3
-    
+
 
 It is also possible to chain fixtures:
 
@@ -168,7 +168,7 @@ It is also possible to chain fixtures:
       print("Test Specific Teardown")
 
   def test_example(test_teardown):
-    assert test_teardown == 3  
+    assert test_teardown == 3
 
 In this example, the setup will run first, then the teardown yields to the test.
 Once the test is complete, due to the ``yield`` statement, the rest of the teardown
@@ -321,7 +321,7 @@ You can find a list of available hooks `Here <https://docs.pytest.org/en/7.1.x/r
 These are the names you should use to target a specific part of the PyTest process.
 
 .. note::
-  Hooks should start with ``pytest_*`` otherwise it won't be recognised as a hook. 
+  Hooks should start with ``pytest_*`` otherwise it won't be recognised as a hook.
 
 
 .. code-block:: python
@@ -355,7 +355,7 @@ Options
 - ``--maxfail <max_number_of_fails>``: Number of fails after which to halt test execution
 - ``-n <num_of_workers>``: How many parallel workers will run the tests
 - ``--junittxml=<path_to_file>``: Outputs test results to XML
-- ``-s``: This will show :python:`print()` from test functions in the console 
+- ``-s``: This will show :python:`print()` from test functions in the console
 
 ----
 
@@ -413,7 +413,7 @@ The above example shows how you can make a simple flag or a argument with a valu
 
 You can view the argument by using the ``request`` fixture: ``request.config.getoption("--access_token")``
 
-.. note:: 
+.. note::
   It is also possible to add options from the ``pytest.ini`` file:
   ``addopts = --ignore=./dummy_tests`` in the ``[pytest]`` section.
 

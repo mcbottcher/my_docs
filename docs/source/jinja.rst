@@ -199,4 +199,3 @@ You can store macros in a separate file and import them into your file as needed
 
 For example, to import: ``{% import 'macros.file' as macros -%}``.
 You can access a macro by using ``macro.<macro_name>``.
-
