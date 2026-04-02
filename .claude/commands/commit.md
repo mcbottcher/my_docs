@@ -1,8 +1,5 @@
 ---
-name: commit
 description: Stage all changes and commit using conventional commits style (type: short description)
-disable-model-invocation: true
-allowed-tools: Bash, Read, Glob, Grep, AskUserQuestion
 ---
 
 Stage and commit the current changes using this project's conventional commit style.
