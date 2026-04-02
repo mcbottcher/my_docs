@@ -71,7 +71,7 @@ Setting up the U-Boot Client
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. note::
-   The steps used here might be specific to DE10-Nano board 
+   The steps used here might be specific to DE10-Nano board
 
 .. note::
    For the DE10-Nano, the ethernet connection wouldn't work unless ``CONFIG_NET_RANDOM_ETHERNET=y`` was added

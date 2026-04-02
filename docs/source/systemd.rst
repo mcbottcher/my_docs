@@ -21,7 +21,7 @@ Unit Section
 ^^^^^^^^^^^^
 
 - Description: This is the description that gets printed when running the service, so make it sound cool!
-- After: You can specify the service runs after another service e.g. 
+- After: You can specify the service runs after another service e.g.
 
 .. code-block::
 
@@ -36,7 +36,7 @@ Service Section
 ^^^^^^^^^^^^^^^
 
 - Type: simple,exec, forking, oneshot, dbus, notify, idle
-- ExecStart: Commands (with their arguments) that are executed when the service is started e.g. 
+- ExecStart: Commands (with their arguments) that are executed when the service is started e.g.
 
 .. code-block::
 
@@ -83,7 +83,7 @@ To view targets available, use:
 If you want to edit a service file, and see the changes instantly, use:
 
 .. code-block::
-    
+
     systemd daemon-reload
 
 ----
@@ -132,6 +132,3 @@ You would also have to change some file permissions and enable the service:
 
     chmod 644 /etc/systemd/system/start-wsgi-server.service
     systemctl enable start-wsgi-server.service
-
-
-

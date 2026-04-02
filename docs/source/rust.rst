@@ -58,7 +58,7 @@ Create a new cargo project with:
 
     cargo new <project_name>
 
-This will initialise a project, and also by default creates a new git repo (unless you are 
+This will initialise a project, and also by default creates a new git repo (unless you are
 already in a git repo).
 
 You will have a ``Cargo.toml`` file where you keep your project configurations and dependancies,
@@ -83,7 +83,7 @@ Release build
 
 When your project is ready for release, build it with ``cargo build --release`` to compile with
 optimisations. This will place the executable in ``target/release``. The compilation time will be longer,
-but the executable will run faster. 
+but the executable will run faster.
 
 Programming Concepts
 --------------------
@@ -145,7 +145,7 @@ This will end up printing:
     The value of x is 7
     The value of x is 6
 
-This is different from making a varibale mutable since we will get a compile time error if we 
+This is different from making a varibale mutable since we will get a compile time error if we
 accidentally set the value to something else without using the ``let`` keyword.
 
 Shadowing also lets you change the type of a variable, since you are effectively creating a new variable.
@@ -185,7 +185,7 @@ architecture you are running. arch is denoted with ``isize`` and ``usize``. Inte
 4. Binary: ``0b1110_0010``
 5. Byte(u8 only): ``b'A'``
 
-.. warning:: 
+.. warning::
     Integer Overflow:
     If you are running rust in debug mode, if an overflow occurs the program will panic.
     Running in release mode it will not. It will wrap the value, e.g. 256 -> 0.
@@ -245,10 +245,10 @@ tuple cannot change.
 As seen in the example, it is possible to access a tuple's values by desructuring a tuple or by the dot
 operator, using the index of the value you want.
 
-.. note:: 
+.. note::
     The first index is 0 in rust.
 
-.. note:: 
+.. note::
     A tuple without any values is called a ``unit``. It is denoted by ``()``, and is similar to ``None``
     in python.
 
@@ -262,7 +262,7 @@ Arrays in rust have fixed lengths. Because of this, array's are stored on the st
     :caption: Example using array
 
     let a = [1, 2, 3, 4, 7, 9];
-    
+
     // Indicates a size of 5, using i32
     let b: [i32: 5] = [1, 2, 3, 4, 5];
 
@@ -314,11 +314,11 @@ Calling a macro, function or new scope block are all expressions.
         let x = 3;
         // note no ;
         x + 1
-    }; 
+    };
 
     println!("Value of y is {y}");
 
-.. note:: 
+.. note::
     There is no semicolon at the end of the expression. If you add a semicolon,
     this makes it a statement and no value is returned.
     If there was a semicolon, this error would show:
@@ -334,12 +334,12 @@ Return values from functions are not named, but we have to specify their type:
 
     fn five() -> i32 {
         5
-        // also valid 
+        // also valid
         // return 5;
         // return 5
     }
 
-.. note:: 
+.. note::
     Since a function is a expression, you can "return" the result by ommitting the final
     semicolon. Alternatively specify "return"
 
@@ -507,7 +507,7 @@ Guessing Game Example - Misc.
     use rand::Rng;
 
     fn main() {
-        
+
         let secret_number = rand::thread_rng().gen_range(1..=100);
         println!("Secret number is {secret_number}");
 
@@ -577,7 +577,7 @@ invalid.
 This type of assignment is known as a ``move``, where the pointer, length and capacity are copied to the new variable,
 and the old variable being made invalid.
 
-.. note:: 
+.. note::
     This is not true when assigning a variable of a fixed size to each other. e.g. ``let y: u32 = x;`` is fine
     since this doesn't use any heap memory. Therefore ``x`` will still be valid after this assignment.
     Variable types like these implement something called the ``Copy`` trait.
@@ -713,7 +713,7 @@ This prevents data races.
 In a similar fashion, we cannot have a mutable reference in existance when a immutable one
 exists. The user of an immuatable value should not have it change on them.
 
-.. note:: 
+.. note::
     A variable is considered out of scope after its last use, so it is possible in the same
     scope to declare a ``&mut`` after a immuatable reference if it is after the last use of the
     immutable reference.
@@ -732,13 +732,13 @@ It is only a reference, so does not have ownership.
     // Starts at the 6th element, and includes upto the 11th
     let world_slice = &s[6..11];
 
-.. note:: 
+.. note::
     In rust's slice syntax, ``&s[0..2]`` and ``&s[..2]`` are equivilent.
     Also if you want to include everything upto the last element, use something
     like ``&s[2..]``.
     Referencing all elements can be done like so ``&s[..]``
 
-.. note:: 
+.. note::
     String literals are simply string slices. The value of the string is stored
     in the compiled binary, so is immutable.
 
@@ -785,7 +785,7 @@ tuple.
     To change an element in the struct, the whole struct needs to be mutable.
     Rust doesn't support different mutability for different fields.
 
-.. note:: 
+.. note::
     We can use field initialisation shorthand. Instead of writing something like:
     ``active:active,`` in the struct initialisation with an input variable called
     ``active``, simply just write ``active``
@@ -806,7 +806,7 @@ values.
         ..user1
     };
 
-.. note:: 
+.. note::
     If ``user2`` copies any values from ``user1`` that don't implement the ``Copy``
     trait (e.g. String), ``user1`` will become invalid.
 
@@ -950,7 +950,7 @@ These are often used as constructors that will return a new instance of the stru
 
     let my_square = Rectangle::square(3);
 
-.. note:: 
+.. note::
     It is also possible to have several ``impl`` blocks for a structure.
     They are all valid for the structure.
 
@@ -1022,7 +1022,7 @@ value or doesn't using the Option Enum.
 
     let some_number: Option<i32> = Some(5);
 
-These are included in the prelude, so you can use ``None`` and ``Some(T)`` where you 
+These are included in the prelude, so you can use ``None`` and ``Some(T)`` where you
 want without the Namespacing.
 
 Match Control
@@ -1070,7 +1070,7 @@ Accessing values from inside an enum can be seen in the example also.
         }
     }
 
-.. note:: 
+.. note::
     Rust match checks are exhaustive, so you have to provide a match arm for every
     possibility.
 
@@ -1089,7 +1089,7 @@ Catch-all Patterns
         // _ => dont_move(),
     }
 
-We can use the ``other`` to catch all remaining options. We can also use 
+We can use the ``other`` to catch all remaining options. We can also use
 just an ``_``, which is the same but when you don't need to use the value.
 
 If you don't want anything to happen, you can just return the empty tuple type: ``_ => (),``
@@ -1174,14 +1174,14 @@ modules.
 
 This makes a module tree like this:
 
-.. code-block:: 
+.. code-block::
     :caption: Module tree
 
     - crate
         - front_of_house
             - hosting
                 - seat_at_table
-            - serving 
+            - serving
                 - bring_food
 
 Crate is a module started from the crate root (``main.rs`` or ``lib.rs``)
@@ -1193,7 +1193,7 @@ We can reference modules in our crate either with relative or absolute crate pat
 Absolute paths start with ``crate`` and relative ones use something like ``self`` / ``super``
 or some other identifier (e.g. nothing also works).
 
-.. note:: 
+.. note::
     It is generally better to use absolute paths since it allows you to move modules
     independently of each other.
 
@@ -1212,7 +1212,7 @@ use the ``pub`` keyword.
         }
     }
 
-.. note:: 
+.. note::
     Making a module public doesn't make its contents public, it just means it is available
     to anything that can access the parent module.
 
@@ -1337,7 +1337,7 @@ Some commonly used sections:
 - ``# Errors``
 - ``# Saftey``
 
-.. note:: 
+.. note::
     The examples in the "Examples" section actually get run as tests, to make sure
     the example works correctly with the funcion functionality
 
@@ -1369,7 +1369,7 @@ Do this by making a new directory with a new ``Cargo.toml`` file in it. Then add
 tag and a list called ``members = []``, which will contain the names of the library/binary crates
 in the workspace.
 
-If one package references another, it can have a ``[dependencies]`` section which has the relative 
+If one package references another, it can have a ``[dependencies]`` section which has the relative
 path to the other crate in the workspace you are using.
 
 Use ``cargo run -p <package_name>`` to run a particular package in the workspace.
@@ -1425,7 +1425,7 @@ Vectors can only store values of the same type.
     // the * is the dereference operator
     for i in &mut v {
         *i += 50;
-    } 
+    }
 
 String
 ^^^^^^
@@ -1470,7 +1470,7 @@ implemented by a function call: ``fn add(self, s: &str) -> String {``
 
     let s = format!("{s1}-{s2}-{s3}");
 
-Indexing of Strings in rust doesn't work. This is because we use UTF-8, which doesn't 
+Indexing of Strings in rust doesn't work. This is because we use UTF-8, which doesn't
 have fixed size characters. Just avoid it since it causes problems.
 
 .. code-block:: rust
@@ -1552,7 +1552,7 @@ There are several options when updating a hashmap:
         *count += 1;
     }
 
-.. note:: 
+.. note::
     Rust has available several backend hashing algorithms. Some are slower than others (improved security against DoS)
     and some are faster. It is possible to change these hash backends.
 
@@ -1629,7 +1629,7 @@ You can use a ``match`` block as before, or some shorthand.
 The ``?`` operator is placed after a ``Result`` value. If it is ``Ok``, we continue
 execution. If there is an ``Err``, that error will be returned. Using the ``?`` will
 convert the error to the error type specified in the function signature.
-The ``?`` can only be used on expressions which return something that matches the 
+The ``?`` can only be used on expressions which return something that matches the
 return signatature of the function.
 
 Custom Type for Validation
@@ -1673,7 +1673,7 @@ Type parameter names in rust are usually short, e.g. ``<T>``
 
     fn largest<T>(lis: &[T]) -> &T {
         let mut largest = &list[0];
-    
+
         for item in list {
             if item > largest {
                 largest = item;
@@ -1812,7 +1812,7 @@ type.
         ...
     }
 
-This can be handy in the context of closures and iterators. This only works if the 
+This can be handy in the context of closures and iterators. This only works if the
 function returns only one type, not an option between two types for example.
 
 Lifetimes
@@ -1822,7 +1822,7 @@ Lifetimes ensure that references are valid as long as we need them to be.
 Normally, like types, lifetimes are inferred from the code. However, if you want some
 special behaviour, you can annotate the lifetime.
 
-Lifetime annotations use ``'`` syntax. We usually use ``'a`` for the first lifetime 
+Lifetime annotations use ``'`` syntax. We usually use ``'a`` for the first lifetime
 annotation. This goes after the ``&`` but before the ``mut`` and type e.g. ``i32``.
 e.g. ``'a mut i32``.
 
@@ -1843,7 +1843,7 @@ each other.
 Static lifetime
 """""""""""""""
 
-There is one special lifetime called the "static" lifetime. This indicates that the affected 
+There is one special lifetime called the "static" lifetime. This indicates that the affected
 reference can be valid for the whole lifetime of the program. All string literals have static
 lifetime.
 
@@ -1859,7 +1859,7 @@ Automated Tests
 
 To change a function into a test function, add ``#[test]`` on the line before ``fn``.
 
-.. note:: 
+.. note::
     Rust has benchmark specific tests available, but currently this is only available on nightly
     rust and is unstable.
 
@@ -1874,9 +1874,9 @@ Checking results
 
 - ``assert!(<expression>)``: panics if the expression given returns ``false``
 - ``assert_eq!(<thing1>, <thing2>)``: panics if the two things are not equal
-- ``assert_ne!(<thing1>, <thing2>)``: panics if the two things are equal 
+- ``assert_ne!(<thing1>, <thing2>)``: panics if the two things are equal
 
-.. note:: 
+.. note::
     The values used must implement the ``PartialEq`` trait, so the values can be compared,
     and the ``Debug`` trait so the value can be printed on a failure.
 
@@ -1897,7 +1897,7 @@ after the required ones. These will be passed to the ``format!`` macro to use in
     }
 
 - ``#[should_panic]``: This specifies that a test function should expect a ``panic``. This is placed after the
-                       ``#[test]`` macro. Add ``expected = `` to specify what should be present in the panic 
+                       ``#[test]`` macro. Add ``expected = `` to specify what should be present in the panic
                        message. This is one way to make sure the panic you see is for the right reason.
                        ``#[should_panic(expected="less than or equal to 100")]``.
 
@@ -1933,7 +1933,7 @@ Test Organisation
 
 Tests are usually split between "Unit tests" and "Intergration tests". Unit tests test one module
 in isolation at a time. They can also test private functions. Intergration tests are totally external
-to your library, and use the library in the same way any other external code would, just with the 
+to your library, and use the library in the same way any other external code would, just with the
 public APIs.
 
 Unit tests
@@ -1941,7 +1941,7 @@ Unit tests
 
 These should live in the ``src`` directory of your library.
 The convention is to create a module named ``tests`` in each file to contain the test functions
-and to annotate the module with ``#[cfg(test)]``. This specifies that the code following should 
+and to annotate the module with ``#[cfg(test)]``. This specifies that the code following should
 only be compiled when running tests.
 
 .. code-block:: rust
@@ -1978,7 +1978,7 @@ To create unit tests, you first create a ``tests`` directory, on the same level 
         assert_eq!(4, adder::add_two(2));
     }
 
-.. note:: 
+.. note::
     Not ``[cfg(test)]`` is needed since we are already in the ``tests`` directory and Cargo knows
     what's up
 
@@ -2006,9 +2006,9 @@ These are anonymous functions you can save in a variable or pass as arguments to
     :caption: Example using closures
 
     fn main() {
-    
+
         let list = vec![1, 2, 3];
-    
+
         // this is only printed once only_borrows is called
         let only_borrows = || println!("From closure {:?}", list);
 

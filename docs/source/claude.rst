@@ -12,7 +12,7 @@ Commands
 Commands are run but using ``/<command>``. Can see a list by just typing the ``/``
 
 - ``init``: Claude analyses your code and makes a summary in the ``claude.md`` file for future context
-- ``compact``: summarises the chat for concise context 
+- ``compact``: summarises the chat for concise context
 - ``clear``: refresh the context from the chat
 
 You can also implement custom commands in ``.claude/commands/<name.md>``, including with arguments witht eh ``@`` symbol
@@ -21,7 +21,7 @@ You can also implement custom commands in ``.claude/commands/<name.md>``, includ
 Shortcuts
 ^^^^^^^^^
 
-- ``#``: Memory mode, give instruction of something to commit to the project memory 
+- ``#``: Memory mode, give instruction of something to commit to the project memory
 - ``@<filepath>``: point to a specific file for context. Can also be in the ``CLAUDE.md`` file, where the file is pasted in place so always part of the context prompt
 - escape: interrupt claude
 - double escape: go back in the chat history to remove some context that is no longer needed

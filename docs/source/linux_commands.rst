@@ -65,17 +65,17 @@ Linux Commands
   - Use :shell:`-i` to search for expression without being case sensitive
   - Can use it with pipe: :shell:`cat my_file.txt | grep "hello world"`
   - Use with extended regualar expressions: :shell:`grep -E 'pattern1|pattern2' fileName`
-    
+
     - Or regular grep:
-      
+
       - :shell:`grep 'pattern1\|pattern2' fileName`
       - :shell:`grep -e 'pattern1' -e 'pattern2' fileName`
-  
+
   - Use :shell:`-c` to get a count of number of grep matches
   - Can also search multiple files: :shell:`grep -c 'warning\|error' /var/log/*log` -> Searches all log files...
-    
+
     - Use the -R flag to recursivly search subdirectories too
-  
+
   - :shell:`grep -r "pattern" *`: This will search recursivly all files in the current dir and below
 
   - :shell:`grep -P "(?<=hello)(.*)(?=world)"`: Use a pearl regex. This returns all

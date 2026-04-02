@@ -49,7 +49,7 @@ You use the ``$`` operator to access a variable's value
         # This variable is local to bash function only
         local VAR="local variable"
         echo $VAR
-    }    
+    }
 
 - Arrays:
     - 4 element array: :bash:`ARRAY=(MY NAME IS 4)`
@@ -102,7 +102,7 @@ Conditional Statements
     if [ condition ]; then
         statement
     elif [ condition ]; then
-        statement 
+        statement
     else
         statement
     fi
@@ -145,9 +145,9 @@ Looping and Branching
     file="./file"
     if [ -e $file ]; then
         echo "File exists"
-    else 
+    else
         echo "File does not exist"
-    fi 
+    fi
 
 - Case statements:
 
@@ -280,7 +280,7 @@ It is possible to test characteristics of files/directories in bash:
     file="./file"
     if [ -e $file ]; then
         echo "File exists"
-    else 
+    else
         echo "File does not exist"
     fi
 
@@ -455,4 +455,4 @@ variable:
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(git branch --show-current > /dev/null 2>&1 && echo " [$(git branch --show-current)]")\[\033[00m\] \$ '
 
     # Newly added section
-    # $(git branch --show-current > /dev/null 2>&1 && echo " [$(git branch --show-current)]")\[\033[00m\] \$ 
+    # $(git branch --show-current > /dev/null 2>&1 && echo " [$(git branch --show-current)]")\[\033[00m\] \$
