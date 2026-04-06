@@ -85,7 +85,7 @@ The *ipaddr* is the one that the DE10nano will use, and the *serverip* is the on
    :caption: Example updating Yocto build file for U-Boot config. This example pulls a setup script using TFTP
 
    CONFIG_USE_BOOTCOMMAND=y
-   CONFIG_BOOTCOMMAND="setenv ipaddr 192.168.0.67; setenv serverip 192.168.0.64; tftp ${scriptaddr} tftp_boot.scr; source ${scriptaddr}""
+   CONFIG_BOOTCOMMAND="setenv ipaddr 192.168.0.67; setenv serverip 192.168.0.64; tftp ${scriptaddr} tftp_boot.scr; source ${scriptaddr}"
 
 .. warning::
    It seemed that the script had to end with *.scr* to function correctly

@@ -340,7 +340,7 @@ Return values from functions are not named, but we have to specify their type:
     }
 
 .. note::
-    Since a function is a expression, you can "return" the result by ommitting the final
+    Since a function is an expression, you can "return" the result by omitting the final
     semicolon. Alternatively specify "return"
 
 Control Flow

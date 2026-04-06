@@ -540,7 +540,7 @@ Each package must also contain a ``__init__.py`` file.
 Using a python package has an advantage in the python will add that directory to the
 PATH search so it is easier to specify imports etc.
 
-You can also declare package wide constants/vairables in the ``__init__.py`` file.
+You can also declare package wide constants/variables in the ``__init__.py`` file.
 
 Making a package
 ^^^^^^^^^^^^^^^^

@@ -16,7 +16,7 @@ Nomenclature
 - Metadata: files containing information about how to build an image
 - Recipe: file with instructions to build one or more packages
 - Layer: directory containing grouped meta-data
-- BSP: board support package, layer that deefines how to build for a board
+- BSP: board support package, layer that defines how to build for a board
 - Distribution: specific implementation of Linux, kernel version, rootfs etc.
 - Machine: defines the architecture, pins, buses, BSP etc.
 - Image: output of build process (bootable and executable Linux OS)
