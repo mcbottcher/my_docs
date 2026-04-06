@@ -27,6 +27,7 @@ Contents
    python
    linux_commands
    ssh
+   Multiple GitHub Accounts <github_multiple_accounts>
    bash
    git
    jinja
