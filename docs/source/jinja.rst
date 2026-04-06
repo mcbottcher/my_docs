@@ -14,7 +14,7 @@ Basic Usage
 -----------
 
 With Jinja you provide a template file with variables that should be filled in.
-You load this file and then 'render' these varibales.
+You load this file and then 'render' these variables.
 
 .. code-block:: python
     :caption: Basic Load and Rendering Example
@@ -74,7 +74,7 @@ Nesting templates
 -----------------
 
 As you get more templates, you might want to keep common code in the same place.
-You can use Jinja's template inhertiance.
+You can use Jinja's template inheritance.
 
 .. code-block::
     :caption: Example base template
@@ -93,7 +93,7 @@ You can use Jinja's template inhertiance.
 If the block age is not given in the overriding template, then the content from the default
 template will be used.
 
-Inlcuding Templates
+Including Templates
 -------------------
 
 You are also able to include a whole other template in another template.
@@ -127,7 +127,7 @@ You need take care about where Jinja will add in whitespace.
 
     You
 
-There a few ways you can avoid this.
+There are a few ways you can avoid this.
 
 1. Enable ``trim_blocks`` and ``lstrip_blocks`` rendering options
 2. Use a ``-`` at the start or end of a block. e.g. ``{% if var == "1" -%}``

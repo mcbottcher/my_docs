@@ -114,7 +114,7 @@ You can also set :python:`autouse=True` if you want it enabled for all test func
   def test_divisible_by_6(input_value):
     assert input_value % 6 == 0
 
-Instead of passing the fixture as an argument, you can also use the :python:`@pytest.mark.usefixtures('<ficture_name>')`
+Instead of passing the fixture as an argument, you can also use the :python:`@pytest.mark.usefixtures('<fixture_name>')`
 decorator to use the fixture in a test function.
 
 .. note::
@@ -349,7 +349,7 @@ that finishes, execution returns to the hookwrapper to complete:
 Options
 -------
 
-- ``-v``: make the output more versbose
+- ``-v``: make the output more verbose
 - ``-k <substring>``: run a subset of tests based on given substring
 - ``-m <markername>``: only run tests with given marker
 - ``--maxfail <max_number_of_fails>``: Number of fails after which to halt test execution

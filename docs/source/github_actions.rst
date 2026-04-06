@@ -276,7 +276,7 @@ This executable status is included when you commit the file to GitHub.
     sudo chmod +x <your_script.sh>
 
 .. warning::
-    A script might still exit with a sucessfull exit code even if one of the commands returned an
+    A script might still exit with a successful exit code even if one of the commands returned an
     error code. This could make your workflow seem like it succeeded. You can use the ``set -e`` in
     your script file to cause the script to exit with error on the first command that returns an error
 
@@ -289,7 +289,7 @@ Expressions are used to programmatically set environment variables.
 
 You use special syntax to evaluate as an expression: ``${{ <expression> }}``.
 
-If you use the expression within an ``if`` conditional, you can ommit the expression syntax above.
+If you use the expression within an ``if`` conditional, you can omit the expression syntax above.
 
 Examples
 ^^^^^^^^

@@ -15,7 +15,7 @@ Commands are run but using ``/<command>``. Can see a list by just typing the ``/
 - ``compact``: summarises the chat for concise context
 - ``clear``: refresh the context from the chat
 
-You can also implement custom commands in ``.claude/commands/<name.md>``, including with arguments witht eh ``@`` symbol
+You can also implement custom commands in ``.claude/commands/<name.md>``, including with arguments with the ``@`` symbol
 
 
 Shortcuts
@@ -55,4 +55,4 @@ Misc
 ^^^^^
 
 - Can instruct claude to write commit messages and commit files
-- claude SDK: SDK available in python which lets you progrommatically invoke claude code commands. However, not all commands are availble as using the CLI.
+- claude SDK: SDK available in python which lets you programmatically invoke claude code commands. However, not all commands are available as using the CLI.

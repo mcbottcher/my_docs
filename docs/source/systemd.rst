@@ -74,7 +74,7 @@ Systemd services are classified by targets, formally known as runlevels in sysvi
 Examples of targets are *multi-user* and *graphical*.
 To view targets available, use:
 
-.. code-block::¨
+.. code-block::
     :caption: Viewing SystemD targets
 
     systemctl list-units --type target

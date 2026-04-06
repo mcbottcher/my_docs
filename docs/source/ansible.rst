@@ -6,7 +6,7 @@ of machines in your test system, you might manage updates etc. on all of them wi
 ansible.
 
 Ansible uses control nodes, which can be any machine with ansible installed, to send commands
-and instuctions to managed nodes.
+and instructions to managed nodes.
 
 Ansible uses SSH and SFTP/SCP, so no agent needs to be added to the managed nodes. This makes
 it handy for tasks such as provisioning.
@@ -16,7 +16,7 @@ Getting Started
 
 To get started you will need one machine with ansible installed, and one which will act as the
 managed node. To setup the managed node, you need to install an ssh client on it and add the
-control machine's public ssh key to the autorized keys file.
+control machine's public ssh key to the authorized keys file.
 
 You can then produce an ansible inventory file:
 
@@ -66,10 +66,10 @@ You can run this using a command like:
 Using Variables
 ^^^^^^^^^^^^^^^
 
-You can add vairables in your playbook yaml files.
+You can add variables in your playbook yaml files.
 
 .. code-block::yaml
-    :caption: Example using vairables
+    :caption: Example using variables
 
     - name: Variables playbook
       hosts: all
@@ -93,7 +93,7 @@ Modules
 -------
 
 Modules are discrete units of code that can be used from command line or in a playbook task.
-Ansible ships with a load of readily avaialble modules.
+Ansible ships with a load of readily available modules.
 
 .. note::
     Use the command ``ansible-doc -l`` to list all modules. Or for documentation on a single module,
