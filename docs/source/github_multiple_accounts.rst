@@ -63,14 +63,26 @@ Copy each public key and add it under
     $ cat ~/.ssh/id_ed25519_personal.pub   # add to personal GitHub account
     $ cat ~/.ssh/id_ed25519_work.pub       # add to work GitHub account
 
-Step 4: Configure Git (``~/.gitconfig``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 4: Configure Git
+^^^^^^^^^^^^^^^^^^^^^^
 
-Set work as the global default. Use ``includeIf`` to override identity
-for the personal folder.
+Keep shared config (aliases, etc.) in ``~/.gitconfig``. Create separate
+files for each account that include it, then override identity and SSH URL.
 
 .. code-block:: ini
-    :caption: ~/.gitconfig
+    :caption: ~/.gitconfig — shared config only, no identity
+
+    [alias]
+      co = checkout
+      br = branch
+      ci = commit
+      st = status
+
+.. code-block:: ini
+    :caption: ~/.gitconfig-work
+
+    [include]
+      path = ~/.gitconfig
 
     [user]
       name = Work Name
@@ -79,11 +91,11 @@ for the personal folder.
     [url "git@github-work:"]
       insteadOf = git@github.com:
 
-    [includeIf "gitdir:~/personal/"]
-      path = ~/.gitconfig-personal
-
 .. code-block:: ini
     :caption: ~/.gitconfig-personal
+
+    [include]
+      path = ~/.gitconfig
 
     [user]
       name = Personal Name
@@ -92,45 +104,84 @@ for the personal folder.
     [url "git@github-personal:"]
       insteadOf = git@github.com:
 
-Create the file as your own user so that Git can read it:
-
 .. code-block:: bash
-    :caption: Create ~/.gitconfig-personal with correct ownership and permissions
+    :caption: Create the files with correct ownership and permissions
 
-    $ touch ~/.gitconfig-personal
-    $ chmod 644 ~/.gitconfig-personal
+    $ touch ~/.gitconfig-work ~/.gitconfig-personal
+    $ chmod 644 ~/.gitconfig-work ~/.gitconfig-personal
 
 .. note::
 
-    The ``includeIf`` directive requires a separate file — overrides cannot
-    be inlined directly in ``~/.gitconfig``. This is a Git limitation.
-    The file must be owned by your user; if it was created by root (e.g. via
-    ``sudo``), Git will silently ignore it. Fix with:
-    ``sudo chown $USER:$USER ~/.gitconfig-personal``
+    Do not put identity (``[user]``) or ``[url]`` rewrites in ``~/.gitconfig``
+    itself — those belong only in the account-specific files. The base file
+    is included by both, so anything there applies everywhere.
 
-Step 5: Create Folders
-^^^^^^^^^^^^^^^^^^^^^^^
+Step 5: Create Personal Folder
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
-    $ mkdir ~/personal ~/work
+    $ mkdir ~/personal
+
+.. note::
+
+    Only the personal folder needs to be created. Any path outside of ``~/personal``
+    will automatically use the work config.
+
+Step 6: Set Up Shell Hook (``~/.bashrc``)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``GIT_CONFIG_GLOBAL`` overrides the path Git uses as its global config.
+Override ``cd`` to update this variable whenever you change directories.
+
+.. code-block:: bash
+    :caption: ~/.bashrc
+
+    _update_git_config() {
+        if [[ "$PWD" == ~/personal* ]]; then
+            export GIT_CONFIG_GLOBAL=~/.gitconfig-personal
+        else
+            export GIT_CONFIG_GLOBAL=~/.gitconfig-work
+        fi
+    }
+
+    cd() {
+        builtin cd "$@"
+        _update_git_config
+    }
+
+    _update_git_config   # run once on shell startup
+
+After editing ``~/.bashrc``, reload it:
+
+.. code-block:: bash
+
+    $ source ~/.bashrc
+
+.. note::
+
+    The hook runs on ``cd``, not on repo operations directly. This means
+    identity and URL rewriting are applied based on which directory you are
+    in when you run the Git command — including when cloning into a new
+    folder that is not yet a git repo.
 
 How It Works
 ^^^^^^^^^^^^^
 
-``includeIf`` matches repos by their location on disk. Any repo inside
-``~/personal/`` will use the personal Git identity. Anything else on the
-filesystem uses the global (work) identity. Only one ``includeIf`` is needed
-— the other account is the default.
+``GIT_CONFIG_GLOBAL`` tells Git which file to use as its global config.
+The shell hook keeps it pointed at the right account-specific file based
+on your current directory. Both account files include ``~/.gitconfig`` for
+shared settings, then add their own identity and URL rewrite on top.
+
+Why not use ``includeIf "gitdir:..."``? That directive only activates inside
+an existing git repo. When you run ``git clone`` from ``~/personal/`` — which
+is not itself a repo — Git reads the global config before the repo exists,
+so ``includeIf`` never fires and the work identity is used instead. The
+``GIT_CONFIG_GLOBAL`` approach works at the directory level regardless.
 
 ``insteadOf`` rewrites remote URLs transparently. When you clone using
 ``git@github.com:``, Git silently rewrites the URL to use the correct SSH
-host alias based on which folder you are in. This means you never have to
-type the alias manually.
-
-This matters especially for public repos — cloning always works without
-authentication, but pushing requires the correct key. The rewrite ensures
-the remote URL is set up correctly from the start.
+host alias. This means you never have to type the alias manually.
 
 .. code-block:: bash
     :caption: Git rewrites the URL automatically based on your current folder
