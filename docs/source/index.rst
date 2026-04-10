@@ -36,6 +36,7 @@ Contents
    claude
    ansible
    mcp
+   openviking
    ros2
    prompt_engineering
    udev
