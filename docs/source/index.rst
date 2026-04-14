@@ -36,6 +36,7 @@ Contents
    claude
    ansible
    mcp
+   mqtt
    openviking
    ros2
    prompt_engineering
