@@ -503,6 +503,77 @@ Who can publish or subscribe to what. Defined as ACLs (access control lists) per
 
 Without ACLs, any authenticated client can read or write any topic — a serious issue in multi-tenant systems.
 
+Mosquitto: Passwords and ACLs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To disable anonymous access and enforce per-client credentials, configure Mosquitto with a password file and an ACL file.
+
+**Step 1 — create the password file:**
+
+.. code-block:: bash
+
+   # Create a new file and add the first user (-c = create)
+   mosquitto_passwd -c /etc/mosquitto/passwd device123
+
+   # Add further users (omit -c to avoid overwriting the file)
+   mosquitto_passwd /etc/mosquitto/passwd dashboard
+
+**Step 2 — point mosquitto.conf at the password and ACL files:**
+
+.. code-block:: text
+
+   # /etc/mosquitto/mosquitto.conf
+   allow_anonymous false
+   password_file   /etc/mosquitto/passwd
+   acl_file        /etc/mosquitto/acl
+
+With ``allow_anonymous false`` any client that does not present valid credentials is refused at the ``CONNECT`` stage.
+
+**Step 3 — write the ACL file:**
+
+.. code-block:: text
+
+   # /etc/mosquitto/acl
+
+   # --- Global rules (apply to every authenticated client) ---
+   topic read  public/#
+
+   # --- Per-user rules ---
+   user device123
+   topic readwrite sensors/device123/#
+   topic read      commands/device123/#
+
+   user dashboard
+   topic read      sensors/#
+
+   # --- Pattern rules (apply to all users regardless of position) ---
+   # %u = username, %c = client ID
+   pattern readwrite devices/%u/#
+
+ACL File Rules
+^^^^^^^^^^^^^^
+
+- **Default deny** — any topic not covered by an explicit ``read``, ``write``, or ``readwrite`` rule is denied. There is no need to add explicit deny-all entries.
+- **Deny takes precedence** — ``deny`` rules are evaluated before permissive rules. A single ``deny`` line blocks access even when a broader ``readwrite`` or wildcard rule would otherwise allow it.
+- **User scope** — a ``user <name>`` line begins a per-user block. All ``topic`` lines that follow apply *only* to that user until the next ``user`` declaration (or end of file). Topics listed before any ``user`` declaration are global and apply to every authenticated client.
+- **Pattern rules** — lines beginning with ``pattern`` use ``%u`` (username) and ``%c`` (client ID) as substitution variables. Pattern rules apply to *all* users regardless of where they appear relative to ``user`` blocks.
+- **Access types:**
+
+  ==================  ===========================================
+  ``read``            Subscribe and receive messages
+  ``write``           Publish messages
+  ``readwrite``       Both (default when type is omitted)
+  ``deny``            Explicitly block — takes priority over allow
+  ==================  ===========================================
+
+Example showing deny override:
+
+.. code-block:: text
+
+   user ops
+   topic readwrite sensors/#        # allows all sensor topics …
+   topic deny      sensors/secret   # … except this one
+
 Production Checklist
 ~~~~~~~~~~~~~~~~~~~~
 
