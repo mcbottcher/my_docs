@@ -42,3 +42,4 @@ Contents
    prompt_engineering
    udev
    python_build_tools
+   can_bus
