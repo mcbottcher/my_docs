@@ -162,6 +162,21 @@ Using the `logging.basicConfig` uses the root logger, which is fine for small ap
 but for larger projects it is better to use different loggers. This allows you to have multiple logging
 configurations.
 
+Logger Hierarchy
+^^^^^^^^^^^^^^^^
+
+All loggers are children of the root logger, and loggers can themselves have child loggers, forming
+a hierarchy. A few things to be aware of with this:
+
+- By default, the ``propagate`` attribute on a logger is ``True``, meaning log records are passed up
+  to the parent logger after being handled. If both a child and parent logger have handlers, the same
+  message can appear twice — set ``logger.propagate = False`` to prevent this.
+- A log record is only emitted if its level is at or above the logger's own level filter. It is then
+  also subject to the parent's level filter when propagated.
+- Log messages are written to ``stderr`` by default.
+- Calling ``logging.basicConfig`` attaches a ``StreamHandler`` to the root logger, which is why log
+  messages appear in the console when using it.
+
 For each logging instance, you can specify to where the log is written. You can use `FileHandler` type to
 specify that your log will be written to a file. You can use the `StreamHandler` to specify the log will be printed
 to the console for example.
