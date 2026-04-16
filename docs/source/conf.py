@@ -31,5 +31,4 @@ exclude_patterns = []
 
 html_theme = "sphinx_rtd_theme"
 
-# This is causing a warning, make _static folder if you need it
-# html_static_path = ['_static']
+html_static_path = ['_static']
