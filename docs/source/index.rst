@@ -43,3 +43,4 @@ Contents
    udev
    python_build_tools
    can_bus
+   tmux
