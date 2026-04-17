@@ -44,3 +44,4 @@ Contents
    python_build_tools
    can_bus
    tmux
+   zephyr_rtos
