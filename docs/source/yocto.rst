@@ -56,6 +56,11 @@ Bitbake Commands
 
    - Prints debug information from your build
 
+- :bash:`bitbake -c listtasks <image>`
+
+   - View all the tasks bitbake has to perform to build a target image.
+   - Add ``-f`` to force a task to run, invalidating any existing stamp file.
+
 - :bash:`bitbake -c devshell <target>`
 
    - This is a shell where you can run bitbake commands, and see environment variables like ``$CC``
@@ -226,7 +231,8 @@ Adding a Service
 
 - Create a new layer:
 
-   ::
+   .. code-block:: text
+
       └── systemd
          ├── files
          │   └── hello.service
@@ -305,6 +311,21 @@ In Bitbake, the workflow of tasks is like this:
 6. Install - copy files to target directories
 7. Package - bundle files for installation
 
+Patching the Kernel
+^^^^^^^^^^^^^^^^^^^
+
+See this `video on I2C patch <https://www.youtube.com/watch?v=srM6u8e4tyw&list=PLEBQazB0HUyTpoJoZecRK6PpDG31Y7RPB&index=5>`_.
+
+Create a diff file for the kernel file you want to patch. This goes into your custom layer under
+``recipes-kernel``, where you can append your patch when building the kernel. You can specify
+where the patch is applied at the top of the patch file.
+
+When creating the diff, put the original file first:
+
+.. code-block:: bash
+
+   git diff --no-index socfpga_common.h.orig socfpga_common.h > 0001-add-uboot-bootcmd.patch
+
 Patching Device Tree
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -343,6 +364,13 @@ Adding Packages
 You can add packages to the final image by using: ``IMAGE_INSTALL += <package_name>``
 
 The package could also be a package_group, with a list of packages to be installed.
+
+``CORE_IMAGE_EXTRA_INSTALL`` is a convenience variable for adding extra packages to images
+based on the ``core-image`` class:
+
+.. code-block:: bash
+
+   CORE_IMAGE_EXTRA_INSTALL:append = " package-name"
 
 Include and Require
 ^^^^^^^^^^^^^^^^^^^
@@ -435,6 +463,26 @@ You can reference specific recipe versions or take the latest by using just the 
 
 You can make append files and other files ignore the version of the recipe too by using the
 ``%`` symbol. e.g. ``my_recipe_%.bbappend`` will apply to all versions of ``my_recipe``
+
+Example layer structure for a recipe:
+
+.. code-block:: text
+
+   ├── COPYING.MIT
+   ├── README
+   ├── conf
+   │   └── layer.conf
+   └── recipes-hello
+       └── hello
+           ├── files
+           │   └── helloworld.c
+           └── hellos_0.1.bb
+
+To look up the recipe name for a given target (e.g. the kernel):
+
+.. code-block:: bash
+
+   oe-pkgdata-util lookup-recipe kernel
 
 Updating Bitbake Syntax
 -----------------------

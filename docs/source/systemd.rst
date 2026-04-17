@@ -84,7 +84,7 @@ If you want to edit a service file, and see the changes instantly, use:
 
 .. code-block::
 
-    systemd daemon-reload
+    systemctl daemon-reload
 
 ----
 
