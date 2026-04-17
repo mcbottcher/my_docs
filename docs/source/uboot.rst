@@ -74,7 +74,7 @@ Setting up the U-Boot Client
    The steps used here might be specific to DE10-Nano board
 
 .. note::
-   For the DE10-Nano, the ethernet connection wouldn't work unless ``CONFIG_NET_RANDOM_ETHERNET=y`` was added
+   For the DE10-Nano, the ethernet connection wouldn't work unless ``CONFIG_NET_RANDOM_ETHADDR=y`` was added
    to the ``socfpga_de10_nano_defconfig``
 
 Using these parameters, I can set the default boot command for uboot to setup the environment, and pull a script from TFTP, which I can customise to make uboot boot the way I want.
