@@ -45,3 +45,4 @@ Contents
    can_bus
    tmux
    zephyr_rtos
+   cmake
