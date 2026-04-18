@@ -288,6 +288,61 @@ Driver bindings and documentation live in the kernel tree under ``Documentation/
 
 ----
 
+I2C Drivers
+-----------
+
+I2C Core Data Structures
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **i2c_adapter** — abstracts the I2C master device; identifies a physical I2C bus.
+- **i2c_algorithm** — abstracts the I2C bus transaction interface (read/write operations).
+- **i2c_client** — abstracts a slave device sitting on the I2C bus.
+- **i2c_driver** — driver for the slave device; contains device-specific driving functions.
+- **i2c_msg** — low-level representation of one segment of an I2C transaction; contains device address, transaction flags (transmit/receive), data pointer, and data size.
+
+Device Tree Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Add I2C devices to the bus node with a compatible string and ``reg`` entry (I2C address):
+
+.. code-block:: none
+
+   &i2c2 {  /* Phandle of the bus node */
+       pcf8523: rtc@68 {
+           compatible = "nxp,pcf8523";
+           reg = <0x68>;
+       };
+       eeprom: ee24lc512@55 {
+           compatible = "labcsmart,ee24lc512";
+           reg = <0x55>;
+       };
+   };
+
+Probe Function
+~~~~~~~~~~~~~~
+
+The probe function is responsible for:
+
+1. Check adapter functionality with ``i2c_check_functionality()`` to see what functions the I2C adapter supports.
+2. Verify the device is the expected one (read the chip ID register).
+3. Initialise the device.
+4. Register with kernel frameworks if needed.
+
+Use ``module_i2c_driver(foo_driver)`` to replace init and exit functions that only register/unregister with the I2C core.
+
+I2C Transfer Functions
+~~~~~~~~~~~~~~~~~~~~~~
+
+- **i2c_transfer** — base function for I2C transfers; splits transfers into messages with start and stop bits; use ``i2c_msg`` struct with flags: ``0`` for writes, ``I2C_M_RD`` for reads.
+- **i2c_master_send** — transfer a single message with start and stop bits.
+- **i2c_master_recv** — receive a single message with start and stop bits.
+
+Consult your device datasheet to determine which transfer function fits your device's requirements.
+
+The ``i2c_client`` struct contains a ``dev`` structure, enabling use of ``dev_*`` logging functions which include device info in messages.
+
+----
+
 Practical Reference
 -------------------
 
