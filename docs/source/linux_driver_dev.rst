@@ -23,6 +23,25 @@ Similar to a spinlock but allows sleeping. If a task tries to acquire a mutex th
 
 Both spinlocks and mutexes have ``trylock`` variants that acquire the lock if free, or return immediately without waiting.
 
+Memory Management
+~~~~~~~~~~~~~~~~~
+
+Linux manages memory through a hierarchy of address spaces:
+
+**Physical Address** — an actual RAM location.
+
+**Virtual Address** — a logical address used by processes and the kernel. The MMU (Memory Management Unit) translates virtual addresses to physical addresses.
+
+**Logical Address** — a virtual address within the kernel's linear mapping (above ``PAGE_OFFSET``). Logical addresses have a fixed offset from their physical addresses.
+
+**Virtual Page** — a ``PAGE_SIZE`` unit of virtual memory.
+
+**Frame** (Page Frame) — a ``PAGE_SIZE`` unit of physical memory. Virtual pages map onto frames, which are identified by Page Frame Numbers (PFN).
+
+**Page Table** — stores the mappings between virtual and physical addresses.
+
+The virtual address space is split between kernel space (high addresses) and user space (low addresses). This separation provides memory protection and isolation between user processes and the kernel.
+
 ----
 
 Waiting, Sleeping and Delay Mechanisms
@@ -286,6 +305,13 @@ Building and applying overlays:
 
 Driver bindings and documentation live in the kernel tree under ``Documentation/devicetree/bindings/``.
 
+Raspberry Pi Device Tree Parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On Raspberry Pi, ``dtparams`` can override certain device tree properties. Raspberry Pi uses aliases for some device tree status values: ``on`` → ``okay`` for example.
+
+Reference: https://github.com/raspberrypi/linux/blob/rpi-6.6.y/arch/arm64/boot/dts/broadcom/bcm2712-rpi.dtsi#L195
+
 ----
 
 I2C Drivers
@@ -343,8 +369,268 @@ The ``i2c_client`` struct contains a ``dev`` structure, enabling use of ``dev_*`
 
 ----
 
+Industrial IO Drivers
+---------------------
+
+Industrial IO is a kernel subsystem dedicated to analog-to-digital converters (ADCs) and digital-to-analog converters (DACs). It supports various sensors including accelerometers, gyroscopes, current/voltage measurement chips, light sensors, and pressure sensors.
+
+Device and Channel Architecture
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The device is the chip itself. A channel is a single acquisition line of the device, such as the x, y, or z axis of a gyroscope.
+
+User-Space Interaction
+~~~~~~~~~~~~~~~~~~~~~~
+
+Two interfaces are available to interact with IIO devices from user space:
+
+- ``/sys/bus/iio`` — sysfs directory representing the device and its channels.
+- ``/dev/iio:devicex`` — character device that exports the device's events and data buffer.
+
+Channel Configuration
+~~~~~~~~~~~~~~~~~~~~~
+
+Channel specifications are defined using ``iio_chan_spec``. The type indicates what type of measurement the channel makes (e.g., ``IIO_VOLTAGE``, ``IIO_ACCEL``). Possible types are found in ``include/uapi/linux/iio/types.h``.
+
+``iio_chan_info_enum`` specifies the channel sysfs attributes exposed to user space. These attributes are defined in ``include/linux/iio/types.h``.
+
+Channels can be indexed by setting the indexed field in the channel spec and specifying the channel number.
+
+Module Loading
+~~~~~~~~~~~~~~
+
+Load the industrialio module before loading your kernel module that uses the IIO framework:
+
+.. code-block:: bash
+
+   sudo modprobe industrialio
+
+----
+
+SPI Drivers
+-----------
+
+Serial Peripheral Interface (SPI) is a synchronous serial bus for communication between a master (controller) and one or more slave devices. Messages are handled by a dedicated thread named after your SPI bus device (e.g., visible via ``ps | grep spi``). Messages are queued and processed atomically — no other message can use the bus until the current one completes.
+
+Core Data Structures
+~~~~~~~~~~~~~~~~~~~~
+
+- **spi_controller** — the master device that controls the bus.
+- **spi_device** — a slave device on the bus.
+- **spi_driver** — driver for a slave SPI device.
+- **spi_transfer** — a single operation between master and slave (read, write, or bidirectional).
+- **spi_message** — an atomic sequence of transfers; the entire message keeps the bus exclusive until completion.
+
+SPI Modes
+~~~~~~~~~
+
+SPI mode is determined by two clock parameters:
+
+- **CPOL** — clock polarity (high or low initial state).
+- **CPHA** — clock phase; determines which clock edge the data is sampled on.
+
+These combine to create four SPI modes (0, 1, 2, 3).
+
+Messages and Transfers
+~~~~~~~~~~~~~~~~~~~~~~
+
+Initialize a message and add transfers to it:
+
+.. code-block:: c
+
+   void spi_message_init(struct spi_message *message);
+   spi_message_add_tail(struct spi_transfer *t, struct spi_message *m);
+
+For frequently used messages, pre-allocate and pre-fill to avoid initialization overhead:
+
+.. code-block:: c
+
+   struct spi_message *spi_message_alloc(unsigned ntrans, gfp_t flags);
+   void spi_message_free(struct spi_message *m);
+
+Starting Transactions
+~~~~~~~~~~~~~~~~~~~~~
+
+**Synchronous (blocking):**
+
+.. code-block:: c
+
+   int spi_sync(struct spi_device *spi, struct spi_message *message);
+
+The chip select (CS) is activated for the entire message and deactivated between messages. This function may sleep while waiting for the transaction to complete.
+
+**Asynchronous (non-blocking):**
+
+.. code-block:: c
+
+   int spi_async(struct spi_device *spi, struct spi_message *message);
+
+Only submission is done; processing is asynchronous. The completion callback is invoked when finished. The message status is stored in ``message->status`` (0 on success, negative error code on failure). No other message can be submitted until the completion callback is complete.
+
+Module Driver Macro
+~~~~~~~~~~~~~~~~~~~
+
+Use this macro to handle init and exit function registration:
+
+.. code-block:: c
+
+   module_spi_driver(foo_driver);
+
+Device Tree Support
+~~~~~~~~~~~~~~~~~~~
+
+SPI device nodes must be children of the SPI controller node. Required entries are:
+
+- **compatible** — driver match string.
+- **reg** — chip select (CS) index of the device.
+- **spi-max-frequency** — maximum clock frequency in Hz.
+
+Optional entries include configuration properties for SPI mode, CS polarity, and other device-specific settings.
+
+----
+
+Resources
+---------
+
+- `Raspberry Pi Linux Kernel Cross-Compilation <https://www.raspberrypi.com/documentation/computers/linux_kernel.html>`_ — comprehensive guide to building and cross-compiling the Linux kernel for Raspberry Pi.
+
+----
+
 Practical Reference
 -------------------
+
+Meta Information
+~~~~~~~~~~~~~~~~
+
+.. code-block:: c
+
+   MODULE_LICENSE("GPL");
+   MODULE_AUTHOR("Mikkel Caschetto-Bottcher <mcb@emlogic.no>");
+   MODULE_DESCRIPTION("GPIO driver for LED");
+
+Device Numbers (dev_t)
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: c
+
+   dev_t device_number = MKDEV(24, 0);
+   unsigned int major_number = MAJOR(device_number);
+   unsigned int minor_number = MINOR(device_number);
+
+   int register_chrdev_region(dev_t first, unsigned int count, char *name);
+   int alloc_chrdev_region(dev_t *dev, unsigned int firstminor,
+                           unsigned int count, char *name);
+   void unregister_chrdev_region(dev_t from, unsigned count);
+
+Character Device Drivers
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Register device with kernel:
+
+.. code-block:: c
+
+   void cdev_init(struct cdev *cdev, const struct file_operations *fops);
+   int cdev_add(struct cdev *p, dev_t dev, unsigned count);
+   void cdev_del(struct cdev *p);
+
+Make device physically present:
+
+.. code-block:: c
+
+   struct device *device_create(struct class *class, struct device *parent,
+                                dev_t devt, void *drvdata, const char *fmt, ...);
+   void device_destroy(const struct class *class, dev_t devt);
+
+Create a device class (if not already in one):
+
+.. code-block:: c
+
+   struct class *class_create(const char *name);
+   void class_destroy(const struct class *cls);
+
+Interrupts
+~~~~~~~~~~
+
+.. code-block:: c
+
+   int devm_request_irq(struct device *dev, unsigned int irq, irq_handler_t handler,
+                        unsigned long irqflags, const char *devname, void *dev_id);
+
+   typedef irqreturn_t (*irq_handler_t)(int, void *);
+
+   irq_number = gpiod_to_irq(my_button); /* get IRQ number for a GPIO */
+
+IOCTL
+~~~~~
+
+Input/Output control allows devices to implement custom functionality not available through standard system calls.
+
+Prototype:
+
+.. code-block:: c
+
+   long ioctl(struct file *f, unsigned int cmd, unsigned long arg);
+
+The ``cmd`` parameter is a unique identifier. Use these macros to generate it (depending on data transfer direction):
+
+- ``_IO(MAGIC, SEQ_NO)`` — no data transfer
+- ``_IOR(MAGIC, SEQ_NO, TYPE)`` — kernel to user space (read)
+- ``_IOW(MAGIC, SEQ_NO, TYPE)`` — user to kernel (write)
+- ``_IORW(MAGIC, SEQ_NO, TYPE)`` — bidirectional transfer
+
+``MAGIC`` is an 8-bit identifier unique to your driver. ``SEQ_NO`` is an 8-bit sequence or command ID. ``TYPE`` is the structure name or data type being transferred; the macro uses it to determine size.
+
+The ``arg`` parameter is a pointer to user-space memory; use ``copy_to_user`` and ``copy_from_user`` to transfer data.
+
+Return ``-ENOTTY`` for unregistered commands. Generate IOCTL numbers in a dedicated header file (usable from user space too). Refer to ``Documentation/ioctl/ioctl-number.txt`` in the kernel sources for existing commands and ``Documentation/ioctl/ioctl-decoding.txt`` for detailed documentation.
+
+User-space usage:
+
+.. code-block:: c
+
+   #include <sys/ioctl.h>
+
+   ioctl(fd, EEP_ERASE); /* fd is the file descriptor to the character device */
+
+Regmap
+~~~~~~
+
+Regmap unifies register accesses across I2C, SPI, and memory-mapped devices, reducing duplicated code. A device accessible over both I2C and SPI can use the same driver logic, changing only the initialization function.
+
+.. code-block:: c
+
+   #include <linux/regmap>
+
+``struct regmap_config`` stores the register map configuration for the driver's lifetime, determining how read and write operations are performed. It includes callbacks for validating which registers are readable, writable, and cacheable.
+
+Initialize regmap based on bus type:
+
+.. code-block:: c
+
+   struct regmap *devm_regmap_init_spi(struct spi_device *spi,
+                                       const struct regmap_config *config);
+   struct regmap *devm_regmap_init_i2c(struct i2c_client *i2c,
+                                       const struct regmap_config *config);
+
+Register read/write operations:
+
+.. code-block:: c
+
+   int regmap_read(struct regmap *map, unsigned int reg, unsigned int *val);
+   int regmap_write(struct regmap *map, unsigned int reg, unsigned int val);
+   int regmap_update_bits(struct regmap *map, unsigned int reg,
+                          unsigned int mask, unsigned int val);
+
+Bulk register operations:
+
+.. code-block:: c
+
+   int regmap_multi_reg_write(struct regmap *map, const struct reg_sequence *regs,
+                              int num_regs);
+   int regmap_bulk_read(struct regmap *map, unsigned int reg, void *val,
+                        size_t val_count);
+   int regmap_bulk_write(struct regmap *map, unsigned int reg, const void *val,
+                         size_t val_count);
 
 Module Management
 ~~~~~~~~~~~~~~~~~
