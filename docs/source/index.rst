@@ -43,6 +43,7 @@ Contents
    udev
    python_build_tools
    can_bus
+   cpp
    tmux
    zephyr_rtos
    cmake
