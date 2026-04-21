@@ -1,8 +1,8 @@
 C++
 ===
 
-Visibility
-----------
+Visibility and Scoping
+----------------------
 
 Classes and structs have three visibility levels: **private**, **protected**, and **public**.
 
@@ -14,6 +14,23 @@ For classes:
 - **Private**: Only that class can access the members marked as private
 - **Protected**: Only that class and subclasses can access the members marked as protected
 - **Public**: That class, subclasses, and objects can access the members marked as public
+
+**Important**: Access restrictions only apply *outside* the class. Inside a class method, you can access private data of other objects of the same class:
+
+.. code-block:: cpp
+
+    class String {
+    private:
+        std::unique_ptr<char[]> data_;
+        size_t length_;
+    public:
+        String &operator=(const String &other) {
+            // Inside String methods, can access other.data_ and other.length_ even though they're private
+            length_ = other.length_;
+            data_ = std::make_unique<char[]>(length_ + 1);
+            return *this;
+        }
+    };
 
 Inheritance Visibility
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -149,6 +166,23 @@ Key differences from pointers:
 
 References are essentially pointers with compiler-induced restrictions to make them safer.
 
+Lvalues and Rvalues
+-------------------
+
+**lvalue**: A value with a named memory location you can reference. It appears on the left-hand side of an assignment.
+
+**rvalue**: A temporary expression or constant that produces a value but has no stable address. You cannot take its address.
+
+.. code-block:: cpp
+
+    int a = 5;           // a is lvalue, 5 is rvalue
+    int b = a;           // b is lvalue, a is also lvalue
+    int c = a + b;       // c is lvalue, (a + b) is rvalue (temporary result)
+
+    int x = 10;
+    int* p = &x;         // fine — x is an lvalue, it has an address
+    int* q = &42;        // error — 42 is an rvalue, no stable address
+
 The ``this`` Pointer
 --------------------
 
@@ -164,6 +198,81 @@ The ``this`` Pointer
     };
 
 You typically don't need ``this`` since the compiler can infer member access, but it's useful for naming clashes.
+
+Move and Copy Semantics
+-----------------------
+
+A class that owns heap-allocated data can either **copy** or **move** that data:
+
+- **Copy**: Create a duplicate of the data. A String with 1000 characters copied means two separate 1000-character allocations. Uses **lvalue references** (``&``) since the original is still needed.
+- **Move**: Transfer ownership of the data. The new object takes the pointer, and the original loses it. Only pointer/metadata moves, not the data itself. Uses **rvalue references** (``&&``) since the original is discarded.
+
+.. code-block:: cpp
+
+    class String {
+    private:
+        std::unique_ptr<char[]> data_;
+        size_t length_;
+    public:
+        // Copy constructor and assignment (lvalue reference)
+        String(const String &other) : data_(nullptr), length_(0) {
+            if (other.data_.get()) {
+                length_ = other.length_;
+                data_ = std::make_unique<char[]>(length_ + 1);
+                memcpy(data_.get(), other.data_.get(), length_ + 1);
+            }
+        }
+
+        String &operator=(const String &other) {
+            length_ = other.length_;
+            data_ = std::make_unique<char[]>(length_ + 1);
+            memcpy(data_.get(), other.data_.get(), length_ + 1);
+            return *this;
+        }
+
+        // Move constructor and assignment (rvalue reference)
+        String(String &&other) noexcept
+            : data_(std::move(other.data_)), length_(other.length_) {
+            other.length_ = 0;
+        }
+
+        String &operator=(String &&other) noexcept {
+            data_ = std::move(other.data_);
+            length_ = other.length_;
+            other.length_ = 0;
+            return *this;
+        }
+    };
+
+Convert an lvalue to an rvalue using ``std::move``:
+
+.. code-block:: cpp
+
+    my::String s("hello");
+    my::String t = std::move(s);  // Move s to t, s is now empty
+
+    std::cout << "s length: " << s.length() << std::endl;  // 0
+    std::cout << "t: " << t.c_str() << std::endl;          // "hello"
+
+A ``const T&`` reference can bind to both lvalues and rvalues, and it extends the lifetime of rvalues. Use this when you don't need to modify the referenced object.
+
+Unique Pointers
+---------------
+
+Use ``unique_ptr`` instead of ``new`` and ``delete`` for automatic memory management. A unique pointer automatically deletes its data when it goes out of scope and only allows one owner:
+
+.. code-block:: cpp
+
+    std::unique_ptr<char[]> data = std::make_unique<char[]>(100);
+    // Use data as normal
+    // Automatically deleted when data goes out of scope
+
+Create with ``std::make_unique``, passing arguments to the object's constructor (or array length for arrays):
+
+.. code-block:: cpp
+
+    auto ptr = std::make_unique<MyClass>(arg1, arg2);
+    auto arr = std::make_unique<int[]>(50);
 
 Dynamic Memory Allocation
 --------------------------
