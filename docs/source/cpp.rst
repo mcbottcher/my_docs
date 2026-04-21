@@ -640,3 +640,114 @@ Pimpl Pattern
 The Pimpl (Pointer to Implementation) pattern helps avoid exposing all private data in a class definition. Instead of putting all private data directly in the class, you create a separate implementation class and store only a pointer to it in the public class.
 
 For more details, see `cpppatterns.com - Pimpl <https://cpppatterns.com/patterns/pimpl.html>`__.
+
+Shared Pointers
+---------------
+
+What is ``shared_ptr``?
+^^^^^^^^^^^^^^^^^^^^^^^
+
+A smart pointer that uses **reference counting** to allow multiple owners of a single heap object.
+The object is automatically destroyed when the last owner goes out of scope.
+
+.. code-block:: cpp
+
+    auto p1 = std::make_shared<int>(42);
+    auto p2 = p1; // ref count = 2
+    // memory freed automatically when both go out of scope
+
+The Control Block
+^^^^^^^^^^^^^^^^^
+
+Each ``shared_ptr`` consists of two internal pointers:
+
+- **ptr** — points to the actual object on the heap
+- **ctrl** — points to the control block (shared metadata)
+
+The **control block** is a separate heap allocation shared by all co-owners:
+
+- **strong count** — incremented by ``shared_ptr`` refs
+- **weak count** — incremented by ``weak_ptr`` refs
+- **deleter / allocator** — how to destroy the object
+
+``make_shared`` allocates the object and control block together in a **single allocation** —
+better cache locality, but memory isn't fully freed until all ``weak_ptr``\ s are also gone.
+
+``shared_ptr<T>(new T{})`` produces **two separate allocations** (less efficient).
+
+``weak_ptr``
+^^^^^^^^^^^^
+
+A **non-owning observer** — points to the object without incrementing the strong count,
+so it doesn't keep it alive.
+
+.. code-block:: cpp
+
+    weak_ptr<int> wp = sp;
+
+    if (auto locked = wp.lock()) {
+        // object still alive
+    } else {
+        // object was destroyed
+    }
+
+Use cases:
+
+- Breaking ownership cycles (e.g., parent-child relationships where child observes parent)
+- Caches that don't need to keep objects alive
+- Observer pattern implementations
+
+Modifying the Data
+^^^^^^^^^^^^^^^^^^
+
+**Mutating the value** — just dereference and write:
+
+.. code-block:: cpp
+
+    *sp = 100;
+
+**Reseating** — redirecting ``ptr`` and ``ctrl`` to point at a new object:
+
+.. code-block:: cpp
+
+    sp = make_shared<int>(999);  // via assignment
+    sp.reset(new int(5));        // via reset()
+
+Reseating one ``shared_ptr`` does **not** affect other co-owners — they retain their own
+``ptr`` and ``ctrl`` arrows to the original object.
+
+Thread Safety
+^^^^^^^^^^^^^
+
+.. warning::
+
+    The ref count is atomic, but the pointed-to data is **not thread-safe**.
+    Use a mutex for concurrent access to the value itself.
+
+Use ``shared_ptr<const T>`` to prevent mutation of the value.
+
+Sharing Between Threads
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Pass ``shared_ptr`` by value to threads — each thread gets its own copy, incrementing the ref count:
+
+.. code-block:: cpp
+
+    auto ptr = std::make_shared<int>(42);
+
+    std::thread t([ptr]() {
+        std::cout << "Thread: " << *ptr << std::endl;
+    });
+
+    std::cout << "Main: " << *ptr << std::endl;
+    t.join();
+
+Both main and thread access the same object. When the thread exits, it releases its copy of the ``shared_ptr``.
+The memory is freed only when the last owner (main thread) exits.
+
+Key Mental Models
+^^^^^^^^^^^^^^^^^^
+
+- ``shared_ptr`` → *"I need this alive"*
+- ``weak_ptr`` → *"I want to access it if it's alive, but I'm not responsible for keeping it"*
+- ``unique_ptr`` → prefer this when there's a **single clear owner** (no ref count overhead)
