@@ -479,6 +479,11 @@ TLS (Transport Layer Security) is the same encryption that underpins HTTPS. It e
 
 Mutual TLS (mTLS) goes further — the client also presents a certificate, so the broker can verify device identity without passwords. Common in device fleets where each device is issued its own cert at manufacture.
 
+**When to use TLS or mTLS in MQTT:**
+
+- **One-way TLS**: Device verifies the broker's certificate. Use when the broker's identity is important but devices don't need authentication.
+- **mTLS**: Both device and broker authenticate each other. Use when the broker needs to reject unknown or revoked devices.
+
 .. code-block:: text
 
    Port 1883 — plaintext, avoid in production
