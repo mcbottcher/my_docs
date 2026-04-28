@@ -301,3 +301,32 @@ Update verification on device:
 declares a minimum version; the bootloader rejects any image below the fuse counter value.
 After a successful boot the fuse counter is incremented. OTP fuses cannot be unburned,
 so rollback is physically impossible.
+
+----
+
+Encryption Algorithms
+---------------------
+
+Symmetric
+^^^^^^^^^
+
+**AES** — Block cipher with 128/192/256-bit keys. Fast; used for bulk data encryption.
+Modes: GCM (recommended), CTR, CBC (deprecated). Used in HTTPS, SSH, and Wi-Fi.
+
+Asymmetric
+^^^^^^^^^^
+
+**RSA** — Based on prime factorisation. 2048/4096-bit keys. Used for key exchange and
+signatures. Slow — not used for bulk data. Being replaced by ECC alternatives.
+
+**Ed25519** — Elliptic curve signatures using Curve25519. Small keys, fast, and secure.
+The recommended key type for SSH. Private key signs, public key verifies.
+
+Hashes
+^^^^^^
+
+**SHA-256** — Produces a 256-bit digest. One-way, collision resistant. Used in
+certificates, Git, and file integrity checks. Not suitable alone for passwords.
+
+**MD5** — Produces a 128-bit digest. **Broken** — collision attacks are feasible.
+Avoid for anything security-related. Legacy/checksum use only.
