@@ -5,6 +5,193 @@ FreeRTOS is a lightweight, open-source real-time operating system kernel for mic
 
 ----
 
+Task States
+-----------
+
+FreeRTOS tracks four task states: **Running**, **Ready**, **Blocked**, and **Suspended**.
+The scheduler only considers tasks in the Ready state when deciding what to run next.
+
+Running
+~~~~~~~
+
+The task currently executing on the CPU. Only one task can be in this state at a time.
+
+If an interrupt fires, the interrupted task **remains in the Running state** from the
+scheduler's perspective. The CPU saves the task's context, executes the ISR, then
+restores the context. FreeRTOS has no "interrupted" state.
+
+The only exception is if the ISR unblocks a higher-priority task and calls
+``portYIELD_FROM_ISR()``, which causes a context switch and moves the interrupted
+task to the Ready state.
+
+Ready
+~~~~~
+
+Tasks that are able to run but are waiting for the CPU. FreeRTOS maintains one ready
+list per priority level. The scheduler picks the highest-priority non-empty ready list
+and runs the task at its head.
+
+Blocked
+~~~~~~~
+
+A task waiting for a specific condition to be met. It unblocks **automatically** when
+that condition is satisfied — no manual intervention required.
+
+A task blocks itself by calling a FreeRTOS API function:
+
+.. code-block:: c
+
+   vTaskDelay(pdMS_TO_TICKS(1000));              // wait for time delay
+   xQueueReceive(xQueue, &data, portMAX_DELAY);  // wait for queue data
+   xSemaphoreTake(xSemaphore, portMAX_DELAY);    // wait for semaphore
+
+The second argument to most blocking calls is a timeout. ``portMAX_DELAY`` means
+wait indefinitely.
+
+**Unblocking** happens in two ways:
+
+- *Time delay expired* — the tick interrupt fires on every tick and checks the delay
+  list. When a task's timeout has expired it is moved back to the ready list automatically.
+- *Resource became available* — when another task or ISR calls ``xSemaphoreGive()``,
+  ``xQueueSend()``, etc., FreeRTOS immediately checks the resource's waiting list and
+  moves the waiting task to the ready list. This happens synchronously inside the give/send
+  call itself, not on the next tick.
+
+A blocked task consumes **zero CPU time** while waiting.
+
+Suspended
+~~~~~~~~~
+
+A task that has been indefinitely paused with no condition to wake it up. It remains
+suspended until explicitly resumed by another task or ISR.
+
+.. code-block:: c
+
+   vTaskSuspend(NULL);              // suspend yourself
+   vTaskSuspend(xTaskHandle);       // suspend another task
+   vTaskResume(xTaskHandle);        // resume from a task
+   xTaskResumeFromISR(xTaskHandle); // resume from an ISR
+
+Any task can suspend any other task regardless of priority — there is no priority
+checking. This makes suspend a blunt instrument that must be used carefully.
+
+Internal Data Structures
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+FreeRTOS uses separate lists to track tasks in each state:
+
+.. code-block:: text
+
+   Ready Lists          (one per priority level)
+   ├── priority 5: [taskA]
+   ├── priority 3: [taskB → taskC]
+   └── priority 1: [taskD]
+
+   Delay Lists          (time-blocked tasks, sorted by expiry time)
+   ├── pxDelayedTaskList:         [taskE(t=150) → taskF(t=300)]
+   └── pxOverflowDelayedTaskList: [taskG]
+
+   Per-Resource Lists   (embedded inside each queue/semaphore/mutex)
+   ├── Queue1.waitingToReceive:  [taskH]
+   └── Semaphore1.waiting:       [taskI]
+
+   Suspended List
+   └── [taskJ, taskK]
+
+Every task is on exactly one of these lists at any given moment. The scheduler only
+ever looks at the ready lists.
+
+----
+
+Synchronisation Primitives
+--------------------------
+
+Queues
+~~~~~~
+
+A queue is a thread-safe FIFO buffer for passing data between tasks.
+
+- Created with a fixed capacity and fixed item size
+- Sender blocks if full; receiver blocks if empty (with configurable timeout)
+- Safe to use from ISRs via ``xQueueSendFromISR`` / ``xQueueReceiveFromISR``
+
+.. code-block:: c
+
+   QueueHandle_t xQueue = xQueueCreate(10, sizeof(int));
+   xQueueSend(xQueue, &value, portMAX_DELAY);
+   xQueueReceive(xQueue, &received, portMAX_DELAY);
+
+**Multiple tasks on one queue:** Only one task unblocks per item received —
+the highest priority waiter, then FIFO among equals. Give each consumer its
+own queue if they need different data.
+
+**Broadcast to all tasks:** Use an Event Group instead.
+
+Semaphores
+~~~~~~~~~~
+
+A semaphore carries no data — it is purely a signalling mechanism.
+
+Binary semaphore
+^^^^^^^^^^^^^^^^
+
+Acts as a flag (0 or 1). Ideal for ISR-to-task signalling, where one entity
+gives and a different entity takes.
+
+.. code-block:: c
+
+   SemaphoreHandle_t xSem = xSemaphoreCreateBinary();
+   xSemaphoreGiveFromISR(xSem, &xHigherPriorityTaskWoken); // from ISR
+   xSemaphoreTake(xSem, portMAX_DELAY);                    // in task
+
+Counting semaphore
+^^^^^^^^^^^^^^^^^^
+
+Tracks N available resources (e.g. 3 DMA buffers). Take to claim one,
+Give to release it.
+
+.. code-block:: c
+
+   SemaphoreHandle_t xSem = xSemaphoreCreateCounting(3, 3);
+
+Mutexes
+~~~~~~~
+
+A mutex is a binary semaphore with **ownership**: the task that takes it
+must be the one to give it back. Use for protecting shared resources, not
+for signalling.
+
+.. code-block:: c
+
+   SemaphoreHandle_t xMutex = xSemaphoreCreateMutex();
+   xSemaphoreTake(xMutex, portMAX_DELAY);
+   // access shared resource
+   xSemaphoreGive(xMutex); // same task gives it back
+
+Priority Inheritance
+^^^^^^^^^^^^^^^^^^^^
+
+FreeRTOS mutexes implement priority inheritance to prevent priority
+inversion.
+
+**The problem (priority inversion):**
+
+1. Low-priority task takes the mutex
+2. High-priority task blocks waiting for the mutex
+3. Medium-priority task pre-empts the low-priority task
+4. High-priority task is now starved by a medium-priority task
+
+**The fix (priority inheritance):**
+
+When the high-priority task blocks, FreeRTOS temporarily boosts the
+low-priority task's priority to match, preventing the medium-priority task
+from pre-empting it. Once the mutex is released the priority is restored.
+
+Binary semaphores do **not** have priority inheritance — use a mutex
+whenever protecting a shared resource.
+
+----
+
 How an Interrupt Is Handled
 ----------------------------
 
@@ -201,3 +388,27 @@ On ARM Cortex-M, FreeRTOS uses the **BASEPRI** register to mask only interrupts 
    Priority 5  ← masked
 
 This lets you have extremely high priority interrupts that can never be blocked by anything FreeRTOS does. The tradeoff: those ISRs cannot call any FreeRTOS API at all — not even the ``FromISR`` variants.
+
+----
+
+Stack Size Analysis
+-------------------
+
+Static stack analysis determines the maximum stack usage of a program without running it.
+In general, this is not always possible — VLAs, ``alloca()``, function pointers, and indirect
+recursion all defeat static analysis. Plain C with none of those constructs is fully analysable.
+
+The process has two steps:
+
+1. **Per-function frame sizes** — GCC's ``-fstack-usage`` flag emits ``.su`` files at compile
+   time, labelling each function's frame as ``static``, ``dynamic``, or ``dynamic,bounded``.
+
+2. **Call graph analysis** — a separate tool walks the call graph and sums worst-case depth.
+   Open-source options include ``cflow`` and ``egypt``; commercial tools such as AbsInt
+   StackAnalyzer and IAR Embedded Workbench provide certified analysis for safety-critical work
+   (DO-178C, ISO 26262).
+
+FreeRTOS requires the developer to specify each task's stack size manually in ``xTaskCreate()``.
+It does not perform static analysis. The practical workflow is to enable
+``configCHECK_FOR_STACK_OVERFLOW`` for safety and use ``uxTaskGetStackHighWaterMark()`` at
+runtime to tune sizes empirically.
