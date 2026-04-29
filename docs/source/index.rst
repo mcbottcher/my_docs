@@ -46,6 +46,7 @@ Contents
    cpp
    tmux
    zephyr_rtos
+   freertos
    cmake
    linux_driver_dev
    cybersecurity
