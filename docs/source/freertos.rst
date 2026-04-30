@@ -190,6 +190,314 @@ from pre-empting it. Once the mutex is released the priority is restored.
 Binary semaphores do **not** have priority inheritance — use a mutex
 whenever protecting a shared resource.
 
+Event Groups
+~~~~~~~~~~~~
+
+An event group is a set of binary flags (bits) that tasks can set, clear, and wait on.
+Each bit represents a condition. Tasks block until their condition is satisfied, then
+the scheduler moves them to the ready state.
+
+- ``xEventGroupCreate()`` — create a group, returns a handle
+- ``xEventGroupSetBits()`` — set one or more bits
+- ``xEventGroupClearBits()`` — clear one or more bits
+- ``xEventGroupWaitBits()`` — block until bits are satisfied
+- ``xEventGroupSync()`` — barrier synchronisation (see below)
+
+``xEventGroupWaitBits()`` supports two modes:
+
+- **AND** — task unblocks only when *all* specified bits are set
+- **OR** — task unblocks when *any* specified bit is set
+
+When a task calls ``xEventGroupWaitBits()`` and the condition is not met:
+
+1. The task is removed from the ready list and placed on the event group's waiting list.
+2. When ``xEventGroupSetBits()`` is called, FreeRTOS walks the waiting list **once**,
+   evaluating each waiter against the new bit state in priority order.
+3. Satisfied tasks are moved to the ready list. The scheduler then runs.
+
+Clear-on-exit
+^^^^^^^^^^^^^
+
+If ``xClearOnExit`` is set, the bits are cleared **inline during the list walk**,
+before any unblocked task actually runs:
+
+- The bit is cleared before the unblocked task executes a single instruction.
+- Lower priority tasks waiting on the same bit are evaluated against the already-cleared
+  state and remain blocked.
+- No task ever needs to manually clear the bit.
+
+If the bit is set again before the unblocked task runs, the task does not re-wait —
+its ``xEventGroupWaitBits()`` call has already returned. The task has no visibility of
+the second set event. For this reason, event groups represent **current state**, not
+occurrences.
+
+Event groups vs queues
+^^^^^^^^^^^^^^^^^^^^^^
+
+Use a **queue** when the value matters and every occurrence must be processed
+(e.g. passing a sensor reading to a logger — each value must be recorded).
+
+Use an **event group** when you only need to know the current state, and missed
+intermediate transitions are acceptable (e.g. is WiFi connected right now?).
+
+Event groups vs semaphores
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **Binary semaphore** — one task signals one other task. Simple ping, no conditions.
+- **Counting semaphore** — tracks how many times something has occurred.
+- **Event group** — wait for combinations of conditions simultaneously (AND/OR logic).
+
+If you find yourself taking multiple semaphores in sequence to combine conditions,
+switch to an event group.
+
+Barrier synchronisation
+^^^^^^^^^^^^^^^^^^^^^^^
+
+``xEventGroupSync()`` is used when a group of tasks must all reach a point before any
+of them continue. Each task sets its own bit and waits for all other tasks' bits:
+
+.. code-block:: c
+
+   xEventGroupSync(
+       barrierGroup,
+       BIT_MY_TASK,                            /* bit this task sets        */
+       BIT_TASK_A | BIT_TASK_B | BIT_TASK_C,  /* bits to wait for          */
+       portMAX_DELAY
+   );
+   /* all tasks proceed from here together */
+
+When the last task calls ``xEventGroupSync()``, FreeRTOS clears all barrier bits
+atomically as part of unblocking everyone — no manual clearing required, no race
+conditions.
+
+----
+
+Stream Buffers and Message Buffers
+------------------------------------
+
+Stream buffers and message buffers are lightweight, lock-free primitives for
+passing data between exactly **one writer** and **one reader**. Because they are
+lock-free by design they are safe to use directly from ISRs without any
+additional protection.
+
+Stream Buffers
+~~~~~~~~~~~~~~
+
+A stream buffer is a continuous byte-stream FIFO with no message framing. Data
+is written and read in arbitrary chunk sizes — the receiver reassembles meaning
+from the raw stream.
+
+Key properties:
+
+- Single-reader / single-writer only (enforced by the lock-free design)
+- ISR-safe via ``xStreamBufferSendFromISR()``
+- No message boundaries
+- Trigger level controls when the receiver task unblocks
+
+Trigger Level
+^^^^^^^^^^^^^
+
+The trigger level is set at creation time (or via
+``xStreamBufferSetTriggerLevel()``), not per receive call. The receiver task
+blocks until at least this many bytes are available — it is a property of the
+buffer, not of individual calls.
+
+.. code-block:: c
+
+   /* 256-byte buffer, unblock receiver when >= 16 bytes are ready */
+   xSB = xStreamBufferCreate(256, 16);
+
+   /* unblocks at trigger level, reads up to 64 bytes */
+   received = xStreamBufferReceive(xSB, rxBuf, 64, portMAX_DELAY);
+
+The receive call can return fewer bytes than requested — always check the
+return value.
+
+Sending from an ISR
+^^^^^^^^^^^^^^^^^^^
+
+``xStreamBufferSendFromISR()`` never blocks. If the buffer is full it writes as
+many bytes as it can and returns immediately; the return value indicates how
+many bytes were actually written, which may be zero.
+
+.. code-block:: c
+
+   void UART_IRQHandler(void) {
+       uint8_t byte = UART->DR;
+       xStreamBufferSendFromISR(xSB, &byte, 1, &xHigherPriorityTaskWoken);
+       portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+   }
+
+Blocking is forbidden in ISRs because the scheduler cannot context-switch inside
+one. All ``FromISR`` FreeRTOS functions follow this contract.
+
+Message Buffers
+~~~~~~~~~~~~~~~
+
+A message buffer is built on top of a stream buffer. It prepends a **4-byte
+length header** to each write, preserving message boundaries so that each
+``xMessageBufferReceive()`` call dequeues exactly one complete message.
+
+.. code-block:: text
+
+   Underlying storage:
+   [ 0x05 0x00 0x00 0x00 | H e l l o | 0x03 0x00 0x00 0x00 | A C K ]
+     |←— 4B length ————>| |←— msg —>| |←— 4B length ————>| |<msg>|
+
+Key properties:
+
+- Each ``xMessageBufferReceive()`` returns exactly one message
+- Receiver unblocks as soon as one complete message is available
+- Receive buffer must be large enough for the largest possible message
+- 4-byte overhead per message
+
+If several messages have accumulated while a task was busy processing, subsequent
+receive calls return immediately as long as the buffer is non-empty. A common
+drain pattern:
+
+.. code-block:: c
+
+   while (1) {
+       /* block until at least one message arrives */
+       received = xMessageBufferReceive(xMB, rxBuf, sizeof(rxBuf), portMAX_DELAY);
+       processMessage(rxBuf, received);
+
+       /* drain any further messages without blocking */
+       while ((received = xMessageBufferReceive(xMB, rxBuf, sizeof(rxBuf), 0)) > 0) {
+           processMessage(rxBuf, received);
+       }
+   }
+
+A Typical Real-World Architecture
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A common pattern for UART-based protocols layers both primitives:
+
+.. code-block:: text
+
+   UART hardware (1 byte at a time)
+        │
+   [ISR] xStreamBufferSendFromISR()
+        │
+   Stream buffer  ← raw bytes, no framing
+        │
+   [Parser task]  ← accumulates bytes, hunts for delimiters,
+        │            validates checksums, assembles complete frames
+   xMessageBufferSend()
+        │
+   Message buffer  ← clean, validated, complete frames
+        │
+   [Application task] xMessageBufferReceive()
+                  ← one call = one complete command, no parsing needed
+
+The parser task acts as the boundary between the raw-bytes world and the
+structured-messages world, shielding application logic from hardware-level
+concerns and making each layer independently testable.
+
+When to use each
+^^^^^^^^^^^^^^^^
+
+- Use a **stream buffer** when data comes from hardware and message boundaries
+  are your problem to figure out.
+- Use a **message buffer** when data comes from another task and message
+  boundaries are already known.
+
+----
+
+Software Timers
+---------------
+
+Software timers execute a callback function at a future point in time, or
+periodically, without consuming a hardware timer peripheral. They are managed
+entirely by the FreeRTOS **daemon task** (also called the Timer Service task).
+
+Two modes:
+
+- **One-shot** -- fires callback once, then goes dormant.
+- **Auto-reload** -- automatically restarts after each expiry, firing periodically.
+
+Architecture
+~~~~~~~~~~~~
+
+Timer API calls (``xTimerStart``, ``xTimerStop``, etc.) never act directly on
+a timer. Instead they post a command to the **timer command queue**. The daemon
+task wakes up, reads the command, and acts on it.
+
+.. code-block:: text
+
+   App task  →  [command queue]  →  Daemon task  →  callback()
+
+Key implications:
+
+- API calls are non-blocking (return immediately).
+- Callbacks run inside the daemon task context -- never in the calling task.
+- Callbacks must not block or call blocking APIs.
+- All callbacks run sequentially -- a slow callback delays all others.
+
+How Timers Are Decremented
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+FreeRTOS does **not** count down timers in a loop. The mechanism is tick-based:
+
+1. A hardware timer (e.g. SysTick on ARM Cortex-M) fires a periodic ISR.
+2. The ISR increments the global ``xTickCount`` counter.
+3. If SW timers are enabled (``configUSE_TIMERS = 1``), the ISR peeks at the
+   **head** of a sorted expiry list.
+4. If the head timer has expired, the ISR unblocks the daemon task via the
+   command queue. The ISR then returns immediately -- O(1) cost.
+5. The daemon task wakes up and walks the list, firing all expired callbacks
+   and reloading any auto-reload timers.
+
+Timers are stored by **absolute expiry tick** (``xTickCount + period`` at
+start time), not by a remaining countdown. The list is sorted ascending, so
+the ISR only ever needs to check the head.
+
+Multiple timers expiring on the same tick
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ISR still only checks the head and unblocks the daemon once. The daemon
+then handles all expired timers in sequence. Callback order among same-tick
+timers is an implementation detail and must not be relied upon.
+
+Accuracy and Jitter
+~~~~~~~~~~~~~~~~~~~
+
+SW timers are **not cycle-accurate**. Two sources of jitter:
+
+1. **Tick granularity** -- resolution is one tick. At ``configTICK_RATE_HZ = 1000``
+   this is 1 ms. Jitter is 0--1 tick depending on when ``xTimerStart`` was
+   called within the current tick period.
+
+2. **Daemon task scheduling delay** -- even after the ISR flags an expiry, the
+   daemon must be scheduled before the callback runs. A higher-priority running
+   task delays the callback by however long it holds the CPU.
+
+When to use what
+^^^^^^^^^^^^^^^^
+
++-------------------------------+------------------------------------------+
+| Requirement                   | Approach                                 |
++===============================+==========================================+
+| ±1--2 ms accuracy (timeouts,  | SW timers -- fine                        |
+| debounce, LED blink)          |                                          |
++-------------------------------+------------------------------------------+
+| Sub-millisecond / hard        | Hardware timer peripheral + ISR directly |
+| real-time                     |                                          |
++-------------------------------+------------------------------------------+
+| Periodic task at exact rate   | ``vTaskDelayUntil()`` in a dedicated     |
+|                               | task -- more predictable                 |
++-------------------------------+------------------------------------------+
+
+Key Configuration (FreeRTOSConfig.h)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: c
+
+   #define configUSE_TIMERS              1
+   #define configTIMER_TASK_PRIORITY     (configMAX_PRIORITIES - 1)
+   #define configTIMER_QUEUE_LENGTH      10
+   #define configTIMER_TASK_STACK_DEPTH  256
+
 ----
 
 How an Interrupt Is Handled
@@ -391,6 +699,41 @@ This lets you have extremely high priority interrupts that can never be blocked 
 
 ----
 
+Memory Allocation
+-----------------
+
+FreeRTOS allocates task stacks and kernel objects (queues, semaphores, mutexes, etc.) from the
+heap by default. Objects can also be allocated **statically** using the ``...Static`` API variants
+(e.g. ``xTaskCreateStatic()``), passing pre-allocated buffers at creation time — FreeRTOS never
+calls the heap allocator in this case.
+
+Heap Management Schemes
+~~~~~~~~~~~~~~~~~~~~~~~
+
+FreeRTOS ships five heap implementations in ``Source/portable/MemMang/``. Choose one based on
+your allocation pattern:
+
++----------+-------------------------------------------------------------------+
+| Scheme   | Behaviour                                                         |
++==========+===================================================================+
+| heap_1   | Allocate-only, no free. Fully deterministic. Suited to            |
+|          | safety-critical systems where fragmentation is unacceptable.      |
++----------+-------------------------------------------------------------------+
+| heap_2   | Adds ``free()`` but does not coalesce adjacent free blocks.       |
+|          | Can fragment over time. Largely superseded by heap_4.             |
++----------+-------------------------------------------------------------------+
+| heap_3   | Wraps the compiler's ``malloc``/``free`` with scheduler           |
+|          | suspension for thread safety.                                     |
++----------+-------------------------------------------------------------------+
+| heap_4   | Best-fit allocator with free-block coalescing. The most           |
+|          | common choice for general embedded use.                           |
++----------+-------------------------------------------------------------------+
+| heap_5   | Extends heap_4 across multiple non-contiguous memory regions      |
+|          | (e.g. internal SRAM + external SDRAM).                            |
++----------+-------------------------------------------------------------------+
+
+----
+
 Stack Size Analysis
 -------------------
 
@@ -409,6 +752,29 @@ The process has two steps:
    (DO-178C, ISO 26262).
 
 FreeRTOS requires the developer to specify each task's stack size manually in ``xTaskCreate()``.
-It does not perform static analysis. The practical workflow is to enable
-``configCHECK_FOR_STACK_OVERFLOW`` for safety and use ``uxTaskGetStackHighWaterMark()`` at
-runtime to tune sizes empirically.
+It does not perform static analysis. The practical workflow is to monitor stack and heap headroom
+at runtime, and to enable overflow detection during development.
+
+Runtime Memory Checks
+~~~~~~~~~~~~~~~~~~~~~
+
+Two APIs expose memory headroom at runtime:
+
+- ``uxTaskGetStackHighWaterMark(task)`` — returns the minimum free stack space (in words)
+  recorded since the task started. A value close to zero means the stack is nearly exhausted
+  and the allocation in ``xTaskCreate()`` should be increased.
+- ``xPortGetFreeHeapSize()`` / ``xPortGetMinimumEverFreeHeapSize()`` — return the current
+  and historically lowest free heap bytes, useful for confirming the heap is not dangerously
+  tight.
+
+Stack Overflow Detection
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+``configCHECK_FOR_STACK_OVERFLOW`` enables checking on every context switch:
+
+- **Mode 1** — checks that the task's stack pointer is within its allocated region at the moment
+  of the switch. Cheap, but only catches overflows still present at context switch time.
+- **Mode 2 (stack canary)** — fills the last few words of each stack with a known pattern at task
+  creation and verifies the pattern on every context switch. If it has been overwritten,
+  ``vApplicationStackOverflowHook()`` is called. More reliable than mode 1 as it catches
+  overflows that occurred and partially recovered between switches.
