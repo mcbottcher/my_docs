@@ -1,5 +1,5 @@
-FreeRTOS
-========
+⏱️ FreeRTOS
+===========
 
 FreeRTOS is a lightweight, open-source real-time operating system kernel for microcontrollers and small processors. It provides task scheduling, synchronisation primitives, and inter-task communication while remaining small enough to run on devices with kilobytes of RAM.
 
