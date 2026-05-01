@@ -46,7 +46,9 @@ A task blocks itself by calling a FreeRTOS API function:
    xSemaphoreTake(xSemaphore, portMAX_DELAY);    // wait for semaphore
 
 The second argument to most blocking calls is a timeout. ``portMAX_DELAY`` means
-wait indefinitely.
+wait indefinitely — but only truly infinite when ``INCLUDE_vTaskSuspend`` is set
+to ``1`` in ``FreeRTOSConfig.h``. Without it, ``portMAX_DELAY`` resolves to the
+largest possible tick count, which is a very long but finite timeout.
 
 **Unblocking** happens in two ways:
 
@@ -778,3 +780,38 @@ Stack Overflow Detection
   creation and verifies the pattern on every context switch. If it has been overwritten,
   ``vApplicationStackOverflowHook()`` is called. More reliable than mode 1 as it catches
   overflows that occurred and partially recovered between switches.
+
+----
+
+Hooks
+-----
+
+FreeRTOS provides hook (callback) functions that the application can implement to
+respond to specific kernel events. The kernel calls these automatically when the
+corresponding event occurs, giving the application control over error handling and
+idle-time behaviour.
+
+Common hook functions:
+
+- **``vApplicationIdleHook()``** — called on every iteration of the idle task.
+  Useful for putting the CPU into a low-power sleep state when no tasks are ready.
+  Must never block or call a blocking API.
+
+- **``vApplicationTickHook()``** — called from the tick ISR on every tick.
+  Must be kept very short and must not call any FreeRTOS API that is unsafe from an ISR.
+
+- **``vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)``** — called
+  when stack overflow detection triggers. Typically used to log the offending task name
+  and halt. Requires ``configCHECK_FOR_STACK_OVERFLOW`` to be enabled.
+
+- **``vApplicationMallocFailedHook()``** — called when ``pvPortMalloc()`` fails.
+  Useful for logging heap exhaustion before the system crashes.
+
+Each hook is enabled by a corresponding define in ``FreeRTOSConfig.h``:
+
+.. code-block:: c
+
+   #define configUSE_IDLE_HOOK                1
+   #define configUSE_TICK_HOOK                1
+   #define configCHECK_FOR_STACK_OVERFLOW     2   /* mode 2 enables stack overflow hook */
+   #define configUSE_MALLOC_FAILED_HOOK       1

@@ -50,6 +50,16 @@ Command Reference
 
 - **``target_compile_options``** — Adds compile options to a target. See Conditional Generator Expression example above, where warning flags are set.
 
+- **``target_compile_definitions``** — Adds preprocessor definitions when compiling a target. Useful for converting a CMake build flag (e.g. ``-DUSER_DEMO=BLINKY_DEMO``) into a C ``#define``. The ``$<IF:condition,true_val,false_val>`` and ``$<STREQUAL:a,b>`` generator expressions can map string values to numeric definitions:
+
+  .. code-block:: cmake
+
+     target_compile_definitions(posix_demo
+         PRIVATE
+             $<IF:$<STREQUAL:${USER_DEMO},BLINKY_DEMO>,USER_DEMO=0,>
+             $<IF:$<STREQUAL:${USER_DEMO},FULL_DEMO>,USER_DEMO=1,>
+     )
+
 - **``install``** — Installs executables and libraries in the local system. Installs to ``/usr/local/<lib|bin|include>``
 
   .. code-block:: cmake
