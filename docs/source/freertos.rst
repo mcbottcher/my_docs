@@ -274,6 +274,125 @@ conditions.
 
 ----
 
+Task Notifications
+------------------
+
+A task notification is a direct signal sent to a specific task. Every task has
+two fields baked into its TCB:
+
+- A **32-bit notification value** — an integer the sender can set, OR, or increment.
+- A **notification state** — either *pending* (notification waiting to be taken) or *not-pending*.
+
+Because these fields live inside the TCB there is no kernel object to create and
+no additional RAM beyond the TCB itself. Task notifications are roughly 45% faster
+and use significantly less memory than an equivalent binary semaphore.
+
+Signalling from an ISR
+~~~~~~~~~~~~~~~~~~~~~~
+
+Two ISR-safe functions cover the common cases:
+
+**``vTaskNotifyGiveFromISR()``** — the lightweight option. Increments the notification
+value and sets the state to pending. The receiving task calls ``ulTaskNotifyTake()``
+to block until notified.
+
+.. code-block:: c
+
+   /* In the ISR */
+   void UART_IRQHandler(void) {
+       BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+       vTaskNotifyGiveFromISR(xUartTaskHandle, &xHigherPriorityTaskWoken);
+       portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+   }
+
+   /* In the task */
+   void vUartTask(void *pvParameters) {
+       for (;;) {
+           ulTaskNotifyTake(pdTRUE, portMAX_DELAY); /* block until notified */
+           processUartData();
+       }
+   }
+
+``pdTRUE`` as the first argument clears the notification value to zero on exit
+(binary semaphore behaviour). ``pdFALSE`` decrements it by one instead (counting
+semaphore behaviour — useful when the ISR fires multiple times before the task runs).
+
+**``xTaskNotifyFromISR()``** — the general-purpose version. Takes an ``eNotifyAction``
+parameter that controls what happens to the notification value:
+
++-------------------------------+----------------------------------------------+
+| Action                        | Effect on the 32-bit value                   |
++===============================+==============================================+
+| ``eNoAction``                 | Sets state to pending; value unchanged.      |
++-------------------------------+----------------------------------------------+
+| ``eSetBits``                  | ORs the value with ``ulValue`` (event-group  |
+|                               | style — multiple flags in one word).         |
++-------------------------------+----------------------------------------------+
+| ``eIncrement``                | Increments value (``ulValue`` ignored).      |
+|                               | Same as ``vTaskNotifyGiveFromISR``.          |
++-------------------------------+----------------------------------------------+
+| ``eSetValueWithOverwrite``    | Sets value unconditionally.                  |
++-------------------------------+----------------------------------------------+
+| ``eSetValueWithoutOverwrite`` | Sets value only if state is *not-pending*.   |
+|                               | Returns ``pdFAIL`` if a notification is      |
+|                               | already waiting. Prevents losing the first.  |
++-------------------------------+----------------------------------------------+
+
+.. code-block:: c
+
+   /* Signal which DMA channel completed — pack status bits into the value */
+   xTaskNotifyFromISR(
+       xDmaTaskHandle,
+       DMA_CHANNEL_2_DONE,     /* ulValue */
+       eSetBits,               /* OR into existing value */
+       &xHigherPriorityTaskWoken
+   );
+
+Receiving Notifications
+~~~~~~~~~~~~~~~~~~~~~~~
+
+**``ulTaskNotifyTake()``** — pairs with ``vTaskNotifyGiveFromISR``/``eIncrement``.
+Blocks until the value is non-zero, then either clears it (``pdTRUE``) or decrements
+it (``pdFALSE``). Returns the value *before* the clear/decrement.
+
+**``xTaskNotifyWait()``** — the general receiver. Accepts masks for clearing bits on
+entry (flushes stale flags) and on exit (acknowledgement), and writes the current
+notification value to an output pointer.
+
+.. code-block:: c
+
+   uint32_t ulNotifiedValue;
+   xTaskNotifyWait(
+       0x00,               /* clear no bits on entry */
+       ULONG_MAX,          /* clear all bits on exit */
+       &ulNotifiedValue,   /* notification value is written here */
+       portMAX_DELAY
+   );
+
+   if (ulNotifiedValue & DMA_CHANNEL_2_DONE) { /* handle channel 2 */ }
+   if (ulNotifiedValue & DMA_CHANNEL_3_DONE) { /* handle channel 3 */ }
+
+Limitations
+~~~~~~~~~~~
+
+- Each task has **one** notification slot. A second notification arriving while
+  one is already pending either overwrites it or is dropped, depending on the action.
+- The sender must hold the **task handle** — notifications are point-to-point, not
+  broadcast. For one-to-many signalling use an event group.
+- ISRs above ``configMAX_SYSCALL_INTERRUPT_PRIORITY`` cannot call any FreeRTOS API,
+  including ``vTaskNotifyGiveFromISR``.
+
+When to use task notifications vs semaphores
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **Task notification** — ISR-to-task or task-to-task, one sender, one receiver,
+  lowest overhead. The first choice for simple interrupt deferred processing.
+- **Binary semaphore** — multiple potential senders or multiple potential receivers;
+  when the sender does not know which task should unblock.
+- **Counting semaphore** — same as binary but the count matters (e.g. N items available).
+
+----
+
 Stream Buffers and Message Buffers
 ------------------------------------
 
