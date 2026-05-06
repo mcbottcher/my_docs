@@ -48,5 +48,6 @@ Contents
    zephyr_rtos
    freertos
    cmake
+   arm_cortex_memory
    linux_driver_dev
    cybersecurity
