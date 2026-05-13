@@ -51,3 +51,5 @@ Contents
    arm_cortex_memory
    linux_driver_dev
    cybersecurity
+   wsl
+   debugging
