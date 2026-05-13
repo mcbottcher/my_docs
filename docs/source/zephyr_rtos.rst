@@ -11,6 +11,164 @@ Zephyr is an open-source real-time operating system (RTOS) designed for resource
 
 ----
 
+Kconfig & Build System
+-----------------------
+
+Zephyr uses the Linux ``Kconfig`` system to manage compile-time configuration. Project-specific options live in ``prj.conf``; the full resolved configuration for a build is written to ``build/zephyr/.config``.
+
+.. warning::
+   The ``build/`` directory is deleted on a clean rebuild. Always commit custom options to ``prj.conf`` rather than relying on ``build/zephyr/.config``.
+
+**Enabling options**
+
+Add options to ``prj.conf`` using ``KEY=value`` syntax:
+
+.. code-block:: kconfig
+
+   CONFIG_LOG=y
+   CONFIG_LED=y
+
+**Interactive configuration**
+
+``west build -t menuconfig`` opens a terminal UI for browsing and toggling all Kconfig symbols. Press ``?`` on any symbol to see its description, default, and dependency chain. Selections are written to ``build/zephyr/.config`` — copy important changes back to ``prj.conf`` to persist them across rebuilds.
+
+**Multiple configuration files**
+
+Maintain separate configs and select between them at build time with ``-DCONF_FILE``:
+
+.. code-block:: bash
+
+   west build -- -DCONF_FILE=prj_debug.conf
+   west build -- -DCONF_FILE=prj_release.conf
+
+This is useful for board-specific configurations or debug/release variants. ``prj.conf`` is the default when ``-DCONF_FILE`` is not specified.
+
+**Custom Kconfig symbols**
+
+Define your own symbols in a ``Kconfig`` file at the project root:
+
+.. code-block:: kconfig
+
+   config MY_SENSOR_MODULE
+       bool "Enable my sensor module"
+       default n
+       help
+         Enables the custom sensor driver and its dependencies.
+
+Reference the symbol in ``CMakeLists.txt`` to conditionally compile source files — anything not needed is simply not built:
+
+.. code-block:: cmake
+
+   zephyr_library_sources_ifdef(CONFIG_MY_SENSOR_MODULE src/sensor.c)
+
+**Zephyr modules**
+
+Declare a directory as a Zephyr module by adding a ``zephyr/module.yml`` file. West discovers the module automatically and integrates its Kconfig, CMake, and DTS contributions into the build.
+
+----
+
+Devicetree
+----------
+
+Zephyr's devicetree describes the hardware topology — peripherals, memory regions, bus connections, and configuration properties — at compile time. Drivers consume the tree through generated C macros; no devicetree parsing happens at runtime.
+
+Labels and Aliases
+~~~~~~~~~~~~~~~~~~
+
+A **label** is a shorthand reference to a devicetree node, avoiding the need to repeat its full path:
+
+.. code-block:: dts
+
+   /* Node with label "my_led" */
+   my_led: led@0 {
+       compatible = "gpio-leds";
+       /* ... */
+   };
+
+   /* Reference by label in an overlay */
+   &my_led {
+       status = "okay";
+   };
+
+Node Bindings
+~~~~~~~~~~~~~
+
+For every ``compatible`` string used in a DTS node, Zephyr requires a matching **binding file** (``*.yaml``). The build system uses bindings to validate node properties and to generate the C macros your driver calls. To understand which properties are required or optional for a node, read its binding:
+
+.. code-block:: bash
+
+   # Built-in bindings live under:
+   $ZEPHYR_BASE/dts/bindings/
+
+   # Project-local bindings go here:
+   dts/bindings/
+
+Writing a custom binding:
+
+.. code-block:: yaml
+
+   # dts/bindings/myvendor,my-i2c-led.yaml
+   description: My vendor I2C LED controller
+   compatible: "myvendor,my-i2c-led"
+   include: [base.yaml, i2c-device.yaml]
+
+``include: [base.yaml, i2c-device.yaml]`` inherits standard properties (``status``, ``reg``, I2C address validation) so you do not have to redeclare them. A binding file is required even for trivial devices — without it the ``DT_HAS_<COMPAT>_ENABLED`` macros will not be generated and Kconfig dependencies that rely on them will silently fail.
+
+.. note::
+   Node names (e.g. ``leds``, ``gpio_keys``) are arbitrary. Driver binding is determined entirely by the ``compatible`` string, not the node name.
+
+Custom I2C Device
+~~~~~~~~~~~~~~~~~
+
+Expose a device on an I2C bus by nesting its node under the bus node in a board overlay. The bus relationship is expressed by tree structure, not by a property:
+
+.. code-block:: dts
+
+   &i2c0 {
+       my_led: my-i2c-led@40 {
+           compatible = "myvendor,my-i2c-led";
+           reg = <0x40>;        /* I2C address */
+           status = "okay";
+       };
+   };
+
+In the driver, ``I2C_DT_SPEC_INST_GET()`` walks the tree to locate the parent bus automatically.
+
+The ``chosen`` Node
+~~~~~~~~~~~~~~~~~~~
+
+The ``chosen`` node maps well-known system-wide roles to specific hardware nodes. Values are node labels or aliases. It is consumed entirely at compile time:
+
+.. code-block:: dts
+
+   / {
+       chosen {
+           zephyr,console        = &usart1;          /* UART for printk() */
+           zephyr,shell-uart     = &usart1;          /* UART for the interactive shell */
+           zephyr,sram           = &sram0;           /* Main RAM (heap, stacks, BSS) */
+           zephyr,flash          = &flash0;          /* Flash device */
+           zephyr,code-partition = &slot0_partition; /* App image partition (MCUboot) */
+           zephyr,canbus         = &can1;            /* Default CAN bus */
+           zephyr,dtcm           = &ccm0;            /* Tightly Coupled Memory (zero wait-state) */
+       };
+   };
+
+``console`` and ``shell-uart`` can point to different UARTs. When both point to the same one, kernel log output and the interactive shell share a single serial port.
+
+``slot0_partition`` implies MCUboot is in use — flash is partitioned and slot 0 holds the primary application image.
+
+``ccm0`` (DTCM on STM32) is CPU-only access memory with zero wait-state speed. DMA cannot access it.
+
+Access a chosen node in C with:
+
+.. code-block:: c
+
+   const struct device *dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_console));
+
+Zephyr subsystems (console, shell) wire up their chosen node automatically — no manual assignment needed in C.
+
+----
+
 Bare-Metal vs. RTOS
 -------------------
 
@@ -116,10 +274,79 @@ To protect a critical section from the scheduler:
    /* critical section */
    k_sched_unlock();
 
+Priority System
+~~~~~~~~~~~~~~~
+
+**Lower priority number = higher priority.** Priorities span from ``-CONFIG_NUM_COOP_PRIORITIES`` through ``CONFIG_NUM_PREEMPT_PRIORITIES - 1``. The sign of the priority value determines the thread's scheduling policy:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Priority range
+     - Policy
+     - Behaviour
+   * - Negative (< 0)
+     - Cooperative
+     - Never preempted by other threads; only yields on an explicit block or ``k_yield()``
+   * - Zero and positive (≥ 0)
+     - Preemptive
+     - Immediately switched out when a higher-priority thread becomes ready
+
+Conventional priority bands (not enforced by the kernel):
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Range
+     - Typical use
+   * - 0 – 9
+     - High priority (time-critical tasks)
+   * - 10 – 49
+     - Medium priority (general application work)
+   * - 50 – 127
+     - Low priority (background tasks)
+
+Cooperative Threads (priority < 0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A cooperative thread will **not** be switched out even if a higher-priority thread becomes ready — the higher-priority thread simply waits until the cooperative thread voluntarily gives up the CPU by:
+
+- Blocking on a kernel object (``k_sem_take``, ``k_mutex_lock``, ``k_msgq_get``, etc.)
+- Calling ``k_yield()``
+- Sleeping with ``k_msleep()``
+
+Blocking on a kernel object is itself a reschedule point, so no separate ``k_yield()`` call is needed — for example, ``k_sem_give()`` that unblocks a higher-priority thread will transfer the CPU to it immediately when the current cooperative thread next blocks.
+
+.. warning::
+   A cooperative thread that never blocks or yields will starve all other threads indefinitely. No timeslicing applies — there is no forced preemption.
+
+Preemptive Threads (priority ≥ 0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A preemptive thread is switched out **immediately** when a higher-priority thread becomes ready. Causes include:
+
+- Another thread or ISR calling ``k_sem_give()``, ``k_mutex_unlock()``, ``k_msgq_put()``, or any unblocking API.
+- An ISR submitting a work item with ``k_work_submit()``.
+- A timer expiry unblocking a waiting thread.
+- The running thread blocking itself.
+
+Without time-slicing, an equal-priority thread does not preempt — the running thread holds the CPU until it blocks or a strictly higher-priority thread becomes ready.
+
+ISRs and Thread Preemption
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ISRs run entirely outside the scheduler — they interrupt any thread, including cooperative ones. On ISR exit, Zephyr checks whether a higher-priority thread is now ready. A cooperative thread reclaims the CPU regardless, because cooperative threads always have lower priority numbers than preemptive ones and cannot be preempted by them. The cooperative thread continues until it next blocks or calls ``k_yield()``, at which point any unblocked higher-priority preemptive thread gets to run.
+
+**The cooperative guarantee is: other threads cannot preempt it. ISRs always can.**
+
 Time-Slicing
 ~~~~~~~~~~~~
 
-Time-slicing allows threads of equal priority to share CPU time. Enable it with:
+Time-slicing forces rotation between **preemptive** threads of exactly equal priority on each scheduler tick. It does not apply to cooperative threads, which cannot be forcibly switched out regardless of this setting.
+
+Enable it with:
 
 .. code-block:: kconfig
 
@@ -127,8 +354,7 @@ Time-slicing allows threads of equal priority to share CPU time. Enable it with:
    CONFIG_TIMESLICE_SIZE=10     # maximum time slice in ms before forced preemption
    CONFIG_TIMESLICE_PRIORITY=0  # threads at or below this priority are subject to slicing
 
-.. note::
-   Lower priority numbers mean **higher** priority. Priority 0 is the highest.
+Without time-slicing, a preemptive thread holds the CPU until it blocks or a higher-priority thread becomes ready. This can look similar to cooperative behaviour, but the distinction remains: a preemptive thread **can** be immediately taken off the CPU by a higher-priority thread becoming ready; a cooperative thread cannot. Timeslicing is an additional rotation mechanism — it is not what separates the two policies.
 
 ----
 
@@ -385,6 +611,32 @@ Key options include backend selection (UART, RTT, SPI), ``CONFIG_LOG_BACKEND_SHO
 
 In error conditions where the scheduler cannot be relied on, call ``log_panic()`` to flush all pending log messages to the backends immediately.
 
+Dictionary Logging
+~~~~~~~~~~~~~~~~~~
+
+Dictionary logging is Zephyr's compressed logging mode. Instead of formatting a full string on the target and writing it to the backend, the target stores only a small integer message ID plus the raw bytes of any variables. The host-side parser reconstructs the full message from a dictionary file generated at build time.
+
+The benefits over standard string logging:
+
+- Drastically lower RAM and bandwidth usage — a message with one variable might be 5–6 bytes instead of 40+.
+- Variables are still included; they are serialised as raw bytes and expanded by the parser.
+- The backend is not fixed — dictionary logging works over UART, RTT, or any other transport.
+
+Enable it with:
+
+.. code-block:: kconfig
+
+   CONFIG_LOG_MODE_DICTIONARY=y
+
+The build system generates ``build/zephyr/log_dictionary.json``, which maps message IDs back to their format strings and type information. Pass this file to the host-side parser along with the captured log output:
+
+.. code-block:: bash
+
+   ./scripts/logging/dictionary/log_parser.py \
+       build/zephyr/log_dictionary.json /tmp/serial.log --hex
+
+A full working example is in ``samples/subsys/logging/dictionary``.
+
 Fatal Errors
 ~~~~~~~~~~~~
 
@@ -407,3 +659,101 @@ Kernel Version
 .. code-block:: c
 
    uint32_t ver = sys_kernel_version_get();
+
+----
+
+Driver Model & Device API
+--------------------------
+
+Zephyr's driver model is borrowed from the Linux kernel. Each driver exposes a subsystem API through a struct of function pointers. Only operations the hardware actually supports need to be filled in — any pointer left ``NULL`` means "not implemented".
+
+API Struct (Table of Function Pointers)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The LED subsystem API struct, for example, lists ``set_brightness``, ``blink``, ``on``, ``off``, and similar. A driver only fills the fields it can meaningfully implement:
+
+.. code-block:: c
+
+   static const struct led_driver_api gpio_led_api = {
+       .on             = gpio_led_on,
+       .off            = gpio_led_off,
+       .set_brightness = gpio_led_set_brightness,
+       /* .blink is left NULL — GPIO LEDs have no hardware timer */
+   };
+
+Dispatch Pattern
+~~~~~~~~~~~~~~~~
+
+Calling a Zephyr subsystem API goes through a wrapper that checks for ``NULL`` before dispatching:
+
+.. code-block:: c
+
+   /* Simplified z_impl_led_blink() */
+   int led_blink(const struct device *dev, uint32_t id,
+                 uint32_t delay_on, uint32_t delay_off)
+   {
+       const struct led_driver_api *api = dev->api;
+       if (api->blink == NULL) {
+           return -ENOSYS;   /* operation not supported */
+       }
+       return api->blink(dev, id, delay_on, delay_off);
+   }
+
+An unimplemented operation returns ``-ENOSYS``, not a crash. **Always check return values** — ``-ENOSYS`` means "this driver doesn't support that operation."
+
+Three Common Patterns
+~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 45 40
+
+   * - Pattern
+     - Description
+     - Example
+   * - Hard ``-ENOSYS``
+     - The subsystem cannot fake the operation; the driver leaves the pointer ``NULL``.
+     - ``led_blink()`` on a GPIO LED
+   * - Fallback
+     - The subsystem synthesises the operation from other ops the driver does implement.
+     - ``led_on()`` → ``set_brightness(MAX)`` if ``on`` pointer is ``NULL``
+   * - Optional
+     - The feature is exposed only if the hardware supports it.
+     - Sensor triggers, ``pm_action``
+
+Read the driver ``.c`` file to see exactly what is wired up — the API header shows what is *possible*, the driver shows what is *implemented*.
+
+Enabling the ``gpio-leds`` Driver: a Kconfig Dependency Gotcha
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When using ``compatible = "gpio-leds"`` in the devicetree, the linker will throw an undefined reference error resembling:
+
+.. code-block:: text
+
+   undefined reference to `__device_dts_ord_XX`
+
+even though the DTS node is correctly defined and ``CONFIG_DT_HAS_GPIO_LEDS_ENABLED=y`` is set.
+
+**Why**: ``drivers/led/Kconfig`` wraps all LED drivers in a ``menuconfig LED … if LED … endif`` block. ``LED_GPIO`` has ``default y`` and depends on ``DT_HAS_GPIO_LEDS_ENABLED``, but because it lives inside the ``if LED`` block it is never evaluated unless the parent ``LED`` switch is explicitly enabled:
+
+.. code-block:: kconfig
+
+   # Fix: add to prj.conf
+   CONFIG_LED=y
+
+**Diagnosing missing Kconfig symbols**:
+
+.. code-block:: bash
+
+   grep "CONFIG_LED" build/zephyr/.config
+   # Look for: # CONFIG_LED is not set
+
+   west build -t menuconfig   # then press / and search LED to see the dependency tree
+
+.. tip::
+   When a driver Kconfig symbol has ``default y`` but is not enabling, check the parent ``Kconfig`` file for a wrapping ``if … endif`` or ``menuconfig`` block.
+
+How ``CONFIG_LED_GPIO`` wires into the build:
+
+- The LED driver's ``CMakeLists.txt`` calls ``zephyr_library_sources_ifdef(CONFIG_LED_GPIO led_gpio.c)`` — the file is only compiled when the symbol is set.
+- Inside ``led_gpio.c``: ``#define DT_DRV_COMPAT gpio_leds`` — this string is matched against the ``compatible`` property in the DTS node to bind the driver.
