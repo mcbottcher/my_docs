@@ -723,6 +723,87 @@ Three Common Patterns
 
 Read the driver ``.c`` file to see exactly what is wired up — the API header shows what is *possible*, the driver shows what is *implemented*.
 
+----
+
+User Space
+----------
+
+Zephyr can run threads in unprivileged CPU mode, enforced by hardware. The primary motivation is damage containment — a bug in a user space thread cannot corrupt kernel data structures. The MPU catches any violation and the kernel terminates only that thread.
+
+User Space Threads
+~~~~~~~~~~~~~~~~~~
+
+Create a user space thread with the ``K_USER`` flag:
+
+.. code-block:: c
+
+   K_THREAD_DEFINE(my_thread_id, STACKSIZE, my_thread, NULL, NULL, NULL,
+                   THREAD_PRIORITY, K_USER, 0);
+
+User space suits any thread that does not need hardware access: data processing, protocol parsing, business logic, UI updates.
+
+ARM CPU Modes and the MPU
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ARM Cortex-M has two privilege levels (**privileged** / **unprivileged**) and two execution modes (**thread mode** / **handler mode**). Dropping a thread into user space sets the CPU to unprivileged thread mode — a hardware state, not a software flag.
+
+The MPU sits between the CPU and the memory bus. Each region is programmed with a base address, size, and access permissions. Every memory access is checked against these regions; a violation raises a **MemManage fault** before the access completes. Cortex-M typically has 8–16 MPU regions. Cortex-A replaces the MPU with a full MMU that provides finer-grained virtual addressing.
+
+Memory Domains and Partitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A **memory domain** is a collection of **partitions** that defines what memory a user space thread can see. Kernel RAM and code outside the domain are invisible to the user thread — enforced by hardware, not convention.
+
+Shared kernel objects (semaphores, queues, buffers) must be placed in a partition and explicitly granted to the thread's domain before the user thread can use them.
+
+Syscalls
+~~~~~~~~
+
+User space threads can still use most kernel synchronisation primitives (mutexes, semaphores, queues) via the syscall layer. The ``SVC`` instruction triggers a controlled CPU exception; the kernel validates and executes the call in privileged mode, then returns to unprivileged mode.
+
+What user space threads **cannot** do:
+
+- Direct hardware register access
+- Calling drivers directly
+- Creating kernel objects
+- Modifying IRQ or MPU configuration
+
+TrustZone
+~~~~~~~~~
+
+TrustZone is a hardware mechanism that divides the system into a **secure world** and a **non-secure world** at the bus level. Its threat model is stronger than MPU privilege levels — it assumes the entire normal-world OS could be compromised and still protects secure-world resources.
+
+Typical secure-world content: cryptographic keys, secure boot, attestation, payment credentials. The normal world requests services via the ``SMC`` instruction; the secure world returns only results, never raw sensitive data. On Cortex-M23/M33, the SAU (Security Attribution Unit) statically marks memory regions as secure or non-secure.
+
+TrustZone vs Zephyr User Space
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TrustZone and MPU-based user space operate at different layers and complement each other:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Mechanism
+     - Protects against
+   * - TrustZone (secure vs non-secure world)
+     - A compromised OS — the secure world does not trust even the kernel
+   * - Zephyr user space (privileged vs unprivileged threads)
+     - Buggy or untrusted application threads — the kernel does not fully trust user threads
+
+Zephyr should run in the **non-secure world**. The standard pattern is **TF-M** (Trusted Firmware-M) in the secure world and Zephyr in the non-secure world. Running a full RTOS in the secure world unnecessarily enlarges the attack surface.
+
+Vendor / Customer Architecture
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Zephyr's user space model supports a vendor/customer split:
+
+- A vendor ships a product image in one flash partition (managed by MCUboot + partition manager); the customer flashes their application into a separate partition independently.
+- The memory domain is defined by the vendor at build time — MPU rules are baked into the vendor image, so customer code is automatically sandboxed regardless of what they flash.
+- The LLEXT subsystem supports dynamically loadable extensions at runtime.
+
+This gives vendors IP protection (their kernel threads are inaccessible to customer code) and stability guarantees (customer bugs cannot affect the kernel).
+
 Enabling the ``gpio-leds`` Driver: a Kconfig Dependency Gotcha
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
