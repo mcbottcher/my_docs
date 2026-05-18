@@ -302,6 +302,29 @@ declares a minimum version; the bootloader rejects any image below the fuse coun
 After a successful boot the fuse counter is incremented. OTP fuses cannot be unburned,
 so rollback is physically impossible.
 
+MCUboot
+^^^^^^^
+
+`MCUboot <https://docs.mcuboot.com/>`_ is an open-source secure bootloader for 32-bit microcontrollers, supported by Zephyr RTOS (enabled via ``CONFIG_BOOTLOADER_MCUBOOT``) and Apache Mynewt. It manages a **primary** and **secondary** image slot in flash: new firmware is written to the secondary slot and MCUboot verifies its signature before swapping it into the primary slot. Rollback protection and image encryption are supported. The signing key's public half is baked into the bootloader at build time.
+
+**Why image swapping?** Firmware must always execute from the same fixed address, because embedded code is typically compiled as position-dependent — absolute addresses are embedded in the binary. The alternative approaches (compiling position-independent code, or building separate images for each possible load address) are complex and carry overhead. By physically copying the new image into the primary slot before execution, MCUboot avoids all of that: the application is always linked for one address and the bootloader handles the rest.
+
+Trusted Firmware-M (TF-M)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`Trusted Firmware-M <https://trustedfirmware-m.readthedocs.io/en/latest/>`_ is Arm's open-source reference implementation of the PSA Certified Trusted Execution Environment (TEE) for Cortex-M devices with TrustZone. It runs in the **secure world** and exposes standardised secure services to the non-secure application:
+
+- **Crypto** — key generation, signing, encryption via PSA Crypto API
+- **Protected Storage / Internal Trusted Storage** — encrypted, authenticated storage for secrets
+- **Initial Attestation** — signed token proving platform identity and security state
+- **Firmware Update** — secure OTA service integrated with MCUboot
+
+The non-secure application calls these services through a well-defined PSA Functional API; TrustZone hardware prevents it from accessing secure memory directly.
+
+A key benefit of TF-M is that rather than implementing a secure partition from scratch, you adopt a mature open-source project that is actively maintained to satisfy PSA Certified requirements — covering threat modelling, secure coding practices, and independent security evaluations. This significantly reduces the effort of achieving a PSA certification for your own product, since the security-critical layer already has documented evidence and test suites behind it.
+
+See the `TF-M generic threat model <https://trustedfirmware-m.readthedocs.io/en/latest/security/threat_models/generic_threat_model.html#>`_ for an example of how Arm documents assets, threats, and mitigations for a TF-M-based system.
+
 ----
 
 Encryption Algorithms
