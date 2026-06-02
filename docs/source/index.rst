@@ -53,3 +53,4 @@ Contents
    cybersecurity
    wsl
    debugging
+   low_power_design
