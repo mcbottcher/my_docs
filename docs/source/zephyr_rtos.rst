@@ -167,6 +167,19 @@ Access a chosen node in C with:
 
 Zephyr subsystems (console, shell) wire up their chosen node automatically — no manual assignment needed in C.
 
+Deleting Properties in Overlays
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To remove a property defined in the base board DTS, use the ``/delete-property/`` directive in a board overlay:
+
+.. code-block:: dts
+
+   &some_node {
+       /delete-property/ property-name;
+   };
+
+This is useful for stripping a property that is not applicable to your hardware variant.
+
 ----
 
 Bare-Metal vs. RTOS
@@ -175,6 +188,30 @@ Bare-Metal vs. RTOS
 A bare-metal application runs sequentially. The only exception to this sequential flow is when an ISR or exception interrupts the main program. This approach works for simple to medium complexity programs, but becomes difficult to manage as application complexity grows.
 
 An RTOS allows multiple concurrent execution units called **threads** to run within a single application. The core of an RTOS is called the **kernel**, which controls everything in the system.
+
+----
+
+Kernel Initialisation
+---------------------
+
+Zephyr initialises drivers and subsystems in a fixed sequence controlled by **initialisation levels**, assigned when each driver or library is registered with ``DEVICE_DT_INST_DEFINE`` or ``SYS_INIT``:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Level
+     - Typical content
+   * - ``PRE_KERNEL_1``
+     - Clock driver and serial driver for early debug output
+   * - ``PRE_KERNEL_2``
+     - System timer
+   * - ``POST_KERNEL``
+     - Libraries, RTOS subsystems, and services that require kernel services (e.g. semaphores, workqueues) during their setup
+   * - ``APPLICATION``
+     - Main thread starts, calling ``main()``; if ``main()`` is absent the main thread terminates and the scheduler dispatches the next ready thread
+
+The scheduler and both system threads (main and idle) are active before the ``POST_KERNEL`` stage runs, so drivers initialised at ``POST_KERNEL`` can safely use kernel synchronisation primitives.
 
 ----
 
@@ -214,6 +251,50 @@ Common thread management functions:
    k_yield();        // change state from Running to Ready
    k_msleep(5);      // change state from Running to Not-runnable for N ms
    k_wakeup(tid);    // wake a sleeping thread early from another thread
+
+Threads must be **allocated statically** — Zephyr does not support fully dynamic thread creation at runtime. ``K_THREAD_DEFINE`` is the recommended approach as it handles stack allocation automatically. ``k_thread_create()`` is also available but requires a separate ``K_THREAD_STACK_DEFINE`` declaration:
+
+.. code-block:: c
+
+   K_THREAD_STACK_DEFINE(my_stack, STACKSIZE);
+   struct k_thread my_thread_data;
+
+   k_thread_create(&my_thread_data, my_stack, STACKSIZE,
+                   my_entry, NULL, NULL, NULL,
+                   MY_PRIORITY, 0, K_NO_WAIT);
+
+**Delayed start**: pass a non-zero timeout as the last argument to defer placing the thread in the ready queue. A delay of ``K_FOREVER`` means the thread will not start until another thread explicitly calls ``k_thread_start()``:
+
+.. code-block:: c
+
+   K_THREAD_DEFINE(my_thread, STACKSIZE, my_entry, NULL, NULL, NULL,
+                   MY_PRIORITY, 0, K_FOREVER);  /* dormant until started */
+
+   /* Elsewhere: */
+   k_thread_start(my_thread);
+
+Thread Lifecycle
+~~~~~~~~~~~~~~~~
+
+Beyond the three scheduler-visible states (Running / Ready / Not-runnable), threads can reach terminal or suspended states:
+
+- **Suspended** — paused with ``k_thread_suspend()``; invisible to the scheduler until ``k_thread_resume()`` is called. Unlike sleeping, suspension has no timeout.
+- **Terminated** — the thread's entry function returned normally.
+- **Aborted** — the thread encountered a fatal error (e.g. a ``NULL`` pointer dereference). The thread enters the ``ABORTED`` state. Distinguishing a terminated thread from an aborted one is a useful debugging signal when inspecting a crash.
+
+.. code-block:: c
+
+   k_thread_suspend(tid);   /* thread stops running */
+   k_thread_resume(tid);    /* thread becomes ready again */
+
+Meta-IRQ Threads
+~~~~~~~~~~~~~~~~
+
+Meta-IRQ threads are a special class of **cooperative** thread used exclusively in device drivers. They solve a specific timing problem: after an ISR completes its urgent work, the driver's "bottom half" (e.g. the Bluetooth stack's event processing) needs to run in thread context immediately — before any other preemptive thread.
+
+The guarantee: when a Meta-IRQ thread is made ready by an ISR, the scheduler runs it immediately after the ISR returns, ahead of any preemptive thread that was interrupted, regardless of that thread's priority. The cooperative thread that was running before the interrupt resumes afterward.
+
+This is how the Zephyr BLE stack and similar drivers decouple ISR work from heavier processing without incurring scheduling latency.
 
 Workqueue Threads
 ~~~~~~~~~~~~~~~~~
@@ -266,13 +347,23 @@ Scheduler algorithms can be selected to trade memory overhead against scheduling
    CONFIG_SCHED_DUMB    # simple list, low overhead, suitable for few threads
    CONFIG_SCHED_MULTIQ  # multiple run queues, better for many threads
 
-To protect a critical section from the scheduler:
+To protect a critical section from other **threads** (but not ISRs):
 
 .. code-block:: c
 
    k_sched_lock();
-   /* critical section */
+   /* critical section — scheduler disabled, ISRs can still run */
    k_sched_unlock();
+
+To protect a critical section from **both threads and ISRs**:
+
+.. code-block:: c
+
+   unsigned int key = irq_lock();
+   /* critical section — scheduler disabled, interrupts disabled */
+   irq_unlock(key);
+
+``irq_lock()`` / ``irq_unlock()`` disable all interrupts at the CPU level. Reserve these for very short, time-critical sections — extended use increases interrupt latency.
 
 Priority System
 ~~~~~~~~~~~~~~~
@@ -307,6 +398,29 @@ Conventional priority bands (not enforced by the kernel):
      - Medium priority (general application work)
    * - 50 – 127
      - Low priority (background tasks)
+
+Default priorities for Zephyr's built-in threads:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 55
+
+   * - Thread
+     - Default priority
+   * - System workqueue thread
+     - -1 (cooperative)
+   * - Main thread
+     - 0 (preemptive)
+   * - Logger thread (deferred mode)
+     - 14 (preemptive)
+   * - Idle thread
+     - 15 (lowest preemptive, ``CONFIG_NUM_PREEMPT_PRIORITIES - 1``)
+
+Thread priority can be changed at runtime with ``k_thread_priority_set()``, which can shift a thread between preemptive and cooperative:
+
+.. code-block:: c
+
+   k_thread_priority_set(k_current_get(), -1);  /* shift current thread to cooperative */
 
 Cooperative Threads (priority < 0)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -355,6 +469,17 @@ Enable it with:
    CONFIG_TIMESLICE_PRIORITY=0  # threads at or below this priority are subject to slicing
 
 Without time-slicing, a preemptive thread holds the CPU until it blocks or a higher-priority thread becomes ready. This can look similar to cooperative behaviour, but the distinction remains: a preemptive thread **can** be immediately taken off the CPU by a higher-priority thread becoming ready; a cooperative thread cannot. Timeslicing is an additional rotation mechanism — it is not what separates the two policies.
+
+Earliest Deadline First (EDF)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Within a priority level, Zephyr supports **Earliest Deadline First (EDF)** scheduling as an alternative to FIFO ordering. Each thread declares how much time it needs to complete its work; the scheduler picks the thread with the closest deadline first.
+
+.. code-block:: c
+
+   k_thread_deadline_set(tid, deadline_cycles);
+
+EDF must be configured per-thread by the application — it is not enabled by default. Threads without a deadline set are ordered by the standard ready-time rule.
 
 ----
 
@@ -441,12 +566,17 @@ Queues / FIFO / LIFO
 
 A Zephyr queue is a linked-list kernel object. FIFO and LIFO are built on top of it. Any thread or ISR can add items; only threads should remove items (removal blocks if the queue is empty).
 
+Unlike a message queue (which uses a statically sized ring buffer with fixed-size items), a FIFO stores only **pointers** — items are typically heap-allocated, giving it variable-size capability. Static allocation is also possible: the item struct's first field must be reserved for the FIFO's internal linked-list pointer.
+
 .. code-block:: c
 
    K_FIFO_DEFINE(my_fifo);
 
    k_fifo_put(&my_fifo, &data_item);
    struct item *rx = k_fifo_get(&my_fifo, K_FOREVER);
+
+.. warning::
+   A FIFO is a linked list — adding the same data entry twice corrupts the list. Ensure each item appears in the FIFO at most once at any given time.
 
 Stacks
 ~~~~~~
@@ -723,6 +853,72 @@ Three Common Patterns
 
 Read the driver ``.c`` file to see exactly what is wired up — the API header shows what is *possible*, the driver shows what is *implemented*.
 
+Exposing Public Functions from a Driver
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There are three ways to expose a public API from a Zephyr driver:
+
+- **Subsystem API** (standard class) — use when the driver fits an existing Zephyr class (sensor, GPIO, UART, etc.). Callers use the generic subsystem functions (e.g. ``sensor_sample_fetch(dev)``); Zephyr dispatches to the implementation via function pointer.
+- **Custom public header** (single implementation) — declare functions in a public header, implement them in the driver ``.c``. Callers include the header and call directly; no indirection involved.
+- **Custom API struct** (multiple implementations) — define a vtable struct with function pointers in the header; each driver fills it in. Callers use inline dispatch helpers. This is how Zephyr's own subsystems work internally.
+
+The subsystem API call chain for a sensor looks like:
+
+.. code-block:: text
+
+   sensor_sample_fetch(dev)
+     → dev->api->sample_fetch(dev)    /* function pointer dispatch */
+       → my_sensor_fetch(dev)         /* concrete implementation */
+
+A subsystem is effectively an interface contract — the API header defines it, the driver fills it. Function pointer slots left as ``NULL`` will fault at runtime (some subsystems return ``-ENOSYS`` via NULL checks instead of crashing). Always obtain the device handle via ``DEVICE_DT_GET(DT_NODELABEL(my_dev))``.
+
+Writing a Custom Driver
+~~~~~~~~~~~~~~~~~~~~~~~
+
+A Zephyr device is represented by a ``struct device`` containing ``config`` (compile-time constants), ``data`` (runtime state), and ``api`` (function pointer table). ``DEVICE_DT_INST_DEFINE`` wires these together for every enabled devicetree instance:
+
+.. code-block:: c
+
+   #define DT_DRV_COMPAT vendor_mysensor  /* matches "vendor,mysensor" in DTS */
+
+   #define MYSENSOR_DEFINE(inst)                                         \
+       static struct mysensor_data data_##inst;                          \
+       static const struct mysensor_config config_##inst = {             \
+           .spi = SPI_DT_SPEC_INST_GET(inst, SPIOP, 0),                 \
+       };                                                                \
+       DEVICE_DT_INST_DEFINE(inst,                                       \
+                             mysensor_init,                              \
+                             NULL,                                       \
+                             &data_##inst,                               \
+                             &config_##inst,                             \
+                             POST_KERNEL,                                \
+                             CONFIG_SENSOR_INIT_PRIORITY,                \
+                             &mysensor_api);
+
+   DT_INST_FOREACH_STATUS_OKAY(MYSENSOR_DEFINE)
+
+``DT_INST_FOREACH_STATUS_OKAY`` expands ``MYSENSOR_DEFINE`` once for each devicetree node with a matching ``compatible`` and ``status = "okay"``. Dots and commas in the ``compatible`` string are replaced with underscores in ``DT_DRV_COMPAT`` — so ``"vendor,mysensor"`` becomes ``vendor_mysensor``.
+
+Power Management in Drivers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Zephyr's device power management subsystem defines four device states:
+
+- ``PM_DEVICE_STATE_ACTIVE`` — device is fully powered and operational.
+- ``PM_DEVICE_STATE_SUSPENDED`` — device is in a low-power state; operations are unavailable.
+- ``PM_DEVICE_STATE_SUSPENDING`` — transition in progress toward suspended.
+- ``PM_DEVICE_STATE_OFF`` — device has no power.
+
+To support PM, implement a ``pm_action`` callback and pass it to ``DEVICE_DT_INST_DEFINE`` as the third argument (replacing ``NULL``). The callback receives ``PM_DEVICE_ACTION_SUSPEND`` or ``PM_DEVICE_ACTION_RESUME`` and applies the appropriate hardware state.
+
+**Runtime PM** lets a driver manage its own power state. Call ``pm_device_runtime_get()`` before using the peripheral (the subsystem wakes it via the callback if needed) and ``pm_device_runtime_put()`` when done (the subsystem may then suspend it):
+
+.. code-block:: c
+
+   pm_device_runtime_get(dev);
+   /* ... perform operation ... */
+   pm_device_runtime_put(dev);   /* may trigger PM_DEVICE_ACTION_SUSPEND */
+
 ----
 
 User Space
@@ -838,3 +1034,107 @@ How ``CONFIG_LED_GPIO`` wires into the build:
 
 - The LED driver's ``CMakeLists.txt`` calls ``zephyr_library_sources_ifdef(CONFIG_LED_GPIO led_gpio.c)`` — the file is only compiled when the symbol is set.
 - Inside ``led_gpio.c``: ``#define DT_DRV_COMPAT gpio_leds`` — this string is matched against the ``compatible`` property in the DTS node to bind the driver.
+
+----
+
+Debugging
+---------
+
+Useful Kconfig Options
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: kconfig
+
+   CONFIG_DEBUG_THREAD_INFO=y       # adds debug info to thread objects (visible in GDB)
+   CONFIG_DEBUG_OPTIMIZATIONS=y     # disables optimisations that hinder single-stepping
+   CONFIG_ASSERT=y                  # enables __ASSERT() runtime checks
+   CONFIG_THREAD_NAME=y             # enables named threads (visible in a debugger)
+   CONFIG_DEBUG=y                   # general debug build switch
+   CONFIG_I2C_DUMP_MESSAGES=y       # dumps I2C transactions to the log
+
+Breakpoints in VS Code
+~~~~~~~~~~~~~~~~~~~~~~
+
+Rather than halting execution unconditionally, VS Code supports richer breakpoint types. Right-click a breakpoint to choose:
+
+- **Conditional expression** — only breaks when an expression evaluates to true.
+- **Hit count** — only breaks after the breakpoint has been reached N times.
+- **Log message** — prints a message to the debug console without stopping execution; useful for tracing without halting the target.
+
+Halt Mode vs Monitor Mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When a breakpoint is hit, the processor can debug in two modes:
+
+**Halt mode** (default)
+   The entire processor is stopped. All threads, ISRs, and timers are frozen. The cleanest state for general debugging.
+
+**Monitor mode**
+   The breakpoint triggers the ``DebugMon`` exception instead of halting the core. A handler communicates with the debugger, allowing register and memory inspection. Because this runs in an exception handler, interrupts can still preempt it — time-critical ISRs continue to execute. Thread-mode code is paused.
+
+   Enable with:
+
+   .. code-block:: kconfig
+
+      CONFIG_CORTEX_M_DEBUG_MONITOR_HOOK=y
+      CONFIG_SEGGER_DEBUGMON=y
+
+addr2line
+~~~~~~~~~
+
+``addr2line`` is a GCC tool that maps a raw memory address to a source file and line number — useful when a crash dump provides only a PC value:
+
+.. code-block:: bash
+
+   addr2line -e build/zephyr/zephyr.elf 0x08001234
+
+Pass the ``.elf`` file and the address; the tool prints the corresponding source location.
+
+Core Dumps
+~~~~~~~~~~
+
+Core dumps capture a snapshot of CPU registers and memory at the moment of a crash. Enable them with:
+
+.. code-block:: kconfig
+
+   CONFIG_DEBUG_COREDUMP=y
+   CONFIG_DEBUG_COREDUMP_BACKEND_LOGGING=y   # output via Zephyr logging backend
+
+Alternatively use ``CONFIG_DEBUG_COREDUMP_BACKEND_FLASH`` to store the dump on flash (requires a devicetree flash partition node). The device can transfer the dump over its communication interface on the next boot.
+
+Analyse a captured dump with the provided GDB server script:
+
+.. code-block:: bash
+
+   python3 scripts/debug/coredump_gdbserver.py --elf build/zephyr/zephyr.elf dump.bin
+   # In GDB: bt
+
+.. note::
+   Core dumps consume flash and RAM. The cost is more acceptable near production when a hardware debugger is unavailable. Tools like Memfault can collect and manage dumps from a fleet of devices in the field.
+
+----
+
+nRF Platform Notes
+------------------
+
+Pin Control and UART Power Management
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On nRF chips, peripherals are not hardwired to physical pins. ``pinctrl`` assigns pins to a peripheral's signals (TX, RX, CTS, RTS, etc.) by programming the peripheral's ``PSEL`` registers, and manages two pin states: **default** (active) and **sleep** (idle).
+
+The sleep state applies ``low-power-enable``, which disconnects the pin's input buffer (``PIN_CNF.INPUT = Disconnect``). This prevents leakage current on floating or mid-voltage lines when the peripheral is inactive.
+
+When runtime PM suspends a UART, the ``uarte_nrfx`` driver handles the transition in ``uarte_nrfx_pm_action()``:
+
+- **Suspend**: disables the peripheral and calls ``pinctrl_apply_state(PINCTRL_STATE_SLEEP)``.
+- **Resume**: calls ``pinctrl_apply_state(PINCTRL_STATE_DEFAULT)`` and re-enables the peripheral.
+
+The same pattern applies to the SPI, I2C, and PWM nrfx drivers.
+
+DPPI / PPI — Peripheral-to-Peripheral Connections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Zephyr does not currently have a driver for nRF's DPPI (nRF53/nRF91) or PPI (nRF52) systems, which allow peripherals to trigger each other without CPU involvement. If you need peripheral-to-peripheral connections you must use the lower-level **nrfx** drivers directly.
+
+.. warning::
+   When using nrfx drivers instead of Zephyr drivers, Zephyr's automatic power management (``pm_device_runtime_get`` / ``pm_device_runtime_put``) does not run. You are responsible for managing peripheral power state manually.
