@@ -117,6 +117,24 @@ Writing a custom binding:
 .. note::
    Node names (e.g. ``leds``, ``gpio_keys``) are arbitrary. Driver binding is determined entirely by the ``compatible`` string, not the node name.
 
+Bus Disambiguation
+~~~~~~~~~~~~~~~~~~
+
+When a device supports both I2C and SPI, two binding files exist with the same ``compatible`` string. The ``on-bus: i2c`` / ``on-bus: spi`` field tells the resolver which file applies based on the parent node type in the DTS (``&i2c1`` vs ``&spi1``).
+
+The ``on-bus`` value can be inherited through ``include:`` — including ``i2c-device.yaml`` implicitly brings in ``on-bus: i2c``. Filename suffixes like ``-i2c.yaml`` / ``-spi.yaml`` are a human-readable convention only; the build system uses ``on-bus`` (direct or inherited) for actual disambiguation.
+
+The common pattern for dual-bus sensors separates bus-specific and shared properties into three files:
+
+.. code-block:: text
+
+   st,lis2dh-i2c.yaml  →  includes i2c-device.yaml + st,lis2dh-common.yaml
+   st,lis2dh-spi.yaml  →  includes spi-device.yaml + st,lis2dh-common.yaml
+
+The ``-common.yaml`` holds all shared sensor properties (ODR, full-scale range, interrupts, etc.) avoiding duplication between bus variants.
+
+The matched binding and DTS node together generate ``devicetree_generated.h``, producing macros like ``DT_HAS_ST_LIS2DH_ENABLED``. Kconfig uses these via ``$(dt_compat_on_bus,...)`` to conditionally enable bus subsystems — ``CONFIG_I2C`` or ``CONFIG_SPI`` is selected automatically when a sensor is added to the DTS.
+
 Custom I2C Device
 ~~~~~~~~~~~~~~~~~
 
@@ -392,11 +410,11 @@ Conventional priority bands (not enforced by the kernel):
 
    * - Range
      - Typical use
-   * - 0 – 9
+   * - 0 - 9
      - High priority (time-critical tasks)
-   * - 10 – 49
+   * - 10 - 49
      - Medium priority (general application work)
-   * - 50 – 127
+   * - 50 - 127
      - Low priority (background tasks)
 
 Default priorities for Zephyr's built-in threads:
@@ -899,6 +917,34 @@ A Zephyr device is represented by a ``struct device`` containing ``config`` (com
 
 ``DT_INST_FOREACH_STATUS_OKAY`` expands ``MYSENSOR_DEFINE`` once for each devicetree node with a matching ``compatible`` and ``status = "okay"``. Dots and commas in the ``compatible`` string are replaced with underscores in ``DT_DRV_COMPAT`` — so ``"vendor,mysensor"`` becomes ``vendor_mysensor``.
 
+Supporting Multiple Bus Types
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A driver can support both I2C and SPI by using a function-pointer table for bus operations and selecting the correct implementation at compile time with ``COND_CODE_1`` and ``DT_INST_ON_BUS``. The ``lis2dh`` accelerometer driver is a canonical example:
+
+.. code-block:: c
+
+   #define LIS2DH_DEFINE(inst)                              \
+       COND_CODE_1(DT_INST_ON_BUS(inst, spi),               \
+               (LIS2DH_DEFINE_SPI(inst)),                    \
+               (LIS2DH_DEFINE_I2C(inst)))
+
+   DT_INST_FOREACH_STATUS_OKAY(LIS2DH_DEFINE)
+
+``DT_INST_ON_BUS(inst, spi)`` expands to ``1`` if the DTS node for that instance is a child of an SPI bus node, ``0`` otherwise. ``COND_CODE_1`` selects the SPI or I2C variant accordingly — the correct binding file (via ``on-bus:``) and the correct driver implementation are therefore both resolved from the same DTS placement.
+
+Each bus variant registers its own transfer functions through a ``hw_tf`` pointer in the driver data struct:
+
+.. code-block:: c
+
+   /* I2C init: */
+   data->hw_tf = &lis2dh_i2c_transfer_fn;
+
+   /* SPI init: */
+   data->hw_tf = &lis2dh_spi_transfer_fn;
+
+``hw_tf`` points to a struct of function pointers for bus-specific reads and writes. The rest of the driver calls these indirectly — all bus knowledge is confined to the init path.
+
 Power Management in Drivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -918,6 +964,119 @@ To support PM, implement a ``pm_action`` callback and pass it to ``DEVICE_DT_INS
    pm_device_runtime_get(dev);
    /* ... perform operation ... */
    pm_device_runtime_put(dev);   /* may trigger PM_DEVICE_ACTION_SUSPEND */
+
+The get/put functions use a reference count. Consider an I2C bus with two devices attached:
+
+- Device A calls ``pm_device_runtime_get()`` → count 0→1, the I2C bus resume callback fires.
+- Device B calls ``pm_device_runtime_get()`` → count is already >0, no callback.
+- Device A calls ``pm_device_runtime_put()`` → count drops to 1, still >0, no suspend callback.
+- Device B calls ``pm_device_runtime_put()`` → count drops to 0, the I2C bus suspend callback fires.
+
+PM Device Actions
+~~~~~~~~~~~~~~~~~
+
+The PM callback receives one of four actions:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 30 40
+
+   * - Action
+     - Triggered by
+     - Notes
+   * - ``PM_DEVICE_ACTION_SUSPEND``
+     - PM subsystem (software)
+     - Device enters low-power state; hardware power may remain on
+   * - ``PM_DEVICE_ACTION_RESUME``
+     - PM subsystem (software)
+     - State is preserved; wake the device
+   * - ``PM_DEVICE_ACTION_TURN_OFF``
+     - Parent power domain
+     - Power is about to be physically cut
+   * - ``PM_DEVICE_ACTION_TURN_ON``
+     - Parent power domain
+     - Power was physically cut and restored; re-initialise hardware from scratch
+
+``TURN_ON`` / ``TURN_OFF`` are only triggered via ``pm_device_children_action_run()`` from a parent power domain. If your device has no parent domain, these actions will never fire — implement only ``SUSPEND`` / ``RESUME`` and ignore the others.
+
+When implementing a parent domain, child propagation is **not** automatic. Call ``pm_device_children_action_run()`` yourself and control the ordering:
+
+- **Suspend**: send ``TURN_OFF`` to children first, then power down the domain.
+- **Resume**: power up the domain first, then send ``TURN_ON`` to children.
+
+Power Domains
+~~~~~~~~~~~~~
+
+A power domain is a regular Zephyr device that manages the physical power supply for a group of child devices. The PM core uses reference counting: when the last child suspends the domain powers off; when the first child resumes the domain powers on. Always target the child device via ``pm_device_runtime_get/put`` — never call the domain directly.
+
+**Kconfig**:
+
+.. code-block:: kconfig
+
+   CONFIG_PM_DEVICE=y
+   CONFIG_PM_DEVICE_POWER_DOMAIN=y
+   CONFIG_PM_DEVICE_RUNTIME=y
+
+**DTS setup**:
+
+.. code-block:: dts
+
+   / {
+       my_domain: my-power-domain {
+           compatible = "power-domain-gpio";
+           enable-gpios = <&gpio0 5 GPIO_ACTIVE_HIGH>;
+           startup-delay-us = <2000>;
+           #power-domain-cells = <0>;
+       };
+   };
+
+   &i2c1 {
+       sensor_a: sensor@48 {
+           /* ... */
+           power-domains = <&my_domain>;
+           zephyr,pm-device-runtime-auto;
+       };
+       sensor_b: sensor@49 {
+           /* ... */
+           power-domains = <&my_domain>;
+           zephyr,pm-device-runtime-auto;
+       };
+   };
+
+``power-domains`` is defined in ``base.yaml`` and available on every node. ``#power-domain-cells = <0>`` is required on the domain node (zero extra phandle cells). ``zephyr,pm-device-runtime-auto`` calls ``pm_device_runtime_enable()`` during init and immediately calls ``put()``, so the device starts suspended and the domain can power off at boot.
+
+**How it works internally**: ``PM_DEVICE_DT_INST_DEFINE`` in the child driver creates a static ``pm_device`` struct with a ``domain`` pointer resolved at compile time from the DTS phandle. The PM core follows ``dev->pm->domain`` when managing the domain. All wiring is compile-time — no runtime registration.
+
+With two sensors sharing a domain, the per-domain reference count reaches 2 when both are active. The GPIO rail only drops when both have called ``put()``.
+
+System Power Management
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Zephyr provides two device PM strategies:
+
+- **System-managed** (``CONFIG_PM_DEVICE_SYSTEM_MANAGED``): devices are suspended automatically when the CPU enters a low-power state.
+- **Runtime PM** (``CONFIG_PM_DEVICE_RUNTIME``): explicit ``get``/``put`` reference counting per device; preferred method.
+
+To shut down the system cleanly (Zephyr 3.4+):
+
+.. code-block:: c
+
+   #include <zephyr/sys/poweroff.h>
+
+   sys_poweroff();   /* requires CONFIG_POWEROFF=y */
+
+On older targets or when fine-grained control is needed, force a low-power state and yield to the idle thread:
+
+.. code-block:: c
+
+   pm_state_force(0, &(struct pm_state_info){PM_STATE_SOFT_OFF, 0, 0});
+   k_sleep(K_FOREVER);
+
+.. warning::
+   Frequent suspend/resume cycles can consume more energy than staying active due to switching overhead and wake-up latency. Profile real current on real hardware before assuming that suspending always saves power. ``pm_device_runtime_put_async()`` defers the suspend by a configurable delay — a simpler equivalent to Linux's autosuspend — giving the device time to be reacquired without cycling power.
+
+.. note::
+   Some drivers do not implement PM callbacks and return ``-ENOSYS`` from ``pm_device_action_run()``. As a workaround, write power-down commands directly to the hardware registers.
 
 ----
 
