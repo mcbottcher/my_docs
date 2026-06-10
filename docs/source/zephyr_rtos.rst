@@ -747,7 +747,20 @@ Zephyr's logging subsystem supports four severity levels: **error**, **warning**
 - ``LOG_INST_<LEVEL>(...)`` — message tied to a specific module instance (e.g. ``LOG_INST_INF``).
 - ``LOG_INST_HEXDUMP_<LEVEL>(...)`` — binary dump tied to a specific instance (e.g. ``LOG_HEXDUMP_INST_DBG``).
 
-Before using log macros, register the logging instance in each source module with ``LOG_MODULE_REGISTER``.
+Each module registers itself with the logging subsystem exactly once, in a single source file:
+
+.. code-block:: c
+
+   #include <zephyr/logging/log.h>
+   LOG_MODULE_REGISTER(foo, CONFIG_FOO_LOG_LEVEL);
+
+If the module spans several files, every other file uses ``LOG_MODULE_DECLARE`` instead — this references the existing registration rather than creating a duplicate:
+
+.. code-block:: c
+
+   #include <zephyr/logging/log.h>
+   /* In all files comprising the module but the one that registers it */
+   LOG_MODULE_DECLARE(foo, CONFIG_FOO_LOG_LEVEL);
 
 Enable logging with:
 
@@ -1077,6 +1090,69 @@ On older targets or when fine-grained control is needed, force a low-power state
 
 .. note::
    Some drivers do not implement PM callbacks and return ``-ENOSYS`` from ``pm_device_action_run()``. As a workaround, write power-down commands directly to the hardware registers.
+
+----
+
+Filesystems
+-----------
+
+A filesystem is an organisational layer between application code and raw storage hardware. Raw storage is just a flat array of bytes; the filesystem imposes structure on top of it. It does three jobs: **space management** (deciding where data lives), **metadata** (filenames, sizes, directories), and a **consistent API** (``open``, ``read``, ``write``, ``close``) that hides the hardware details from the application.
+
+The stack runs from the application down to the physical medium:
+
+.. code-block:: text
+
+   Application
+       │  open / read / write / close
+   Filesystem Layer    organises data into files & directories
+       │
+   Storage Driver      talks to the hardware
+       │
+   Physical Storage    flash, SD card, RAM, ...
+
+Virtual Filesystem Switch (VFS)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Zephyr's VFS lets multiple filesystems be mounted at different mount points at the same time — for example ``/lfs`` (LittleFS on internal flash) and ``/fatfs`` (FAT on an SD card). The application works purely in terms of paths; the VFS routes each operation to the filesystem that owns that path. Filesystems can be registered and unregistered at runtime.
+
+Mount Points
+~~~~~~~~~~~~
+
+A mount point is the path at which a filesystem becomes accessible. It is declared in code with a filesystem type, a mount path, an ``fs_data`` pointer, and the storage partition the filesystem lives on. After ``fs_mount()`` succeeds, every path under that prefix is handled by that filesystem. Several filesystems can be mounted simultaneously at different points.
+
+Comparison to Linux
+~~~~~~~~~~~~~~~~~~~~
+
+In Linux the filesystem abstraction covers storage *and* hardware — ``/dev``, ``/proc``, ``/sys`` all expose devices and kernel state as files ("everything is a file"). In Zephyr the filesystem is purely a storage abstraction; hardware access goes through separate subsystems (the GPIO API, UART API, and so on) rather than through filesystem paths.
+
+Embedded Constraints
+~~~~~~~~~~~~~~~~~~~~~
+
+Filesystems on a microcontroller face constraints a desktop filesystem does not:
+
+- **Limited write endurance** — flash cells survive only 10k–100k erase cycles, so writes must be spread out (wear levelling) rather than hammering the same block.
+- **Unexpected power loss** — power can cut at any moment, so the filesystem must avoid corruption mid-write (power-loss safety).
+- **Scarce RAM** — the filesystem must have a small memory footprint.
+
+The two common choices reflect this: **LittleFS** is flash-safe and wear-aware, while **FAT** is chosen mainly for PC interoperability.
+
+Key Terms
+~~~~~~~~~
+
+- **Mount point** — the path where a filesystem is attached.
+- **Partition** — the defined region of physical storage a filesystem lives on.
+- **Formatting** — initialising storage so a filesystem can use it.
+- **Wear levelling** — spreading writes to avoid burning out individual flash cells.
+- **Power-loss safety** — guaranteeing no corruption if power cuts mid-write.
+
+Typical Use Cases
+~~~~~~~~~~~~~~~~~
+
+- **Config/state** — WiFi credentials, calibration values, application state persisted across reboots.
+- **Logging** — buffering sensor readings or event logs to flash.
+- **Firmware updates** — staging a downloaded image before applying it.
+- **Assets** — audio clips, certificates, or lookup tables too large to keep in ROM.
+- **PC interop** — a FAT-formatted SD card users can read and write on a PC.
 
 ----
 
