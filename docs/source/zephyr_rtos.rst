@@ -1494,6 +1494,90 @@ Analyse a captured dump with the provided GDB server script:
 
 ----
 
+Shell
+-----
+
+Key Kconfig Symbols
+~~~~~~~~~~~~~~~~~~~
+
+- ``CONFIG_SHELL`` — the core shell subsystem (transport, parser, tab completion, history). Required by everything else.
+- ``CONFIG_DEVICE_SHELL`` — adds ``device list`` / ``device info`` commands. Depends on ``CONFIG_SHELL``.
+
+Architecture
+~~~~~~~~~~~~
+
+- Shell runs in its **own thread per backend instance** (UART, USB-CDC, RTT).
+- Default stack: **2048 bytes**. Default priority: **0** (highest preemptive).
+- Tunable via ``CONFIG_SHELL_STACK_SIZE``, ``CONFIG_SHELL_THREAD_PRIORITY``.
+- Your **PC terminal is dumb** — it just sends raw bytes and renders what comes back.
+- All intelligence (tab completion, history, line editing, command parsing) runs **on the device**.
+
+Line Redraw
+~~~~~~~~~~~
+
+Device sends ``\r`` (CR, no LF) + ``\033[K`` (VT100 erase-to-end-of-line) then redraws the line. Terminal just executes the VT100 sequences blindly.
+
+Shell vs Logging on Same UART
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **Don't** use ``CONFIG_LOG_BACKEND_UART`` + shell on the same UART — output will interleave/corrupt.
+- **Do** use ``CONFIG_SHELL_LOG_BACKEND=y`` — shell owns the UART and queues log messages, redrawing the prompt cleanly around them.
+
+Splitting Shell and Logging onto Different UARTs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Done via the devicetree ``chosen`` node, typically in a board overlay:
+
+.. code-block:: dts
+
+   / {
+       chosen {
+           zephyr,shell-uart = &uart0;
+           zephyr,console    = &uart1;
+       };
+   };
+
+``LOG_BACKEND_UART`` is then safe — it writes to ``uart1``, shell owns ``uart0``.
+
+Registering Shell Commands
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: c
+
+   SHELL_STATIC_SUBCMD_SET_CREATE(sub_sensor,
+       SHELL_CMD_ARG(read,  NULL, "Read sensor value", cmd_sensor_read,  1, 1),
+       SHELL_CMD_ARG(reset, NULL, "Reset sensor",      cmd_sensor_reset, 1, 0),
+       SHELL_SUBCMD_SET_END
+   );
+   SHELL_CMD_REGISTER(sensor, &sub_sensor, "Sensor commands", NULL);
+
+- Uses **linker sections** — no registration call needed in ``main()``.
+- Use ``shell_print(sh, ...)`` not ``printk`` inside handlers.
+- Last two args of ``SHELL_CMD_ARG``: mandatory + optional arg counts (excluding command name).
+
+Debug-Only Shell
+~~~~~~~~~~~~~~~~
+
+**Option 1 — conf overlay** (simplest):
+
+.. code-block:: bash
+
+   west build -- -DEXTRA_CONF_FILE=overlays/debug.conf
+
+**Option 2 — custom Kconfig symbol** (best for large codebases):
+
+.. code-block:: kconfig
+
+   config MYAPP_DEBUG_SHELL
+       bool "Enable debug shell"
+       default n
+       select SHELL
+       select SHELL_BACKEND_SERIAL
+
+Use ``SHELL_COND_CMD_REGISTER(CONFIG_MYAPP_DEBUG_SHELL, ...)`` in command files — no ``#ifdef`` needed.
+
+----
+
 nRF Platform Notes
 ------------------
 
