@@ -958,6 +958,151 @@ Each bus variant registers its own transfer functions through a ``hw_tf`` pointe
 
 ``hw_tf`` points to a struct of function pointers for bus-specific reads and writes. The rest of the driver calls these indirectly — all bus knowledge is confined to the init path.
 
+Sensor Triggers
+~~~~~~~~~~~~~~~
+
+Zephyr's sensor subsystem has a standardised interrupt pipeline that routes hardware GPIO interrupts all the way to a user-supplied callback. The ``lis2dh`` driver is a good example to trace end-to-end.
+
+**1. DTS: declaring the interrupt GPIOs**
+
+The sensor node lists its interrupt lines under ``irq-gpios``:
+
+.. code-block:: dts
+
+   lsm303dlhc_accel: lsm303dlhc-accel@19 {
+       compatible = "st,lis2dh", "st,lsm303dlhc-accel";
+       reg = <0x19>;
+       irq-gpios = <&gpioe 4 GPIO_ACTIVE_HIGH>,
+               <&gpioe 5 GPIO_ACTIVE_HIGH>;
+   };
+
+**2. Driver config: consuming the DTS properties**
+
+A macro expands the ``irq-gpios`` phandle array into ``gpio_drdy`` and ``gpio_int`` fields in the driver's static config struct. ``GPIO_DT_SPEC_INST_GET_BY_IDX_COND`` resolves each entry to a ``gpio_dt_spec`` at compile time:
+
+.. code-block:: c
+
+   #define LIS2DH_CFG_INT(inst)                                              \
+       .gpio_drdy =                                                          \
+           COND_CODE_1(ANYM_ON_INT1(inst),                                   \
+           ({.port = NULL, .pin = 0, .dt_flags = 0}),                        \
+           (GPIO_DT_SPEC_INST_GET_BY_IDX_COND(inst, irq_gpios, 0))),         \
+       .gpio_int =                                                           \
+           COND_CODE_1(ANYM_ON_INT1(inst),                                   \
+           (GPIO_DT_SPEC_INST_GET_BY_IDX_COND(inst, irq_gpios, 0)),          \
+           (GPIO_DT_SPEC_INST_GET_BY_IDX_COND(inst, irq_gpios, 1))),
+
+**3. Init: registering the GPIO callback**
+
+During device initialisation, the driver registers a callback with the GPIO subsystem. The GPIO driver owns the EXTI/pin-change ISR and walks its registered callback list when the interrupt fires:
+
+.. code-block:: c
+
+   gpio_init_callback(&lis2dh->gpio_int1_cb,
+              lis2dh_gpio_int1_callback,
+              BIT(cfg->gpio_drdy.pin));
+
+   gpio_add_callback(cfg->gpio_drdy.port, &lis2dh->gpio_int1_cb);
+
+**4. The GPIO callback: ISR context**
+
+Because the interrupt is level-triggered, the callback immediately disables the interrupt line to avoid re-entry. It then signals deferred work — either a semaphore for a dedicated thread or a work item for the system workqueue:
+
+.. code-block:: c
+
+   static void lis2dh_gpio_int1_callback(const struct device *dev,
+                         struct gpio_callback *cb, uint32_t pins)
+   {
+       struct lis2dh_data *lis2dh =
+           CONTAINER_OF(cb, struct lis2dh_data, gpio_int1_cb);
+
+       atomic_set_bit(&lis2dh->trig_flags, TRIGGED_INT1);
+       setup_int1(lis2dh->dev, false);   /* disable until processed */
+
+   #if defined(CONFIG_LIS2DH_TRIGGER_OWN_THREAD)
+       k_sem_give(&lis2dh->gpio_sem);
+   #elif defined(CONFIG_LIS2DH_TRIGGER_GLOBAL_THREAD)
+       k_work_submit(&lis2dh->work);
+   #endif
+   }
+
+**5. Deferred processing: own thread or system workqueue**
+
+Both modes converge on the same ``lis2dh_thread_cb`` function, which calls the user-registered handler:
+
+.. code-block:: c
+
+   /* Own-thread mode */
+   static void lis2dh_thread(void *p1, void *p2, void *p3)
+   {
+       struct lis2dh_data *lis2dh = p1;
+       while (1) {
+           k_sem_take(&lis2dh->gpio_sem, K_FOREVER);
+           lis2dh_thread_cb(lis2dh->dev);
+       }
+   }
+
+   /* System workqueue mode */
+   static void lis2dh_work_cb(struct k_work *work)
+   {
+       struct lis2dh_data *lis2dh =
+           CONTAINER_OF(work, struct lis2dh_data, work);
+       lis2dh_thread_cb(lis2dh->dev);
+   }
+
+Inside ``lis2dh_thread_cb``, the stored handler pointer is invoked:
+
+.. code-block:: c
+
+   if (likely(lis2dh->handler_drdy != NULL)) {
+       lis2dh->handler_drdy(dev, lis2dh->trig_drdy);
+   }
+
+**6. Registering a handler: the sensor subsystem API**
+
+``handler_drdy`` is populated via ``lis2dh_trigger_set``, which is exposed through the sensor driver API struct and dispatches on trigger type:
+
+.. code-block:: c
+
+   int lis2dh_trigger_set(const struct device *dev,
+                  const struct sensor_trigger *trig,
+                  sensor_trigger_handler_t handler)
+   {
+       if (trig->type == SENSOR_TRIG_DATA_READY &&
+           trig->chan == SENSOR_CHAN_ACCEL_XYZ) {
+           return lis2dh_trigger_drdy_set(dev, trig->chan, handler, trig);
+       } else if (trig->type == SENSOR_TRIG_DELTA) {
+           return lis2dh_trigger_anym_set(dev, handler, trig);
+       } else if (trig->type == SENSOR_TRIG_TAP) {
+           return lis2dh_trigger_tap_set(dev, handler, trig);
+       }
+       return -ENOTSUP;
+   }
+
+   static DEVICE_API(sensor, lis2dh_driver_api) = {
+       .attr_set     = lis2dh_attr_set,
+   #if CONFIG_LIS2DH_TRIGGER
+       .trigger_set  = lis2dh_trigger_set,
+   #endif
+       .sample_fetch = lis2dh_sample_fetch,
+       .channel_get  = lis2dh_channel_get,
+   };
+
+**7. Application code**
+
+From the application's perspective only the generic sensor API is needed — the entire pipeline above is hidden inside the driver:
+
+.. code-block:: c
+
+   struct sensor_trigger trig = {
+       .type = SENSOR_TRIG_DATA_READY,
+       .chan = SENSOR_CHAN_ACCEL_XYZ,
+   };
+   sensor_trigger_set(accel, &trig, drdy_handler);
+
+.. note::
+   The choice between ``CONFIG_LIS2DH_TRIGGER_OWN_THREAD`` and ``CONFIG_LIS2DH_TRIGGER_GLOBAL_THREAD`` is a latency/resource trade-off. A dedicated thread has its own stack and priority, giving lower and more predictable latency. The system workqueue is lighter (shared stack, no extra thread) but shares time with all other work items submitted to it.
+
 Power Management in Drivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
