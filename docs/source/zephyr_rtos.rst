@@ -1602,3 +1602,29 @@ Zephyr does not currently have a driver for nRF's DPPI (nRF53/nRF91) or PPI (nRF
 
 .. warning::
    When using nrfx drivers instead of Zephyr drivers, Zephyr's automatic power management (``pm_device_runtime_get`` / ``pm_device_runtime_put``) does not run. You are responsible for managing peripheral power state manually.
+
+----
+
+SYS_INIT
+--------
+
+``SYS_INIT`` registers a function to run automatically during system initialisation, before ``main()`` is called. Use it to initialise subsystems or hardware that other code depends on.
+
+.. code-block:: c
+
+   SYS_INIT(my_init_fn, POST_KERNEL, CONFIG_APPLICATION_INIT_PRIORITY);
+
+   static int my_init_fn(void)
+   {
+       /* initialisation work */
+       return 0;
+   }
+
+The second argument is the **initialisation level**, which controls when the function runs:
+
+- ``EARLY`` — before the kernel itself is fully started; only very basic hardware setup belongs here.
+- ``PRE_KERNEL_1`` / ``PRE_KERNEL_2`` — before the kernel scheduler is active; no kernel services available.
+- ``POST_KERNEL`` — after the kernel is running; threading and kernel services are available.
+- ``APPLICATION`` — just before ``main()``; all drivers and subsystems are up.
+
+The third argument is a priority within the level (lower number runs first). ``CONFIG_APPLICATION_INIT_PRIORITY`` is the conventional default for application-level init functions.
