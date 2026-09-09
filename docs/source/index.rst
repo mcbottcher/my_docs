@@ -56,3 +56,4 @@ Contents
    low_power_design
    hardware
    control_theory
+   reinforcement_learning
