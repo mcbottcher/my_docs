@@ -55,3 +55,4 @@ Contents
    debugging
    low_power_design
    hardware
+   control_theory
