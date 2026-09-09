@@ -54,3 +54,4 @@ Contents
    wsl
    debugging
    low_power_design
+   hardware
